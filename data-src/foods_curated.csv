@@ -463,3 +463,90 @@ fdc_id,name_zh,name_en,category_zh,aliases_zh
 171983,海螺（未指明种，生）,Mollusks whelk unspecified raw,贝类,螺肉|海螺
 167744,蜗牛（生）,Mollusks snail raw,贝类,蜗牛|食用蜗牛
 175132,鱼籽（混合种，生）,Fish roe mixed species raw,鱼类,鱼卵|鱼子
+171265,全脂牛奶（3.25%乳脂，添加维生素D）,Milk whole 3.25% milkfat with added vitamin D,奶类,牛奶|全脂奶
+171267,减脂牛奶（2%乳脂，添加维生素A和D）,Milk reduced fat 2% milkfat with added vitamin A and vitamin D,奶类,牛奶|2%牛奶
+170872,低脂牛奶（1%乳脂，添加维生素A和D）,Milk lowfat 1% milkfat with added vitamin A and vitamin D,奶类,牛奶|1%牛奶
+171269,脱脂牛奶（添加维生素A和D）,Milk nonfat fluid with added vitamin A and vitamin D,奶类,脱脂奶|零脂牛奶
+173432,脱脂牛奶（未添加维生素A和D）,Milk nonfat fluid without added vitamin A and vitamin D,奶类,脱脂奶
+167697,酪乳（培养，减脂）,Milk buttermilk fluid cultured reduced fat,奶类,白脱牛奶|发酵酪乳
+170876,全脂奶粉（添加维生素D）,Milk dry whole with added vitamin D,奶类,奶粉|全脂奶粉
+172195,脱脂奶粉（常规，添加维生素A和D）,Milk dry nonfat regular with added vitamin A and vitamin D,奶类,脱脂奶粉
+171276,淡炼乳（罐装，添加维生素D，未添加维生素A）,Milk canned evaporated with added vitamin D and without added vitamin A,奶类,炼奶|蒸发奶
+171275,甜炼乳（罐装，加糖）,Milk canned condensed sweetened,奶类,炼乳|加糖炼乳
+171278,山羊奶（液体，添加维生素D）,Milk goat fluid with added vitamin D,奶类,羊奶
+170858,稀奶油（轻质，可打发）,Cream fluid light whipping,奶类,淡奶油|鲜奶油
+170859,稀奶油（重质，可打发）,Cream fluid heavy whipping,奶类,淡奶油|重奶油
+171255,半奶油（牛奶与稀奶油各半）,Cream fluid half and half,奶类,半淡奶油
+171257,酸奶油（培养）,Cream sour cultured,奶类,发酵酸奶油
+173410,黄油（有盐）,Butter salted,奶类,牛油|有盐黄油
+173430,黄油（无盐）,Butter without salt,奶类,牛油|无盐黄油
+171314,酥油（澄清黄油）,Butter clarified butter ghee,奶类,印度酥油
+173414,切达奶酪,Cheese cheddar,奶酪,车打芝士|切达芝士
+170845,马苏里拉奶酪（全脂牛奶）,Cheese mozzarella whole milk,奶酪,马苏里拉芝士|马苏里拉
+170847,马苏里拉奶酪（部分脱脂牛奶）,Cheese mozzarella part skim milk,奶酪,马苏里拉芝士
+171251,瑞士奶酪,Cheese swiss,奶酪,埃曼塔奶酪|瑞士芝士
+170848,帕玛森奶酪（硬质）,Cheese parmesan hard,奶酪,帕马森干酪|巴马臣芝士
+171247,帕玛森奶酪（磨碎）,Cheese parmesan grated,奶酪,帕马森干酪碎
+170851,里科塔奶酪（全脂牛奶）,Cheese ricotta whole milk,奶酪,意大利乳清干酪
+172179,农家奶酪（奶油型，大或小凝块）,Cheese cottage creamed large or small curd,奶酪,茅屋奶酪
+173418,奶油奶酪,Cheese cream,奶酪,忌廉芝士|奶油芝士
+172175,蓝纹奶酪,Cheese blue,奶酪,蓝芝士|青纹奶酪
+172177,布里奶酪,Cheese brie,奶酪,布里芝士
+173420,菲达奶酪,Cheese feta,奶酪,羊乳酪
+171241,高达奶酪,Cheese gouda,奶酪,高达芝士
+170850,普罗沃洛内奶酪,Cheese provolone,奶酪,普罗卧干酪
+173416,科尔比奶酪,Cheese colby,奶酪,科尔比芝士
+171290,美式加工奶酪（未添加维生素D）,Cheese pasteurized process American without added vitamin D,奶酪,芝士片|加工奶酪
+172223,墨西哥鲜奶酪,Cheese fresh queso fresco,奶酪,墨西哥白奶酪
+173433,山羊奶酪（半软质）,Cheese goat semisoft type,奶酪,羊奶酪
+171284,酸奶（原味，全脂牛奶）,Yogurt plain whole milk,奶类,原味酸奶|全脂酸奶
+170886,酸奶（原味，低脂）,Yogurt plain low fat,奶类,原味酸奶|低脂酸奶
+171304,希腊酸奶（原味，全脂牛奶）,Yogurt Greek plain whole milk,奶类,希腊式酸奶
+170894,希腊酸奶（原味，脱脂）,Yogurt Greek plain nonfat,奶类,希腊式酸奶|脱脂希腊酸奶
+172475,北豆腐（硫酸钙凝固，硬，生）,Tofu raw firm prepared with calcium sulfate,豆制品,老豆腐|硬豆腐
+172476,豆腐（硫酸钙凝固，常规，生）,Tofu raw regular prepared with calcium sulfate,豆制品,南豆腐|嫩豆腐
+172448,豆腐（硬，硫酸钙与卤水凝固）,Tofu firm prepared with calcium sulfate and magnesium chloride nigari,豆制品,卤水豆腐|北豆腐
+172449,豆腐（软，硫酸钙与卤水凝固）,Tofu soft prepared with calcium sulfate and magnesium chloride nigari,豆制品,卤水嫩豆腐|软豆腐
+172451,油豆腐（炸豆腐）,Tofu fried,豆制品,炸豆腐|豆腐泡
+172450,冻豆腐（干燥）,Tofu dried-frozen koyadofu,豆制品,冻豆腐|高野豆腐
+172452,豆渣,Okara,豆制品,豆腐渣|大豆渣
+172446,豆浆（原味及香草味，未强化）,Soymilk original and vanilla unfortified,豆制品,豆奶|原味豆浆
+172456,豆浆（原味及香草味，添加钙、维生素A和D）,Soymilk original and vanilla with added calcium vitamins A and D,豆制品,豆奶|强化豆浆
+172442,味噌,Miso,豆制品,日式大酱|味噌酱
+172443,纳豆,Natto,豆制品,发酵黄豆
+174272,天贝（发酵豆饼）,Tempeh,豆制品,丹贝|天培
+174273,全脂大豆粉（生）,Soy flour full-fat raw,豆制品,黄豆粉|全脂豆粉
+174276,大豆分离蛋白,Soy protein isolate,豆制品,大豆蛋白粉|分离大豆蛋白
+174270,黄豆（生）,Soybeans mature seeds raw,豆类,大豆|黄大豆
+174271,黄豆（煮，不加盐）,Soybeans mature cooked boiled without salt,豆类,熟黄豆|水煮黄豆
+174300,黄豆（烘烤，未加盐）,Soybeans mature seeds roasted no salt added,豆类,烤黄豆|炒黄豆
+169282,毛豆（青大豆，生）,Soybeans green raw,豆类,枝豆|毛豆荚
+169283,毛豆（青大豆，煮，不加盐）,Soybeans green cooked boiled drained without salt,豆类,熟毛豆|水煮毛豆
+169284,黄豆芽（生）,Soybeans mature seeds sprouted raw,豆类,大豆芽|黄豆芽菜
+168460,黄豆芽（蒸熟）,Soybeans mature seeds sprouted cooked steamed,豆类,熟黄豆芽
+173734,黑豆（生）,Beans black mature seeds raw,豆类,乌豆|黑大豆
+173735,黑豆（煮，不加盐）,Beans black mature seeds cooked boiled without salt,豆类,熟黑豆
+173740,芸豆（煮，不加盐）,Beans kidney all types mature seeds cooked boiled without salt,豆类,熟芸豆
+175193,芸豆（生）,Beans kidney all types mature seeds raw,豆类,多花菜豆|芸豆
+173741,芸豆（罐装）,Beans kidney all types mature seeds canned,豆类,罐头芸豆
+173745,海军豆（生）,Beans navy mature seeds raw,豆类,白豆|小白豆
+173746,海军豆（煮，不加盐）,Beans navy mature seeds cooked boiled without salt,豆类,熟海军豆
+175202,白豆（生）,Beans white mature seeds raw,豆类,白芸豆
+175203,白豆（煮，不加盐）,Beans white mature seeds cooked boiled without salt,豆类,熟白豆
+173756,鹰嘴豆（生）,Chickpeas garbanzo beans mature seeds raw,豆类,鸡豆|桃尔豆
+173757,鹰嘴豆（煮，不加盐）,Chickpeas garbanzo beans mature seeds cooked boiled without salt,豆类,熟鹰嘴豆
+173800,鹰嘴豆（罐装，沥干）,Chickpeas garbanzo beans mature seeds canned drained solids,豆类,罐头鹰嘴豆
+172420,小扁豆（生）,Lentils raw,豆类,兵豆|滨豆
+172421,小扁豆（煮，不加盐）,Lentils mature seeds cooked boiled without salt,豆类,熟小扁豆
+174284,红扁豆（生）,Lentils pink or red raw,豆类,红小扁豆|脱皮扁豆
+174256,绿豆（生）,Mung beans mature seeds raw,豆类,青小豆
+174257,绿豆（煮，不加盐）,Mung beans mature seeds cooked boiled without salt,豆类,熟绿豆|绿豆汤豆
+173727,红豆（生）,Beans adzuki mature seeds raw,豆类,赤小豆|红小豆
+173728,红豆（煮，不加盐）,Beans adzuki mature seeds cooked boiled without salt,豆类,熟红豆|豆沙原料
+172428,裂瓣豌豆（绿，干，生）,Peas green split mature seeds raw,豆类,绿豌豆|豌豆瓣
+172429,裂瓣豌豆（绿，干，煮，不加盐）,Peas split mature seeds cooked boiled without salt,豆类,熟裂瓣豌豆
+175205,蚕豆（成熟，生）,Broadbeans fava beans mature seeds raw,豆类,胡豆|大蚕豆
+173753,蚕豆（成熟，煮，不加盐）,Broadbeans fava beans mature seeds cooked boiled without salt,豆类,熟蚕豆
+173758,豇豆（成熟种子，生）,Cowpeas common blackeyes mature seeds raw,豆类,眉豆|黑眼豆
+173759,豇豆（成熟种子，煮，不加盐）,Cowpeas common blackeyes mature seeds cooked boiled without salt,豆类,熟眉豆
+174288,鹰嘴豆粉,Chickpea flour besan,豆类,鸡豆粉|贝桑粉
