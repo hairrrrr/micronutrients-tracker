@@ -550,3 +550,93 @@ fdc_id,name_zh,name_en,category_zh,aliases_zh
 173758,豇豆（成熟种子，生）,Cowpeas common blackeyes mature seeds raw,豆类,眉豆|黑眼豆
 173759,豇豆（成熟种子，煮，不加盐）,Cowpeas common blackeyes mature seeds cooked boiled without salt,豆类,熟眉豆
 174288,鹰嘴豆粉,Chickpea flour besan,豆类,鸡豆粉|贝桑粉
+170567,杏仁（巴旦木）,Nuts almonds,坚果类,巴旦木|美国大杏仁
+170158,杏仁（巴旦木，干烤，无盐）,Nuts almonds dry roasted without salt added,坚果类,烤巴旦木
+170581,榛子,Nuts hazelnuts or filberts,坚果类,榛果|平榛
+170187,核桃（英国核桃）,Nuts walnuts english,坚果类,核桃仁|胡桃
+170182,碧根果（美国山核桃）,Nuts pecans,坚果类,美国山核桃|长山核桃
+170162,腰果（生）,Nuts cashew nuts raw,坚果类,腰果仁
+170571,腰果（干烤，无盐）,Nuts cashew nuts dry roasted without salt added,坚果类,烤腰果
+170184,开心果（生）,Nuts pistachio nuts raw,坚果类,开心果仁
+170178,夏威夷果（生）,Nuts macadamia nuts raw,坚果类,澳洲坚果|夏果
+170569,巴西坚果（干，未去皮）,Nuts brazilnuts dried unblanched,坚果类,巴西栗
+170591,松子（干）,Nuts pine nuts dried,坚果类,松子仁
+170164,板栗（中国栗，生）,Nuts chestnuts chinese raw,坚果类,栗子|中国板栗
+170166,板栗（中国栗，蒸煮）,Nuts chestnuts chinese boiled and steamed,坚果类,熟板栗
+170169,椰肉（生）,Nuts coconut meat raw,坚果类,椰子肉
+170170,椰蓉（无糖，干）,Nuts coconut meat dried desiccated not sweetened,坚果类,椰丝|干椰肉
+170585,混合坚果（干烤，含花生，无盐）,Nuts mixed nuts dry roasted with peanuts without salt added,坚果类,什锦坚果
+170584,白果（银杏果，生）,Nuts ginkgo nuts raw,坚果类,银杏|白果仁
+170175,白果（银杏果，干）,Nuts ginkgo nuts dried,坚果类,干白果
+168591,莲子（生）,Seeds lotus seeds raw,种子类,鲜莲子
+170150,芝麻（整粒，干）,Seeds sesame seeds whole dried,种子类,白芝麻|黑芝麻
+170151,芝麻（整粒，炒香）,Seeds sesame seeds whole roasted and toasted,种子类,熟芝麻|炒芝麻
+170152,芝麻仁（去皮，炒香，无盐）,Seeds sesame seed kernels toasted without salt added decorticated,种子类,白芝麻仁
+170189,芝麻酱（烤芝麻制，中东芝麻糊）,Seeds sesame butter tahini from roasted and toasted kernels most common type,种子类,芝麻糊|中东芝麻酱
+170554,奇亚籽（干）,Seeds chia seeds dried,种子类,鼠尾草籽
+169414,亚麻籽,Seeds flaxseed,种子类,胡麻籽
+170562,葵花籽仁（干）,Seeds sunflower seed kernels dried,种子类,葵花子仁|瓜子仁
+170563,葵花籽仁（干烤，无盐）,Seeds sunflower seed kernels dry roasted without salt,种子类,烤瓜子仁
+170556,南瓜籽仁（干）,Seeds pumpkin and squash seed kernels dried,种子类,南瓜子仁|白瓜子
+170557,南瓜籽仁（烤，无盐）,Seeds pumpkin and squash seed kernels roasted without salt,种子类,烤南瓜子
+172430,花生（生）,Peanuts all types raw,种子类,落花生|地豆
+173806,花生（干烤，无盐）,Peanuts all types dry-roasted without salt,种子类,烤花生
+169251,白蘑菇（生）,Mushrooms white raw,菌菇类,双孢蘑菇|口蘑
+169252,白蘑菇（煮，不加盐）,Mushrooms white cooked boiled drained without salt,菌菇类,熟口蘑
+168434,褐蘑菇（生）,Mushrooms brown italian or crimini raw,菌菇类,棕蘑|栗蘑
+169242,香菇（鲜，生）,Mushrooms shiitake raw,菌菇类,花菇|冬菇
+168436,香菇（干）,Mushrooms shiitake dried,菌菇类,干香菇
+168437,香菇（熟，不加盐）,Mushrooms shiitake cooked without salt,菌菇类,熟香菇
+168580,平菇（生）,Mushrooms oyster raw,菌菇类,蚝菇|侧耳
+169382,金针菇（生）,Mushrooms enoki raw,菌菇类,金菇
+169255,大褐菇（波特贝勒，生）,Mushrooms portabella raw,菌菇类,波特菇
+168422,鸡油菌（生）,Mushrooms Chanterelle raw,菌菇类,黄蘑菇
+168423,羊肚菌（生）,Mushrooms morel raw,菌菇类,羊肚蘑
+168581,黑木耳（干）,Fungi Cloud ears dried,菌菇类,木耳|云耳
+168457,海带（生）,Seaweed kelp raw,海藻类,昆布|江白菜
+168458,紫菜（生）,Seaweed laver raw,海藻类,海苔|坛紫菜
+170496,裙带菜（生）,Seaweed wakame raw,海藻类,海芥菜
+170090,琼脂（干）,Seaweed agar dried,海藻类,洋菜|寒天
+169280,石花菜（鲜，琼脂藻）,Seaweed agar raw,海藻类,鲜石花菜
+170495,螺旋藻（干）,Seaweed spirulina dried,海藻类,蓝藻粉
+171413,橄榄油,Oil olive salad or cooking,食用油脂,初榨橄榄油
+172336,菜籽油,Oil canola,食用油脂,芥花油|加拿大油菜籽油
+171410,花生油,Oil peanut salad or cooking,食用油脂,花生仁油
+171016,芝麻油（香油）,Oil sesame salad or cooking,食用油脂,香油|麻油
+171411,大豆油,Oil soybean salad or cooking,食用油脂,豆油
+171017,葵花籽油,Oil sunflower linoleic less than 60%,食用油脂,向日葵油
+171029,玉米油,Oil corn industrial and retail all purpose salad or cooking,食用油脂,玉米胚芽油
+171412,椰子油,Oil coconut,食用油脂,椰油
+171013,米糠油,Oil rice bran,食用油脂,稻米油
+167702,亚麻籽油（冷榨）,Oil flaxseed cold pressed,食用油脂,胡麻油
+171401,猪油,Lard,食用油脂,大油|荤油
+174277,酱油（黄豆小麦酿造）,Soy sauce made from soy and wheat shoyu,调味料,生抽|老抽
+172473,酱油（黄豆小麦酿造，低钠）,Soy sauce made from soy and wheat shoyu low sodium,调味料,低盐酱油
+174278,酱油（日式溜酱油，仅用黄豆）,Soy sauce made from soy tamari,调味料,溜酱油|玉子酱油
+168556,番茄沙司（番茄酱）,Catsup,调味料,番茄酱|茄汁
+170459,番茄膏（罐装，无盐）,Tomato products canned paste without salt added,调味料,浓缩番茄酱
+172237,白醋（蒸馏醋）,Vinegar distilled,调味料,米醋|白米醋
+172241,意大利香醋（黑醋）,Vinegar balsamic,调味料,意式陈醋|黑醋
+172234,黄芥末酱（调制）,Mustard prepared yellow,调味料,芥末酱
+173472,辣根酱（调制）,Horseradish prepared,调味料,西洋山葵酱
+174529,蚝油,Sauce oyster ready-to-serve,调味料,牡蛎酱
+174531,鱼露,Sauce fish ready-to-serve,调味料,鱼酱油
+172886,海鲜酱,Sauce hoisin ready-to-serve,调味料,叉烧酱
+172879,梅子酱（苏梅酱）,Sauce plum ready-to-serve,调味料,酸梅酱
+171009,蛋黄酱（沙拉酱）,Salad dressing mayonnaise regular,调味料,美乃滋
+168820,糖蜜（黑糖浆）,Molasses,调味料,糖浆
+169593,可可粉（无糖）,Cocoa dry powder unsweetened,调味料,纯可可粉
+175043,干酵母（活性干酵母）,Leavening agents yeast baker's active dry,调味料,酵母粉
+172470,花生酱（细腻型，无盐）,Peanut butter smooth style without salt,调味料,花生酱
+172469,花生酱（颗粒型，无盐）,Peanut butter chunk style without salt,调味料,粗粒花生酱
+170922,芫荽籽（香菜籽）,Spices coriander seed,香辛料,胡荽籽
+170923,孜然（孜然籽）,Spices cumin seed,香辛料,孜然籽|安息茴香
+170926,姜粉,Spices ginger ground,香辛料,干姜粉
+171320,肉桂粉,Spices cinnamon ground,香辛料,桂皮粉
+171321,丁香粉,Spices cloves ground,香辛料,丁子香
+170931,黑胡椒粉,Spices pepper black,香辛料,胡椒
+170932,辣椒粉（红辣椒，卡宴）,Spices pepper red or cayenne,香辛料,卡宴辣椒粉
+172231,姜黄粉,Spices turmeric ground,香辛料,郁金粉
+171319,辣椒粉（混合香料）,Spices chili powder,香辛料,墨西哥辣椒粉
+171325,蒜粉,Spices garlic powder,香辛料,大蒜粉
+171328,牛至（干）,Spices oregano dried,香辛料,披萨草|奥勒冈
