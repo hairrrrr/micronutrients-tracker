@@ -281,3 +281,99 @@ fdc_id,name_zh,name_en,category_zh,aliases_zh
 171695,苹果酱（罐装，无糖）,Applesauce canned unsweetened,水果制品,苹果泥
 169130,大蕉（黄，生）,Plantains yellow raw,水果类,熟蕉
 168216,大蕉（青，煮）,Plantains green boiled,水果类,煮大蕉
+169483,牛肉（综合切块，带肥，生）,"Beef composite of trimmed retail cuts separable lean and fat trimmed to 1/8"" fat all grades raw",畜肉类,牛肉
+169484,牛肉（综合切块，带肥，熟）,"Beef composite of trimmed retail cuts separable lean and fat trimmed to 1/8"" fat all grades cooked",畜肉类,熟牛肉
+174760,牛肉（综合切块，瘦，生）,"Beef composite of trimmed retail cuts separable lean only trimmed to 0"" fat all grades raw",畜肉类,瘦牛肉
+170208,牛肉（综合切块，瘦，熟）,"Beef composite of trimmed retail cuts separable lean only trimmed to 0"" fat all grades cooked",畜肉类,熟瘦牛肉
+171790,牛肉末（95%瘦，生）,Beef ground 95% lean meat / 5% fat raw,畜肉类,瘦牛肉末|牛肉馅
+171791,牛肉饼（95%瘦，烤）,Beef ground 95% lean meat / 5% fat patty cooked broiled,畜肉类,牛肉饼|汉堡肉饼
+168664,牛腩（带肥，生）,"Beef brisket whole separable lean and fat trimmed to 1/8"" fat all grades raw",畜肉类,牛胸肉|牛腩
+168665,牛腩（带肥，炖）,"Beef brisket whole separable lean and fat trimmed to 1/8"" fat all grades cooked braised",畜肉类,炖牛腩
+168668,牛肩肉（生）,"Beef chuck arm pot roast separable lean and fat trimmed to 1/8"" fat choice raw",畜肉类,牛前肩|牛肩
+168669,牛肩肉（炖）,"Beef chuck arm pot roast separable lean and fat trimmed to 1/8"" fat choice cooked braised",畜肉类,炖牛肩肉
+169433,牛腹肉（生）,"Beef flank steak separable lean and fat trimmed to 0"" fat choice raw",畜肉类,牛腩条|侧腹牛排
+168724,牛里脊（生）,"Beef tenderloin steak separable lean and fat trimmed to 1/8"" fat select raw",畜肉类,牛柳|菲力
+168722,牛里脊（烤）,"Beef tenderloin steak separable lean and fat trimmed to 1/8"" fat choice cooked broiled",畜肉类,牛柳|菲力牛排
+168726,西冷牛排（生）,"Beef top sirloin steak separable lean and fat trimmed to 1/8"" fat all grades raw",畜肉类,沙朗牛排|西冷
+168727,西冷牛排（烤）,"Beef top sirloin steak separable lean and fat trimmed to 1/8"" fat all grades cooked broiled",畜肉类,沙朗牛排
+168677,牛肋排（烤）,"Beef rib whole (ribs 6-12) separable lean and fat trimmed to 1/8"" fat choice cooked roasted",畜肉类,牛肋条|牛排骨
+168613,牛小排（炖）,Beef rib shortribs separable lean and fat choice cooked braised,畜肉类,牛肋排|牛排骨
+170199,腌牛肉（生）,Beef cured corned beef brisket raw,加工肉制品,咸牛肉
+170200,腌牛肉（熟）,Beef cured corned beef brisket cooked,加工肉制品,咸牛肉
+169451,牛肝（生）,Beef variety meats and by-products liver raw,内脏类,牛肝脏
+168626,牛肝（炖）,Beef variety meats and by-products liver cooked braised,内脏类,熟牛肝
+168625,牛心（生）,Beef variety meats and by-products heart raw,内脏类,牛心脏
+169449,牛腰（生）,Beef variety meats and by-products kidneys raw,内脏类,牛肾|牛腰子
+170196,牛舌（生）,Beef variety meats and by-products tongue raw,内脏类,牛口条
+168297,猪肉（综合部位，带肥，熟）,Pork fresh composite of trimmed retail cuts (leg loin shoulder and spareribs) separable lean and fat cooked,畜肉类,熟猪肉|猪肉
+167812,五花肉（生）,Pork fresh belly raw,畜肉类,猪五花|带皮猪肉
+167853,猪排骨（生）,Pork fresh spareribs separable lean and fat raw,畜肉类,排骨|肋排
+167854,猪排骨（炖）,Pork fresh spareribs separable lean and fat cooked braised,畜肉类,炖排骨
+167902,猪肉末（生）,Pork fresh ground raw,畜肉类,猪肉馅|肉末
+167839,猪通脊（生）,Pork fresh loin top loin (chops) boneless separable lean and fat raw,畜肉类,猪大排|猪排
+168312,猪里脊（生）,Pork fresh loin tenderloin separable lean and fat raw,畜肉类,里脊肉|猪柳
+167843,猪肩肉（生）,Pork fresh shoulder whole separable lean and fat raw,畜肉类,梅花肉|猪前腿
+167844,猪肩肉（烤）,Pork fresh shoulder whole separable lean and fat cooked roasted,畜肉类,烤猪肉
+168226,猪腿肉（生）,Pork fresh leg (ham) shank half separable lean and fat raw,畜肉类,猪后腿
+167862,猪肝（生）,Pork fresh variety meats and by-products liver raw,内脏类,猪肝脏
+167863,猪肝（炖）,Pork fresh variety meats and by-products liver cooked braised,内脏类,熟猪肝
+168267,猪心（生）,Pork fresh variety meats and by-products heart raw,内脏类,猪心脏
+168270,猪腰（生）,Pork fresh variety meats and by-products kidneys raw,内脏类,猪肾|腰子
+168275,猪舌（生）,Pork fresh variety meats and by-products tongue raw,内脏类,猪口条
+167867,猪肚（生）,Pork fresh variety meats and by-products stomach raw,内脏类,猪胃
+168323,猪肚（煮）,Pork fresh variety meats and by-products stomach cooked simmered,内脏类,熟猪肚
+167859,猪蹄（生）,Pork fresh variety meats and by-products feet raw,畜肉类,猪脚|猪手
+168290,猪蹄（炖）,Pork fresh variety meats and by-products feet cooked simmered,畜肉类,炖猪蹄
+168266,猪大肠（生）,Pork fresh variety meats and by-products chitterlings raw,内脏类,肥肠|猪肠
+168277,培根（未烹制）,Pork cured bacon unprepared,加工肉制品,咸肉|烟肉
+167712,培根（熟，低钠）,Pork cured bacon cooked broiled pan-fried or roasted reduced sodium,加工肉制品,煎培根
+167871,火腿（瘦，熟）,Pork cured ham boneless extra lean (approximately 5% fat) roasted,加工肉制品,熟火腿
+171477,鸡胸肉（去皮，烤）,Chicken broilers or fryers breast meat only cooked roasted,禽肉类,鸡胸|鸡胸脯
+171077,鸡胸肉（去皮去骨，生）,Chicken broilers or fryers breast skinless boneless meat only raw,禽肉类,鸡胸|鸡胸脯
+171474,鸡胸肉（带皮，生）,Chicken broilers or fryers breast meat and skin raw,禽肉类,带皮鸡胸
+172385,鸡大腿肉（带皮，生）,Chicken broilers or fryers thigh meat and skin raw,禽肉类,鸡腿肉|鸡大腿
+173625,鸡大腿肉（带皮，烤）,Chicken broilers or fryers thigh meat and skin cooked roasted,禽肉类,烤鸡腿
+172373,鸡小腿（带皮，生）,Chicken broilers or fryers drumstick meat and skin raw,禽肉类,琵琶腿|鸡腿
+173612,鸡小腿（带皮，烤）,Chicken broilers or fryers drumstick meat and skin cooked roasted,禽肉类,烤鸡腿
+172390,鸡翅（带皮，生）,Chicken broilers or fryers wing meat and skin raw,禽肉类,鸡翅膀
+173630,鸡翅（带皮，烤）,Chicken broilers or fryers wing meat and skin cooked roasted,禽肉类,烤鸡翅
+171447,鸡肉（带皮，生）,Chicken broilers or fryers meat and skin raw,禽肉类,鸡肉|整鸡
+171450,鸡肉（带皮，烤）,Chicken broilers or fryers meat and skin cooked roasted,禽肉类,烤鸡|烤鸡肉
+171119,鸡爪（煮）,Chicken feet boiled,禽肉类,凤爪|鸡脚
+171061,鸡肝（煮）,Chicken liver all classes cooked simmered,内脏类,鸡肝脏
+171060,鸡肝（生）,Chicken liver all classes raw,内脏类,鸡肝脏
+171457,鸡胗（煮）,Chicken gizzard all classes cooked simmered,内脏类,鸡肫|鸡胃
+171116,鸡肉末（生）,Chicken ground raw,禽肉类,鸡肉馅|鸡绞肉
+171479,火鸡肉（带皮，烤）,Turkey whole meat and skin cooked roasted,禽肉类,火鸡
+171081,火鸡肉（带皮，生）,Turkey whole meat and skin raw,禽肉类,火鸡
+171496,火鸡胸肉（去皮，烤）,Turkey whole breast meat only cooked roasted,禽肉类,火鸡胸
+171098,火鸡胸肉（去皮，生）,Turkey whole breast meat only raw,禽肉类,火鸡胸
+171506,火鸡肉末（熟）,Turkey ground cooked,禽肉类,火鸡肉馅
+171487,火鸡肝（煮）,Turkey all classes liver cooked simmered,内脏类,火鸡肝脏
+172408,鸭肉（带皮，生）,Duck domesticated meat and skin raw,禽肉类,鸭|鸭子
+172409,鸭肉（带皮，烤）,Duck domesticated meat and skin cooked roasted,禽肉类,烤鸭
+174467,鸭肝（生）,Duck domesticated liver raw,内脏类,鸭肝脏
+174470,鹅肉（带皮，生）,Goose domesticated meat and skin raw,禽肉类,鹅
+172415,鹅肝（生）,Goose liver raw,内脏类,鹅肝脏
+172418,鹌鹑（带皮，生）,Quail meat and skin raw,禽肉类,鹌鹑肉
+174472,野鸡（带皮，生）,Pheasant raw meat and skin,禽肉类,雉鸡|山鸡
+171287,鸡蛋（全蛋，生）,Egg whole raw fresh,蛋类,鸡蛋|全蛋
+173424,鸡蛋（水煮，全熟）,Egg whole cooked hard-boiled,蛋类,水煮蛋|白煮蛋
+173423,煎鸡蛋（全蛋）,Egg whole cooked fried,蛋类,煎蛋|荷包蛋
+172187,炒鸡蛋（全蛋）,Egg whole cooked scrambled,蛋类,炒蛋
+172183,蛋清（生）,Egg white raw fresh,蛋类,蛋白|鸡蛋白
+172184,蛋黄（生）,Egg yolk raw fresh,蛋类,鸡蛋黄
+172189,鸭蛋（全蛋，生）,Egg duck whole fresh raw,蛋类,鸭蛋
+172191,鹌鹑蛋（全蛋，生）,Egg quail whole fresh raw,蛋类,鹌鹑蛋
+174311,羊腿肉（带肥，生）,"Lamb leg whole (shank and sirloin) separable lean and fat trimmed to 1/4"" fat choice raw",畜肉类,羊肉|绵羊腿
+174312,羊腿肉（带肥，烤）,"Lamb leg whole (shank and sirloin) separable lean and fat trimmed to 1/4"" fat choice cooked roasted",畜肉类,烤羊腿
+172496,羊肩肉（带肥，生）,"Lamb shoulder whole (arm and blade) separable lean and fat trimmed to 1/4"" fat choice raw",畜肉类,羊肩|羊前腿
+174370,羊肉末（生）,Lamb ground raw,畜肉类,羊肉馅|羊绞肉
+172531,羊肝（生）,Lamb variety meats and by-products liver raw,内脏类,羊肝脏
+172532,羊肝（炖）,Lamb variety meats and by-products liver cooked braised,内脏类,熟羊肝
+175290,小牛肉末（生）,Veal ground raw,畜肉类,小牛肉馅
+173855,鹿肉（生）,Game meat deer raw,畜肉类,鹿肉
+173851,野牛肉（瘦，生）,Game meat bison separable lean only raw,畜肉类,美洲野牛
+175301,麋鹿肉（生）,Game meat elk raw,畜肉类,麋鹿|马鹿
+172521,兔肉（生）,Game meat rabbit domesticated composite of cuts raw,畜肉类,家兔肉
+175303,山羊肉（生）,Game meat goat raw,畜肉类,山羊肉
