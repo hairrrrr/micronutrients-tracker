@@ -1,0 +1,43 @@
+/*!
+ * Segmented "inline group" layout, adapted from Pico CSS v2.
+ * https://picocss.com  |  MIT License, Copyright (c) 2019-2024 Pico
+ *
+ * Vendored excerpt (small, no CDN, no build step). The only changes are the
+ * class names (`.segmented` instead of Pico's `[role=group]`), Pico's custom
+ * properties replaced with this project's tokens, and the rules trimmed to the
+ * ones this site actually uses. Full license text: ./pico-segmented.LICENSE.md
+ *
+ * Buttons placed in a `.segmented` wrapper become one joined bar: equal-width
+ * segments, squared inner corners, shared outer radius, and the focused segment
+ * lifted above its neighbours so its outline is not clipped.
+ */
+
+.segmented {
+  display: inline-flex;
+  position: relative;
+  width: 100%;
+  vertical-align: middle;
+  border-radius: var(--radius-sm, 8px);
+}
+
+.segmented > * {
+  position: relative;
+  flex: 1 1 auto;
+  margin-bottom: 0;
+}
+
+.segmented > *:not(:first-child) {
+  margin-left: calc(var(--segmented-border, 1px) * -1);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.segmented > *:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.segmented > *:focus,
+.segmented > *:focus-visible {
+  z-index: 2;
+}

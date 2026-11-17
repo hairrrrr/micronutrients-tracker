@@ -1,0 +1,504 @@
+/* Micronutrients Tracker - mobile-first styles (390 px design width).
+ *
+ * Hand-written, no build step. The segmented control layout is a small
+ * vendored excerpt of Pico CSS v2's inline group (docs/vendor/pico-segmented.css,
+ * MIT, Copyright 2019-2024 Pico); the skin and form rows below are ours.
+ * See "Credits" in README.md.
+ */
+
+/* ---------------------------------------------------------------------------
+ * Tokens
+ * ------------------------------------------------------------------------ */
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --surface-muted: #eef1f5;
+  --text: #1f2328;
+  --text-muted: #57606a;
+  --border: #d6dbe1;
+  --border-strong: #b7bec7;
+  --accent: #1a5fb4;
+  --accent-soft: #e8f1fd;
+  --danger: #b3261e;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --pad: 16px;
+  --font: system-ui, -apple-system, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", "Helvetica Neue",
+    Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+h1 {
+  font-size: 1.125rem;
+  line-height: 1.3;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * Layout
+ * ------------------------------------------------------------------------ */
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 12px var(--pad);
+}
+
+.app-header__inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.app-header__title {
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+.app-header__subtitle {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+
+.app-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--pad);
+  padding-bottom: 48px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.panel + .panel {
+  margin-top: var(--pad);
+}
+
+.status {
+  padding: 20px var(--pad);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.status--error {
+  color: var(--danger);
+}
+
+/* ---------------------------------------------------------------------------
+ * Profile panel (<details>)
+ * ------------------------------------------------------------------------ */
+.profile__summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px var(--pad);
+  cursor: pointer;
+  list-style: none;
+  background: var(--surface);
+}
+
+.profile__summary::-webkit-details-marker {
+  display: none;
+}
+
+.profile__summary::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-left: 4px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.15s ease;
+  flex: none;
+}
+
+.profile[open] .profile__summary::after {
+  transform: translateY(2px) rotate(225deg);
+}
+
+.profile__summary-title {
+  font-weight: 650;
+  font-size: 0.9375rem;
+}
+
+.profile__summary-meta {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 55%;
+}
+
+.profile__body {
+  border-top: 1px solid var(--border);
+  padding: var(--pad);
+}
+
+/* ---------------------------------------------------------------------------
+ * Form fields
+ * ------------------------------------------------------------------------ */
+.profile__controls {
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.field__label {
+  display: block;
+  padding: 0;
+  margin-bottom: 6px;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.field__note {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.input {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem; /* 16px keeps iOS from zooming on focus */
+  appearance: none;
+}
+
+select.input {
+  padding-right: 32px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
+    linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(50% + 2px), calc(100% - 13px) calc(50% + 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input--age {
+  max-width: 120px;
+}
+
+.input-row__suffix {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* Segmented control: layout comes from the vendored Pico CSS v2 inline-group
+ * excerpt (docs/vendor/pico-segmented.css, MIT); the skin below is ours.
+ * `--segmented-border: 0` because our segments share one divider border
+ * instead of overlapping full borders, so Pico's negative margin is not
+ * wanted here. */
+.segmented {
+  width: 100%;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface);
+  --segmented-border: 0px;
+}
+
+.segmented__btn {
+  flex: 1 1 0;
+  min-height: 44px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.segmented__btn + .segmented__btn {
+  border-left: 1px solid var(--border-strong);
+}
+
+.segmented__btn.is-active {
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.segmented__btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+}
+
+/* Radio choice row */
+.choice-row {
+  display: grid;
+  gap: 8px;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 0.9375rem;
+}
+
+.choice input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--accent);
+  flex: none;
+}
+
+.choice:has(input:checked),
+.choice.is-checked {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+
+.choice:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Standards comparison table
+ * ------------------------------------------------------------------------ */
+.standards {
+  margin-top: 18px;
+}
+
+.standards__table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.875rem;
+}
+
+.standards__caption {
+  caption-side: top;
+  padding-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-align: left;
+}
+
+.standards__table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface-muted);
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8125rem;
+  font-weight: 650;
+  text-align: right;
+  vertical-align: bottom;
+}
+
+.standards__table thead th.standards__name--head {
+  text-align: left;
+}
+
+.standards__col.is-active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+
+.standards__col-age {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.standards__badge {
+  display: block;
+  margin-top: 4px;
+  color: var(--accent);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.standards__table tbody th,
+.standards__table tbody td {
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+  vertical-align: middle;
+}
+
+.standards__table tbody tr:last-child th,
+.standards__table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.standards__name {
+  width: 38%;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.standards__en {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.standards__value {
+  width: 31%;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.35;
+}
+
+/* On narrow screens the value type drops to a second line so the two value
+ * columns never collide at 390 px. */
+.standards__amount {
+  display: block;
+  white-space: nowrap;
+}
+
+.standards__kind {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.standards__value.is-active {
+  background: var(--accent-soft);
+  color: var(--text);
+  font-weight: 650;
+}
+
+.standards__value.is-empty {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.standards__note {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------------
+ * Utilities
+ * ------------------------------------------------------------------------ */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * Wider screens: two columns of controls, roomier table
+ * ------------------------------------------------------------------------ */
+@media (min-width: 640px) {
+  :root {
+    --pad: 20px;
+  }
+
+  .profile__body {
+    padding: 20px;
+  }
+
+  .profile__controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .choice-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .standards__name {
+    width: 40%;
+  }
+
+  .standards__value {
+    width: 30%;
+  }
+
+  /* Enough room for one line again: "800 mg (RNI)". */
+  .standards__amount,
+  .standards__kind {
+    display: inline;
+    white-space: normal;
+  }
+
+  .standards__table {
+    font-size: 0.9375rem;
+  }
+}

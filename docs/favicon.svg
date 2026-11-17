@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="微量营养素追踪">
+  <rect width="32" height="32" rx="7" fill="#1a5fb4"/>
+  <path d="M9 21.5c0-7 5.5-11.5 14-11.5 0 8.5-4.5 13.5-11.5 13.5-1.2 0-2.5-.7-2.5-2z" fill="#c8f2d0"/>
+  <path d="M9.5 24.5c2.5-5 6-8.5 11-10.5" stroke="#1a5fb4" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+</svg>

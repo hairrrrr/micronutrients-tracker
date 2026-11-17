@@ -4,11 +4,29 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>微量营养素追踪</title>
+  <meta name="description" content="每日微量营养素参考摄入量对照与食物速查（中国 2023 与美国标准）">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="vendor/pico-segmented.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>微量营养素追踪</h1>
-  <p>Micronutrients Tracker</p>
+  <header class="app-header">
+    <div class="app-header__inner">
+      <h1 class="app-header__title">微量营养素追踪</h1>
+      <p class="app-header__subtitle">中国 2023 与美国参考摄入量对照</p>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <section class="panel" id="profile" aria-busy="true">
+      <p class="status">正在加载数据…</p>
+    </section>
+  </main>
+
+  <noscript>
+    <p class="status">本站需要启用 JavaScript 才能显示内容。</p>
+  </noscript>
+
   <script type="module" src="js/app.js"></script>
 </body>
 </html>
