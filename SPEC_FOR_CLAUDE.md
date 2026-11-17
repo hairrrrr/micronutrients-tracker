@@ -1,4 +1,4 @@
-# Product Spec: "Vita Check" - Daily Vitamin & Mineral Intake Checker (static website)
+# Product Spec: "Micronutrients Tracker" - Daily Vitamin & Mineral (Micronutrient) Intake Checker (static website)
 
 ## What I need from you
 Please produce, for an **autonomous coding model** that will build this project mostly unattended overnight (driven through the OpenCode CLI, with a human-side supervisor checking its work):
@@ -60,7 +60,7 @@ A static, pure front-end website that lets a person check whether their daily in
 
 ### 8. Platform and deployment
 - Output must be static files only (plain HTML/CSS/JS, or a light build such as Vite producing static output).
-- Must work under **any base path** (relative asset paths): first deployed to GitHub Pages at a project path (e.g. `https://<user>.github.io/vita-check/`), later moved to a custom subdomain via CNAME. Include a short DEPLOY.md describing the custom-subdomain setup.
+- Must work under **any base path** (relative asset paths): first deployed to GitHub Pages at a project path (e.g. `https://<user>.github.io/micronutrients-tracker/`), later moved to the custom subdomain micronutrients.lianboji.club via CNAME. Include a short DEPLOY.md describing the custom-subdomain setup.
 - Mobile-first, responsive layout (iPhone widths around 390 px must be comfortable); also good on desktop.
 
 ## Data requirements (correctness is critical)
