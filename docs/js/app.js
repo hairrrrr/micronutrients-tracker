@@ -11,6 +11,7 @@
 
 import { load, reduce, save } from "./core/state.js";
 import { renderProfile } from "./ui/profile.js";
+import { renderTargets } from "./ui/targets.js";
 
 const DATA_FILES = ["nutrients", "foods", "dri"];
 
@@ -43,15 +44,17 @@ function storage() {
 }
 
 /**
- * Replace the loading placeholder with a Chinese error message.
+ * Replace the loading placeholders with a Chinese error message.
  *
  * @param {string} message
  */
 function showError(message) {
-  const section = document.getElementById("profile");
-  if (!section) return;
-  section.setAttribute("aria-busy", "false");
-  section.innerHTML = `<p class="status status--error" role="alert">${message}</p>`;
+  for (const id of ["profile", "targets"]) {
+    const section = document.getElementById(id);
+    if (!section) continue;
+    section.setAttribute("aria-busy", "false");
+    section.innerHTML = `<p class="status status--error" role="alert">${message}</p>`;
+  }
 }
 
 /**
@@ -71,6 +74,7 @@ function indexFoods(foodsJson) {
 
 async function main() {
   const section = document.getElementById("profile");
+  const targetsSection = document.getElementById("targets");
   if (!section) return;
 
   const store = storage();
@@ -96,7 +100,10 @@ async function main() {
   };
 
   /**
-   * Apply a reducer, persist and re-render the panel.
+   * Apply a reducer, persist and re-render every section.
+   *
+   * One path for every change, so the profile panel, the target cards and the
+   * stored state can never disagree.
    *
    * @param {string} action state.js reducer name
    * @param {*} payload reducer payload
@@ -104,7 +111,13 @@ async function main() {
   function update(action, payload) {
     app.state = reduce(app.state, action, payload);
     save(app.state, store);
+    renderAll();
+  }
+
+  /** Re-render every section from the current state. */
+  function renderAll() {
     renderProfile(section, context);
+    renderTargets(targetsSection, context);
   }
 
   const context = {
@@ -114,10 +127,11 @@ async function main() {
     nutrients: app.nutrients,
     dri: app.dri,
     foods: app.foods,
+    foodsById: app.foodsById,
     onChange: update,
   };
 
-  renderProfile(section, context);
+  renderAll();
 
   // Handy for the headless smoke check and the console; no behaviour depends
   // on it.

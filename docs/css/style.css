@@ -447,6 +447,156 @@ select.input {
 }
 
 /* ---------------------------------------------------------------------------
+ * Target cards
+ *
+ * 3 columns at the 390 px design width, 4 from 560 px and 6 from 760 px, so a
+ * desktop shows the whole set without scrolling. Each card carries its own
+ * background through the `--card-bg` / `--card-border` / `--card-text` custom
+ * properties set inline by targets.js, which keeps the data colours out of the
+ * stylesheet. The density (name, target, remaining, thin bar) follows the
+ * goal/nutrient cards of common trackers such as Cronometer; the CSS is ours.
+ * ------------------------------------------------------------------------ */
+.panel--targets {
+  padding: 14px var(--pad) var(--pad);
+}
+
+.targets__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 8px;
+  margin-bottom: 10px;
+}
+
+.targets__title {
+  flex: none;
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.targets__meta {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-align: right;
+}
+
+.targets__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.target-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  min-height: 92px;
+  padding: 7px 8px 8px;
+  border: 2px solid var(--card-border, transparent);
+  border-radius: var(--radius-sm);
+  background: var(--card-bg, var(--surface-muted));
+  color: var(--card-text, var(--text));
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The active nutrient is the one the (later) food list shows. The ring is
+ * inset so it never pushes neighbouring cards around. */
+.target-card.is-active {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.target-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Over the UL: a red outline plus the warning line, on top of the normal
+ * background (PLAN.md 1.8 item 3). */
+.target-card.is-over {
+  border-color: var(--danger);
+  box-shadow: inset 0 0 0 1px var(--danger);
+}
+
+.target-card.is-over.is-active {
+  box-shadow: inset 0 0 0 2px var(--accent), inset 0 0 0 4px var(--danger);
+}
+
+.target-card__name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.target-card__target {
+  color: inherit;
+  font-size: 0.6875rem;
+  opacity: 0.78;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}
+
+.target-card__status {
+  margin-top: auto;
+  padding-top: 3px;
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.target-card__bar {
+  display: block;
+  height: 4px;
+  margin-top: 5px;
+  border-radius: 999px;
+  background: rgba(31, 35, 40, 0.14);
+  overflow: hidden;
+}
+
+.target-card__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.target-card.is-met .target-card__fill {
+  opacity: 0.85;
+}
+
+.target-card__warn {
+  display: block;
+  color: var(--danger);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* The met green uses a dark green text; keep the warning readable there. */
+.target-card.is-met.is-over .target-card__warn {
+  color: #8a1310;
+}
+
+.targets__note {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------------
  * Utilities
  * ------------------------------------------------------------------------ */
 .visually-hidden {
@@ -500,5 +650,37 @@ select.input {
 
   .standards__table {
     font-size: 0.9375rem;
+  }
+}
+
+/* Wider than the 390 px design width: more cards per row instead of wider
+ * cards, so the whole set stays visible at once (PLAN.md 1.8 item 3). */
+@media (min-width: 560px) {
+  .targets__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+}
+
+@media (min-width: 760px) {
+  .targets__grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .target-card {
+    min-height: 100px;
+    padding: 9px 10px 10px;
+  }
+
+  .target-card__name {
+    font-size: 0.8125rem;
+  }
+
+  .target-card__target {
+    font-size: 0.75rem;
+  }
+
+  .target-card__status {
+    font-size: 0.8125rem;
   }
 }

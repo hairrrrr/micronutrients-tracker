@@ -43,7 +43,17 @@ under `docs/` (no CDN, no runtime dependency), as noted per item.
   rewritten by hand.
 - **Open Props** - https://open-props.style - MIT License. The design-token
   approach (a `:root` block of `--surface`, `--border`, `--radius`, `--pad`
-  custom properties) follows Open Props' idea; the values are our own.
+  custom properties) follows Open Props' idea; the values are our own. The
+  target-card grid (`repeat(n, minmax(0, 1fr))` with a `min-width: 0` card so
+  long Chinese names cannot widen a column) and the 4 px rounded progress bar
+  are the same utility-style ideas re-implemented by hand in
+  `docs/css/style.css`; no Open Props file is vendored or fetched.
+- **Cronometer** - https://cronometer.com - design reference only, no code
+  copied (the site is not open source, so nothing was vendored). The target
+  cards in `docs/js/ui/targets.js` and `docs/css/style.css` follow the common
+  nutrition-tracker pattern of a dense goal/nutrient card grid: nutrient name,
+  target, remaining or surplus amount, and a thin progress bar under it. The
+  markup and CSS are written from scratch for this project.
 
 ## Disclaimer
 
