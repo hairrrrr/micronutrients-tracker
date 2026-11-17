@@ -14,7 +14,12 @@ Current checks (phase P2):
                      table with a matching USDA unit, 22 unique pastel colors
                      that stay WCAG AA readable with the UI text color.
 
-Later phases add checks for the other data-src files here.
+Phase P3 adds:
+    foods_curated.csv - header, unique fdc_id, every fdc_id present in the
+                     SR Legacy food table, no excluded food category (baby
+                     food, fast food, restaurant food, branded, QC material),
+                     non-empty Chinese name_zh / category_zh and Chinese
+                     aliases; the total row count is printed.
 """
 
 from __future__ import annotations
@@ -82,6 +87,14 @@ CSV_COLUMNS = [
     "kind",
     "note",
 ]
+
+# data-src/foods_curated.csv columns (PLAN.md 1.3).
+FOODS_COLUMNS = ["fdc_id", "name_zh", "name_en", "category_zh", "aliases_zh"]
+
+# P3: categories that must never appear in the curated food list:
+# 3 Baby Foods, 21 Fast Foods, 25 Restaurant Foods, 26 Branded Food
+# Products Database, 27 Quality Control Materials.
+EXCLUDED_CATEGORY_IDS = {3, 21, 25, 26, 27}
 
 
 class Checks:
@@ -163,6 +176,25 @@ def load_usda_nutrients():
     from usda_lib import load_nutrients  # local import: keeps --help cheap
 
     return {nutrient_id: row for nutrient_id, row in load_nutrients().items()}
+
+
+def load_usda_foods():
+    """fdc_id -> food row from the SR Legacy food table."""
+    from usda_lib import load_food  # local import: keeps --help cheap
+
+    return load_food()
+
+
+def load_excluded_categories():
+    """food_category id -> description for the categories P3 forbids."""
+    from usda_lib import load_food_category
+
+    categories = load_food_category()
+    return {
+        category_id: categories[category_id]["description"]
+        for category_id in EXCLUDED_CATEGORY_IDS
+        if category_id in categories
+    }
 
 
 def validate_nutrients(checks, usda_nutrients):
@@ -280,16 +312,82 @@ def validate_nutrients(checks, usda_nutrients):
     return len(rows)
 
 
+def validate_foods(checks, usda_foods, excluded_categories):
+    """Checks for data-src/foods_curated.csv (phase P3)."""
+    path = DATA_SRC / "foods_curated.csv"
+    if not checks.check(path.is_file(), "missing data-src/foods_curated.csv"):
+        return 0
+
+    header, rows = read_csv(path)
+    checks.check(
+        header == FOODS_COLUMNS,
+        f"foods_curated.csv columns are {header}, expected {FOODS_COLUMNS}",
+    )
+
+    seen_ids = {}
+    for line_no, row in enumerate(rows, start=2):
+        raw_id = (row.get("fdc_id") or "").strip()
+        label = f"foods_curated.csv line {line_no} ({raw_id or 'no fdc_id'})"
+
+        if not checks.check(raw_id.isdigit(), f"{label}: fdc_id must be a number"):
+            continue
+        fdc_id = int(raw_id)
+
+        if fdc_id in seen_ids:
+            checks.fail(f"{label}: duplicate fdc_id (also on line {seen_ids[fdc_id]})")
+        else:
+            seen_ids[fdc_id] = line_no
+
+        food = usda_foods.get(fdc_id)
+        if not checks.check(food is not None, f"{label}: fdc_id {fdc_id} not in SR Legacy food.csv"):
+            continue
+
+        category_id = food["food_category_id"]
+        if category_id in excluded_categories:
+            checks.fail(
+                f"{label}: excluded category {category_id} "
+                f"({excluded_categories[category_id]}): {food['description']}"
+            )
+
+        name_zh = (row.get("name_zh") or "").strip()
+        checks.check(
+            name_zh != "" and has_cjk(name_zh),
+            f"{label}: name_zh must be a non-empty Chinese name, got {name_zh!r}",
+        )
+
+        name_en = (row.get("name_en") or "").strip()
+        checks.check(name_en != "", f"{label}: name_en must not be empty")
+
+        category_zh = (row.get("category_zh") or "").strip()
+        checks.check(
+            category_zh != "" and has_cjk(category_zh),
+            f"{label}: category_zh must be a non-empty Chinese category, got {category_zh!r}",
+        )
+
+        aliases = (row.get("aliases_zh") or "").strip()
+        if aliases:
+            checks.check(
+                all(has_cjk(part) for part in aliases.split("|") if part.strip()),
+                f"{label}: aliases_zh entries must be Chinese, got {aliases!r}",
+            )
+
+    return len(rows)
+
+
 def main():
     checks = Checks()
     usda_nutrients = load_usda_nutrients()
     nutrient_count = validate_nutrients(checks, usda_nutrients)
+    food_count = validate_foods(checks, load_usda_foods(), load_excluded_categories())
 
     if checks.failures:
-        print(f"nutrients: {nutrient_count} rows checked, {len(checks.failures)} problem(s)")
+        print(f"nutrients: {nutrient_count} rows checked")
+        print(f"foods: {food_count} rows checked")
+        print(f"{len(checks.failures)} problem(s) found")
         return checks.report()
 
     print(f"nutrients: {nutrient_count} OK")
+    print(f"foods: {food_count} OK")
     return 0
 
 

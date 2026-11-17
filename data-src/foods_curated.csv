@@ -1,0 +1,69 @@
+fdc_id,name_zh,name_en,category_zh,aliases_zh
+168877,白米（长粒，生，强化）,White rice long-grain raw enriched,谷物与面食,大米|白米
+168931,白米（短粒，生，未强化）,White rice short-grain raw unenriched,谷物与面食,大米|粳米
+168883,糯米（生，未强化）,Glutinous rice raw,谷物与面食,江米|圆糯米
+169711,糯米饭（熟）,Glutinous rice cooked,谷物与面食,江米饭
+169703,糙米（长粒，生）,Brown rice long-grain raw,谷物与面食,糙米
+169704,糙米饭（长粒，熟）,Brown rice long-grain cooked,谷物与面食,糙米饭
+168878,白米饭（长粒，熟，强化）,White rice long-grain cooked enriched,谷物与面食,米饭|大米饭
+169757,白米饭（长粒，熟，未强化）,White rice long-grain cooked unenriched,谷物与面食,米饭|大米饭
+168932,白米饭（短粒，熟，未强化）,White rice short-grain cooked unenriched,谷物与面食,米饭|粳米饭
+169726,野米（生）,Wild rice raw,谷物与面食,菰米
+168897,野米饭（熟）,Wild rice cooked,谷物与面食,菰米饭
+168874,藜麦（生）,Quinoa uncooked,谷物与面食,藜麦米
+168917,藜麦（熟）,Quinoa cooked,谷物与面食,藜麦饭
+169702,小米（生）,Millet raw,谷物与面食,粟米|谷子
+168871,小米（熟）,Millet cooked,谷物与面食,小米饭
+170284,珍珠大麦（生）,Pearled barley raw,谷物与面食,大麦|洋薏米
+170285,珍珠大麦（熟）,Pearled barley cooked,谷物与面食,大麦饭
+170286,荞麦（生）,Buckwheat raw,谷物与面食,荞麦粒
+170685,烤荞麦米（干）,Roasted buckwheat groats dry,谷物与面食,荞麦米
+168893,全麦面粉,Wheat flour whole-grain,谷物与面食,全麦粉|面粉
+168894,中筋面粉（白，强化，漂白）,Wheat flour white all-purpose enriched bleached,谷物与面食,面粉|白面
+168896,面包粉（白，强化）,Wheat flour white bread enriched,谷物与面食,高筋面粉
+168898,糙米粉,Rice flour brown,谷物与面食,米粉
+169714,白米粉（未强化）,Rice flour white unenriched,谷物与面食,粘米粉
+169697,玉米面（全谷物，黄）,Cornmeal whole-grain yellow,谷物与面食,玉米粉|棒子面
+170288,玉米粒（黄，干）,Corn grain yellow,谷物与面食,玉米|苞米
+169698,玉米淀粉,Cornstarch,谷物与面食,生粉|粟粉
+169705,燕麦（生）,Oats,谷物与面食,燕麦|燕麦粒
+169741,燕麦粉（部分去皮）,Oat flour partially debranned,谷物与面食,燕麦面
+168872,燕麦麸（生）,Oat bran raw,谷物与面食,燕麦糠
+168892,小麦胚芽（未精制）,Wheat germ crude,谷物与面食,麦胚
+168933,硬粒小麦粉（未强化）,Semolina unenriched,谷物与面食,粗粒小麦粉|杜兰小麦粉
+170687,荞麦粉,Buckwheat flour whole-groat,谷物与面食,荞面
+169716,高粱米,Sorghum grain,谷物与面食,蜀黍|甜高粱
+168943,高粱粉（全谷物）,Sorghum flour whole-grain,谷物与面食,高粱面
+168885,黑麦粉（深色）,Rye flour dark,谷物与面食,黑面粉
+168446,马铃薯粉,Potato flour,谷物与面食,土豆粉|马铃薯淀粉
+168914,米粉（熟）,Rice noodles cooked,面条与面食,河粉|米线
+174258,粉丝（绿豆，脱水）,Cellophane noodles mung bean dehydrated,面条与面食,粉丝|粉条
+168907,荞麦面（日式，熟）,Soba noodles cooked,面条与面食,荞麦面条
+169732,鸡蛋面（强化，熟）,Egg noodles enriched cooked,面条与面食,鸡蛋面
+169737,意大利面（强化，熟，不加盐）,Pasta cooked enriched without added salt,面条与面食,意面|通心粉
+168910,全麦意大利面（熟）,Pasta whole-wheat cooked,面条与面食,全麦意面
+174915,皮塔饼（白，强化）,Pita bread white enriched,面包与烘焙,口袋饼
+172688,全麦面包,Bread whole-wheat commercially prepared,面包与烘焙,全麦吐司
+174924,白面包（市售）,Bread white commercially prepared,面包与烘焙,白吐司|吐司
+172684,黑麦面包,Bread rye,面包与烘焙,黑面包
+172675,法式面包,Bread french or vienna,面包与烘焙,法棍|酸面团面包
+174899,贝果（原味，强化）,Bagels plain enriched,面包与烘焙,百吉饼
+172793,小圆面包（市售）,Rolls dinner plain commercially prepared,面包与烘焙,餐包
+172746,苏打饼干,Crackers saltines,面包与烘焙,咸饼干
+172749,全麦饼干,Crackers whole-wheat,面包与烘焙,全麦苏打饼干
+175036,玉米饼（墨西哥薄饼）,Tortillas corn,面包与烘焙,玉米薄饼
+170026,马铃薯（带皮，生）,Potatoes flesh and skin raw,薯类与根茎,土豆|洋芋
+170029,马铃薯（红皮，带皮，生）,Potatoes red flesh and skin raw,薯类与根茎,红土豆
+170093,马铃薯（带皮，烤，不加盐）,Potatoes baked flesh and skin without salt,薯类与根茎,烤土豆
+170438,马铃薯（带皮煮，只取肉，不加盐）,Potatoes boiled cooked in skin flesh without salt,薯类与根茎,煮土豆
+168482,甘薯（生，未处理）,Sweet potato raw unprepared,薯类与根茎,红薯|地瓜
+168483,甘薯（带皮烤，只取肉，不加盐）,Sweet potato baked in skin flesh without salt,薯类与根茎,烤红薯
+170071,山药（生）,Yam raw,薯类与根茎,淮山|参薯
+170072,山药（煮或烤，不加盐）,Yam cooked boiled drained or baked without salt,薯类与根茎,熟山药|淮山
+169308,芋头（生）,Taro raw,薯类与根茎,芋艿|毛芋
+168486,芋头（熟，不加盐）,Taro cooked without salt,薯类与根茎,熟芋头
+169985,木薯（生）,Cassava raw,薯类与根茎,树薯|木薯根
+170066,荸荠（生）,Waterchestnuts chinese raw,薯类与根茎,马蹄|地梨
+170073,沙葛（生）,Yambean jicama raw,薯类与根茎,凉薯|豆薯
+169236,菊芋（生）,Jerusalem-artichokes raw,薯类与根茎,洋姜
+168215,大蕉（青，生）,Plantains green raw,薯类与根茎,青香蕉
