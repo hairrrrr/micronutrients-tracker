@@ -63,6 +63,15 @@ under `docs/` (no CDN, no runtime dependency), as noted per item.
   number per food. The markup, the CSS and the 2-column (mobile) / 4-column
   (desktop) grid are written from scratch in `docs/css/style.css`, using the
   same hand-written `repeat(n, minmax(0, 1fr))` idea as the target cards.
+- **Cronometer / MyFitnessPal / Lose It!** - https://cronometer.com,
+  https://www.myfitnesspal.com and https://www.loseit.com - design reference
+  only, no code copied (none of the three is open source). The selected food
+  card and its quantity editor in `docs/js/ui/foods.js` and `docs/css/style.css`
+  follow the common tracker pattern of a green (logged) card with an inline
+  serving editor underneath it: a serving/measure dropdown, a `-` / `+`
+  quantity stepper in half steps, and the resolved weight in grams. The markup
+  is written from scratch; the editor is a sibling of the card button so no
+  click inside it can toggle the card.
 
 ## Disclaimer
 

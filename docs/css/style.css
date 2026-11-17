@@ -707,10 +707,58 @@ select.input {
   text-align: right;
 }
 
+/* Search box (optional P11b: filter by Chinese name, alias or English name).
+ * A plain input with a hand-written skin (Pico-style form field, our tokens). */
+.foods__search {
+  margin-bottom: 10px;
+}
+
+.foods__search-input {
+  width: 100%;
+  min-height: 40px;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.foods__search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.foods__search-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  background: var(--surface);
+}
+
 .foods__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
+}
+
+/* One grid cell = the card button + (when selected) its quantity editor. The
+ * editor is a sibling of the button, so nothing inside it can toggle the card.
+ * A selected cell spans two columns, which keeps the stepper/select usable at
+ * 390 px while the card itself stays a normal card. */
+.food-cell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.food-cell--selected {
+  grid-column: span 2;
+}
+
+.food-cell .food-card {
+  flex: 1 1 auto;
+  width: 100%;
 }
 
 .food-card {
@@ -789,6 +837,153 @@ select.input {
   line-height: 1.25;
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------------------
+ * Quantity editor of a selected food (PLAN.md 1.8 item 5, phase P11b)
+ *
+ * Lives under its card inside the same cell, tinted with the same green border
+ * as the card. One row: measure select, then either the 0.5-step stepper or the
+ * gram input; the computed weight ("约 28 g") and the "household measures are
+ * estimates" note follow. All controls are at least 34 px tall so they stay
+ * tappable at 390 px.
+ * ------------------------------------------------------------------------ */
+.food-editor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: -1px;
+  padding: 7px 8px 8px;
+  border: 1px solid var(--food-border, var(--border-strong));
+  border-top-style: dashed;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.food-cell--selected .food-card {
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.food-editor__label {
+  flex: 1 1 96px;
+  min-width: 0;
+  margin: 0;
+}
+
+.food-editor__select {
+  width: 100%;
+  min-height: 34px;
+  margin: 0;
+  padding: 4px 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8125rem;
+}
+
+.food-editor__select:focus-visible,
+.food-editor__step:focus-visible,
+.food-editor__grams-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.food-editor__qty {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: stretch;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.food-editor__step {
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border: 0;
+  background: var(--surface-muted);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.food-editor__step:hover {
+  background: var(--surface-muted);
+  filter: brightness(0.96);
+}
+
+.food-editor__count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  padding: 0 2px;
+  border-right: 1px solid var(--border-strong);
+  border-left: 1px solid var(--border-strong);
+  background: var(--surface);
+  font-size: 0.8125rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.food-editor__row {
+  display: flex;
+  flex: 1 1 96px;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.food-editor__grams-input {
+  width: 100%;
+  min-width: 0;
+  min-height: 34px;
+  margin: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.food-editor__unit {
+  flex: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.food-editor__weight {
+  flex: 1 1 100%;
+  margin: 0;
+  color: var(--food-text, var(--text));
+  font-size: 0.8125rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.food-editor__note {
+  flex: 1 1 100%;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+}
+
+/* The weight text carries the selection colour; keep the note readable on the
+ * white editor background. */
+.food-cell--selected .food-editor__weight {
+  color: var(--food-text, var(--text));
 }
 
 .foods__foot {

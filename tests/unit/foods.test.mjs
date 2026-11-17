@@ -12,15 +12,22 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { DEFAULT_LIMIT, LIMIT_STEP } from "../../docs/js/core/order.js";
+import { reduce } from "../../docs/js/core/state.js";
 import {
   ESTIMATE_BADGE,
   buildFoodCards,
+  editorHtml,
+  editorModel,
   foodArray,
+  foodById,
   foodCardHtml,
+  foodCellHtml,
+  foodsBodyHtml,
   foodsHeading,
   foodsHtml,
   hiddenCount,
   per100gText,
+  shortNumber,
 } from "../../docs/js/ui/foods.js";
 
 const NUTRIENTS = {
@@ -281,4 +288,231 @@ test("against foods.json, the first Vitamin A card is the highest vitamin A food
   // Sorted all the way down, not just at the top.
   const shown = cards.map((card) => card.id);
   assert.deepEqual(shown, ranked.slice(0, DEFAULT_LIMIT).map((food) => food.id));
+});
+
+// ---------------------------------------------------------------------------
+// P11b: selection, quantity editor and cross-tab sync
+// ---------------------------------------------------------------------------
+
+const SELECTION_FOODS = [
+  {
+    id: "fdc:liver",
+    nameZh: "猪肝（生）",
+    nameEn: "Pork, fresh, variety meats and by-products, liver, raw",
+    aliases: ["猪肝"],
+    per100g: { vitA: 6502, iron: 23.3 },
+    estimate: false,
+    measures: [
+      { id: "palm", labelZh: "一掌心大小", grams: 100, basis: "estimate:one palm", default: true },
+      { id: "slice", labelZh: "一块", grams: 44, basis: "usda_portion:1", default: false },
+    ],
+  },
+  {
+    id: "composite:fanqie",
+    nameZh: "番茄炒蛋",
+    nameEn: "Tomato and egg stir-fry",
+    per100g: { vitA: 66.95, iron: 0.6154 },
+    estimate: true,
+    measures: [{ id: "plate", labelZh: "一盘", grams: 250, basis: "estimate:one plate", default: true }],
+  },
+];
+const SELECTION_JSON = { foods: SELECTION_FOODS };
+
+function selCtx(overrides = {}, ctxOverrides = {}) {
+  return {
+    ...ctxOverrides,
+    nutrients: NUTRIENTS,
+    foods: SELECTION_JSON,
+    limit: DEFAULT_LIMIT,
+    state: {
+      profile: { sex: "female", age: 30, lifeStage: "none" },
+      standard: "cn2023",
+      activeNutrient: "vitA",
+      selections: {},
+      ...overrides,
+    },
+  };
+}
+
+test("selected cards carry an editor model, unselected ones do not", () => {
+  const plain = buildFoodCards(selCtx());
+  assert.equal(plain.every((card) => card.editor === null), true);
+
+  const cards = buildFoodCards(selCtx({ selections: { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } } }));
+  const liver = cards.find((card) => card.id === "fdc:liver");
+  assert.equal(liver.selected, true);
+  assert.equal(liver.editor.measureId, "palm");
+  assert.equal(liver.editor.count, 1);
+  assert.equal(liver.editor.grams, 100);
+  assert.equal(liver.editor.manual, false);
+});
+
+test("editor model lists household measures plus 克, with per-unit weights", () => {
+  const model = editorModel(SELECTION_FOODS[0], { measureId: "palm", count: 1, grams: 100 });
+  assert.deepEqual(model.options.map((option) => option.id), ["palm", "slice", "grams"]);
+  assert.equal(model.options[0].label, "一掌心大小（100 g）");
+  assert.equal(model.options[1].label, "一块（44 g）");
+  assert.equal(model.options[2].label, "克");
+  assert.equal(model.options[2].manual, true);
+  assert.equal(model.options[0].selected, true);
+});
+
+test("editor model marks the manual gram option and formats the weight", () => {
+  const model = editorModel(SELECTION_FOODS[0], { measureId: "grams", count: 0, grams: 28 });
+  assert.equal(model.manual, true);
+  assert.equal(model.gramsText, "约 28 g");
+  assert.equal(model.options.find((option) => option.manual).selected, true);
+  // Half a slice: the computed weight follows the count, not the selected id.
+  const half = editorModel(SELECTION_FOODS[0], { measureId: "slice", count: 0.5 });
+  assert.equal(half.grams, 22);
+  assert.equal(half.countText, "0.5");
+  assert.equal(half.gramsText, "约 22 g");
+});
+
+test("editor model tolerates a missing selection and a food without measures", () => {
+  const fallback = editorModel(SELECTION_FOODS[0], undefined);
+  assert.equal(fallback.measureId, "palm");
+  assert.equal(fallback.count, 1);
+  const bare = editorModel({ id: "x", measures: [] }, { measureId: "grams", grams: 50 });
+  assert.deepEqual(bare.options.map((option) => option.id), ["grams"]);
+  assert.equal(bare.gramsText, "约 50 g");
+});
+
+test("the editor markup has a select, a stepper and 克, and never nests in the button", () => {
+  const card = buildFoodCards(selCtx({ selections: { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } } }))
+    .find((entry) => entry.id === "fdc:liver");
+  const editor = editorHtml(card);
+  assert.match(editor, /<select[^>]*data-measure/);
+  assert.match(editor, /data-step="-1"/);
+  assert.match(editor, /data-step="1"/);
+  assert.match(editor, /约 100 g/);
+  assert.match(editor, /家庭计量为估算值/);
+  assert.match(editor, /<option value="grams"/);
+
+  // The cell keeps the editor outside the <button>, so no click inside it can
+  // bubble to the card (PLAN.md 1.8 item 5).
+  const cell = foodCellHtml(card);
+  const buttonEnd = cell.indexOf("</button>");
+  assert.ok(buttonEnd > 0, "the card is a button");
+  assert.ok(cell.indexOf('class="food-editor"') > buttonEnd, "the editor sits after the card button");
+  assert.equal(/<button[^>]*>[^]*data-measure/.test(cell.slice(cell.indexOf("<button"), buttonEnd)), false);
+
+  // A manual gram amount swaps the stepper for a gram input.
+  const manualCard = buildFoodCards(selCtx({ selections: { "fdc:liver": { measureId: "grams", count: 0, grams: 28 } } }))
+    .find((entry) => entry.id === "fdc:liver");
+  const manualHtml = editorHtml(manualCard);
+  assert.match(manualHtml, /type="number"/);
+  assert.match(manualHtml, /data-grams/);
+  assert.equal(manualHtml.includes("data-step"), false);
+  // The note about household measures only makes sense with a household measure.
+  assert.equal(manualHtml.includes("家庭计量为估算值"), false);
+});
+
+test("editorHtml returns nothing for an unselected card", () => {
+  assert.equal(editorHtml({ id: "x", editor: null }), "");
+  assert.equal(editorHtml({}), "");
+});
+
+test("selected foods stay pinned across nutrient tabs (cross-tab sync)", () => {
+  const selections = { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } };
+  for (const nutrientId of ["vitA", "iron"]) {
+    const cards = buildFoodCards(selCtx({ activeNutrient: nutrientId, selections }));
+    assert.equal(cards[0].id, "fdc:liver", nutrientId);
+    assert.equal(cards[0].selected, true);
+    assert.equal(cards[0].editor.grams, 100);
+  }
+});
+
+test("selection state flows through state.js and changes the contributions", () => {
+  let state = { ...selCtx().state };
+  state = reduce(state, "toggleFood", SELECTION_FOODS[0]);
+  assert.deepEqual(state.selections["fdc:liver"], { measureId: "palm", count: 1, grams: 100 });
+
+  const cards = buildFoodCards({ ...selCtx(), state });
+  assert.equal(cards[0].id, "fdc:liver");
+
+  // A quantity change re-renders the editor and re-pins by contribution.
+  state = reduce(state, "setQuantity", { foodId: "fdc:liver", quantity: { measureId: "slice", count: 2 }, food: SELECTION_FOODS[0] });
+  assert.deepEqual(state.selections["fdc:liver"], { measureId: "slice", count: 2, grams: 88 });
+  const updated = buildFoodCards({ ...selCtx(), state });
+  assert.equal(updated[0].editor.grams, 88);
+  assert.equal(updated[0].editor.gramsText, "约 88 g");
+
+  // Toggling the same food again removes it and its editor.
+  state = reduce(state, "toggleFood", SELECTION_FOODS[0]);
+  assert.deepEqual(state.selections, {});
+  assert.equal(buildFoodCards({ ...selCtx(), state }).some((card) => card.editor), false);
+});
+
+test("pinned foods are sorted by contribution, then the rest by per 100 g", () => {
+  const selections = {
+    "fdc:liver": { measureId: "palm", count: 0.1, grams: 10 },   // 650.2
+    "composite:fanqie": { measureId: "plate", count: 1, grams: 250 }, // 167.4
+  };
+  const cards = buildFoodCards(selCtx({ selections }));
+  assert.deepEqual(cards.map((card) => card.id), ["fdc:liver", "composite:fanqie"]);
+  assert.equal(cards.every((card) => card.pinned), true);
+});
+
+test("the search box filters by Chinese name, alias and English name, pinned first", () => {
+  const selections = { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } };
+  const byZh = buildFoodCards(selCtx({ selections }, { search: "炒蛋" }));
+  assert.deepEqual(byZh.map((card) => card.id), ["composite:fanqie"]);
+
+  const byEn = buildFoodCards(selCtx({}, { search: "stir-fry" }));
+  assert.deepEqual(byEn.map((card) => card.id), ["composite:fanqie"]);
+
+  const byAlias = buildFoodCards(selCtx({ selections }, { search: "猪肝" }));
+  assert.equal(byAlias[0].id, "fdc:liver");
+  assert.equal(byAlias[0].pinned, true);
+
+  // Case-insensitive English search.
+  assert.equal(buildFoodCards(selCtx({}, { search: "PORK" }))[0].id, "fdc:liver");
+  // Searching a name that only the pinned food matches keeps it first.
+  const pinnedOnly = buildFoodCards(selCtx({ selections }, { search: "liver" }));
+  assert.deepEqual(pinnedOnly.map((card) => card.id), ["fdc:liver"]);
+  // No match: empty list, and the section shows the Chinese empty state.
+  const none = buildFoodCards(selCtx({}, { search: "zzz" }));
+  assert.deepEqual(none, []);
+  assert.match(foodsBodyHtml(none, { ...selCtx(), more: 0, search: "zzz" }), /没有匹配的食物/);
+  // An empty search shows everything again.
+  assert.equal(buildFoodCards(selCtx({}, { search: "   " })).length, SELECTION_FOODS.length);
+});
+
+test("hiddenCount follows the search filter", () => {
+  const many = Array.from({ length: 140 }, (_, index) => ({
+    id: `fdc:${index}`,
+    nameZh: index % 2 === 0 ? `肝脏${index}` : `水果${index}`,
+    nameEn: `Food ${index}`,
+    per100g: { vitA: 1000 - index },
+  }));
+  const shared = { nutrients: NUTRIENTS, foods: { foods: many }, state: selCtx().state, limit: 10 };
+  assert.equal(hiddenCount(shared, 10), 130);
+  assert.equal(hiddenCount(shared, 10, "肝脏"), 60);
+  assert.equal(hiddenCount(shared, 1000, "肝脏"), 0);
+});
+
+test("the section renders a search box and the editor for a selected food", () => {
+  const ctxSelected = selCtx({ selections: { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } } });
+  const html = foodsHtml(buildFoodCards(ctxSelected), { ...ctxSelected, more: 0 });
+  assert.match(html, /data-food-search/);
+  assert.match(html, /搜索食物/);
+  assert.match(html, /data-food-body/);
+  assert.match(html, /data-food-editor="fdc:liver"/);
+  assert.match(html, /--food-border:#145c2a/);
+});
+
+test("shortNumber drops trailing float noise", () => {
+  assert.equal(shortNumber(1), "1");
+  assert.equal(shortNumber(1.5), "1.5");
+  assert.equal(shortNumber(28), "28");
+  assert.equal(shortNumber(13.5), "13.5");
+  assert.equal(shortNumber(Number.NaN), "0");
+});
+
+test("foodById finds a food and tolerates junk", () => {
+  assert.equal(foodById(SELECTION_JSON, "fdc:liver").nameZh, "猪肝（生）");
+  assert.equal(foodById(SELECTION_FOODS, "nope"), null);
+  assert.equal(foodById(null, "fdc:liver"), null);
+  assert.equal(foodById(SELECTION_JSON, ""), null);
 });
