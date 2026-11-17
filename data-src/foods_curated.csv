@@ -67,3 +67,139 @@ fdc_id,name_zh,name_en,category_zh,aliases_zh
 170073,沙葛（生）,Yambean jicama raw,薯类与根茎,凉薯|豆薯
 169236,菊芋（生）,Jerusalem-artichokes raw,薯类与根茎,洋姜
 168215,大蕉（青，生）,Plantains green raw,薯类与根茎,青香蕉
+168462,菠菜（生）,Spinach raw,叶菜类,菠菜叶|赤根菜
+168463,菠菜（煮，不加盐）,Spinach cooked boiled drained without salt,叶菜类,熟菠菜
+168421,羽衣甘蓝（生）,Kale raw,叶菜类,甘蓝叶|凯尔
+169238,羽衣甘蓝（煮，不加盐）,Kale cooked boiled drained without salt,叶菜类,熟羽衣甘蓝
+170406,宽叶甘蓝（生）,Collards raw,叶菜类,羽衣甘蓝叶
+170407,宽叶甘蓝（煮，不加盐）,Collards cooked boiled drained without salt,叶菜类,熟宽叶甘蓝
+169256,芥菜（生）,Mustard greens raw,叶菜类,芥菜叶|芥菜缨
+169257,芥菜（煮，不加盐）,Mustard greens cooked boiled drained without salt,叶菜类,熟芥菜
+170061,芜菁叶（生）,Turnip greens raw,叶菜类,萝卜缨
+170466,芜菁叶（煮，不加盐）,Turnip greens cooked boiled drained without salt,叶菜类,熟芜菁叶
+170375,甜菜叶（生）,Beet greens raw,叶菜类,甜菜缨
+170376,甜菜叶（煮，不加盐）,Beet greens cooked boiled drained without salt,叶菜类,熟甜菜叶
+169991,瑞士甜菜（生）,Chard swiss raw,叶菜类,牛皮菜|莙荙菜
+170401,瑞士甜菜（煮，不加盐）,Chard swiss cooked boiled drained without salt,叶菜类,熟牛皮菜
+169226,蒲公英叶（生）,Dandelion greens raw,叶菜类,蒲公英
+169227,蒲公英叶（煮，不加盐）,Dandelion greens cooked boiled drained without salt,叶菜类,熟蒲公英
+169387,芝麻菜（生）,Arugula raw,叶菜类,火箭菜|芸芥
+168385,苋菜（生）,Amaranth leaves raw,叶菜类,红苋菜|青苋菜
+169202,苋菜（煮，不加盐）,Amaranth leaves cooked boiled drained without salt,叶菜类,熟苋菜
+168419,黄麻叶（生）,Jute potherb raw,叶菜类,长蒴黄麻叶
+168420,黄麻叶（煮，不加盐）,Jute potherb cooked boiled drained without salt,叶菜类,熟黄麻叶
+169301,空心菜（生）,Water convolvulus raw,叶菜类,蕹菜|通菜
+169302,空心菜（煮，不加盐）,Water convolvulus cooked boiled drained without salt,叶菜类,熟空心菜
+168491,茼蒿（生）,Chrysanthemum leaves raw,叶菜类,皇帝菜|蓬蒿
+170405,茼蒿（煮，不加盐）,Chrysanthemum garland cooked boiled drained without salt,叶菜类,熟茼蒿
+170390,小白菜（生）,Cabbage chinese pak-choi raw,叶菜类,青菜|上海青|小油菜
+170391,小白菜（煮，不加盐）,Cabbage chinese pak-choi cooked boiled drained without salt,叶菜类,熟小白菜
+169979,大白菜（生）,Cabbage chinese pe-tsai raw,叶菜类,白菜|结球白菜
+169980,大白菜（煮，不加盐）,Cabbage chinese pe-tsai cooked boiled drained without salt,叶菜类,熟大白菜
+169975,卷心菜（生）,Cabbage raw,叶菜类,圆白菜|包菜|洋白菜
+169976,卷心菜（煮，不加盐）,Cabbage cooked boiled drained without salt,叶菜类,熟卷心菜
+169977,紫甘蓝（生）,Cabbage red raw,叶菜类,紫包菜|红甘蓝
+169978,紫甘蓝（煮，不加盐）,Cabbage red cooked boiled drained without salt,叶菜类,熟紫甘蓝
+170388,皱叶甘蓝（生）,Cabbage savoy raw,叶菜类,萨伏伊甘蓝
+170389,皱叶甘蓝（煮，不加盐）,Cabbage savoy cooked boiled drained without salt,叶菜类,熟皱叶甘蓝
+170383,抱子甘蓝（生）,Brussels sprouts raw,叶菜类,小甘蓝
+169971,抱子甘蓝（煮，不加盐）,Brussels sprouts cooked boiled drained without salt,叶菜类,熟抱子甘蓝
+169404,芥蓝（生）,Broccoli chinese raw,叶菜类,广东芥兰|芥兰
+169392,芥蓝（熟）,Broccoli chinese cooked,叶菜类,熟芥蓝
+170379,西兰花（生）,Broccoli raw,叶菜类,绿菜花|青花菜
+169967,西兰花（煮，不加盐）,Broccoli cooked boiled drained without salt,叶菜类,熟西兰花
+169986,花椰菜（生）,Cauliflower raw,叶菜类,菜花|白花菜
+170397,花椰菜（煮，不加盐）,Cauliflower cooked boiled drained without salt,叶菜类,熟花椰菜
+168429,奶油生菜（生）,Lettuce butterhead raw,叶菜类,团叶生菜|波士顿生菜
+168431,红叶生菜（生）,Lettuce red leaf raw,叶菜类,紫叶生菜
+169247,罗马生菜（生）,Lettuce cos or romaine raw,叶菜类,长叶生菜
+169248,球生菜（生）,Lettuce iceberg raw,叶菜类,冰山生菜|西生菜
+169249,绿叶生菜（生）,Lettuce green leaf raw,叶菜类,生菜
+170393,胡萝卜（生）,Carrots raw,根茎类,红萝卜|甘荀
+170394,胡萝卜（煮，不加盐）,Carrots cooked boiled drained without salt,根茎类,熟胡萝卜
+170500,胡萝卜（脱水）,Carrot dehydrated,根茎类,胡萝卜干
+170491,胡萝卜汁（罐装）,Carrot juice canned,根茎类,胡萝卜汁
+169145,甜菜根（生）,Beets raw,根茎类,红菜头|甜菜头
+169146,甜菜根（煮）,Beets cooked boiled drained,根茎类,熟甜菜根
+169276,红皮萝卜（生）,Radishes raw,根茎类,小萝卜|樱桃萝卜
+168451,白萝卜（生，东方萝卜）,Radishes oriental raw,根茎类,大根|日本萝卜
+168452,白萝卜（煮，不加盐）,Radishes oriental cooked boiled drained without salt,根茎类,熟白萝卜
+168453,白萝卜干（脱水）,Radishes oriental dried,根茎类,萝卜干
+170465,芜菁（生）,Turnips raw,根茎类,大头菜|蔓菁
+170058,芜菁（煮，不加盐）,Turnips cooked boiled drained without salt,根茎类,熟芜菁
+168454,芜菁甘蓝（生）,Rutabagas raw,根茎类,瑞典萝卜
+168455,芜菁甘蓝（煮，不加盐）,Rutabagas cooked boiled drained without salt,根茎类,熟芜菁甘蓝
+170417,欧防风（生）,Parsnips raw,根茎类,欧洲萝卜
+170009,欧防风（煮，不加盐）,Parsnips cooked boiled drained without salt,根茎类,熟欧防风
+170400,根芹（生）,Celeriac raw,根茎类,块根芹
+169987,根芹（煮，不加盐）,Celeriac cooked boiled drained without salt,根茎类,熟根芹
+169974,牛蒡（生）,Burdock root raw,根茎类,牛蒡根
+170384,牛蒡（煮，不加盐）,Burdock root cooked boiled drained without salt,根茎类,熟牛蒡
+169250,莲藕（生）,Lotus root raw,根茎类,藕|莲菜
+168430,莲藕（煮，不加盐）,Lotus root cooked boiled drained without salt,根茎类,熟莲藕
+168583,山葵根（生）,Wasabi root raw,根茎类,芥末根
+170457,番茄（生）,Tomatoes red ripe raw year round average,茄果瓜类,西红柿
+170050,番茄（熟）,Tomatoes red ripe cooked,茄果瓜类,熟番茄
+170054,番茄酱汁（罐装，无添加盐）,Tomato products canned sauce,茄果瓜类,番茄酱|番茄沙司
+170460,番茄泥（罐装，无盐）,Tomato products canned puree without salt added,茄果瓜类,番茄糊
+168567,番茄干（晒干）,Tomatoes sun-dried,茄果瓜类,番茄干
+168409,黄瓜（带皮，生）,Cucumber with peel raw,茄果瓜类,青瓜
+169225,黄瓜（去皮，生）,Cucumber peeled raw,茄果瓜类,去皮黄瓜
+170108,红甜椒（生）,Peppers sweet red raw,茄果瓜类,红椒|甜椒
+170427,青甜椒（生）,Peppers sweet green raw,茄果瓜类,青椒|灯笼椒
+169383,黄甜椒（生）,Peppers sweet yellow raw,茄果瓜类,黄椒
+170110,红甜椒（煮，不加盐）,Peppers sweet red cooked boiled drained without salt,茄果瓜类,熟红椒
+170428,青甜椒（煮，不加盐）,Peppers sweet green cooked boiled drained without salt,茄果瓜类,熟青椒
+170497,青辣椒（生，辣）,Peppers hot chili green raw,茄果瓜类,辣椒|尖椒
+170106,红辣椒（生，辣）,Peppers hot chili red raw,茄果瓜类,红辣椒
+168576,墨西哥辣椒（生）,Peppers jalapeno raw,茄果瓜类,哈拉皮纽椒
+169228,茄子（生）,Eggplant raw,茄果瓜类,茄瓜
+169229,茄子（煮，不加盐）,Eggplant cooked boiled drained without salt,茄果瓜类,熟茄子
+169291,西葫芦（带皮，生）,Squash summer zucchini includes skin raw,茄果瓜类,角瓜|翠玉瓜
+169292,西葫芦（带皮，煮，不加盐）,Squash summer zucchini includes skin cooked boiled drained without salt,茄果瓜类,熟西葫芦
+168448,南瓜（生）,Pumpkin raw,茄果瓜类,倭瓜|番瓜
+168449,南瓜（煮，不加盐）,Pumpkin cooked boiled drained without salt,茄果瓜类,熟南瓜
+168450,南瓜（罐装，无盐）,Pumpkin canned without salt,茄果瓜类,南瓜泥
+169210,竹笋（生）,Bamboo shoots raw,笋类与芽苗,春笋|毛笋
+169211,竹笋（煮，不加盐）,Bamboo shoots cooked boiled drained without salt,笋类与芽苗,熟竹笋
+169212,竹笋（罐装，沥干）,Bamboo shoots canned drained solids,笋类与芽苗,罐头笋
+169957,绿豆芽（生）,Mung beans mature seeds sprouted raw,笋类与芽苗,豆芽|银芽
+169137,绿豆芽（煮，不加盐）,Mung beans mature seeds sprouted cooked boiled drained without salt,笋类与芽苗,熟绿豆芽
+169138,绿豆芽（炒）,Mung beans mature seeds sprouted cooked stir-fried,笋类与芽苗,炒豆芽
+168384,苜蓿芽（生）,Alfalfa seeds sprouted raw,笋类与芽苗,苜蓿苗
+169232,葫芦（生）,Gourd white-flowered calabash raw,笋类与芽苗,葫芦瓜|瓠瓜
+169233,葫芦（煮，不加盐）,Gourd white-flowered calabash cooked boiled drained without salt,笋类与芽苗,熟葫芦
+170069,冬瓜（生）,Waxgourd chinese preserving melon raw,笋类与芽苗,白瓜
+170475,冬瓜（煮，不加盐）,Waxgourd chinese preserving melon cooked boiled drained without salt,笋类与芽苗,熟冬瓜
+168393,苦瓜（生）,Balsam-pear bitter gourd pods raw,笋类与芽苗,凉瓜
+168394,苦瓜（煮，不加盐）,Balsam-pear bitter gourd pods cooked boiled drained without salt,笋类与芽苗,熟苦瓜
+168414,丝瓜（生）,Gourd dishcloth towelgourd raw,笋类与芽苗,水瓜|天罗
+168415,丝瓜（煮，不加盐）,Gourd dishcloth towelgourd cooked boiled drained without salt,笋类与芽苗,熟丝瓜
+170402,佛手瓜（生）,Chayote fruit raw,笋类与芽苗,合掌瓜
+170403,佛手瓜（煮，不加盐）,Chayote fruit cooked boiled drained without salt,笋类与芽苗,熟佛手瓜
+170000,洋葱（生）,Onions raw,葱蒜与香辛菜,圆葱|球葱
+170001,洋葱（煮，不加盐）,Onions cooked boiled drained without salt,葱蒜与香辛菜,熟洋葱
+170005,小葱（带叶和葱白，生）,Onions spring or scallions raw,葱蒜与香辛菜,香葱|青葱|葱
+169230,大蒜（生）,Garlic raw,葱蒜与香辛菜,蒜|蒜头
+169246,韭葱（生）,Leeks bulb and lower leaf portion raw,葱蒜与香辛菜,西洋大葱|扁叶葱
+169994,细香葱（生）,Chives raw,葱蒜与香辛菜,香葱
+169988,芹菜（生）,Celery raw,葱蒜与香辛菜,西芹
+169989,芹菜（煮，不加盐）,Celery cooked boiled drained without salt,葱蒜与香辛菜,熟芹菜
+169385,茴香球茎（生）,Fennel bulb raw,葱蒜与香辛菜,球茴香
+168424,苤蓝（生）,Kohlrabi raw,葱蒜与香辛菜,球茎甘蓝
+170068,西洋菜（生）,Watercress raw,葱蒜与香辛菜,豆瓣菜|水田芥
+168412,苦苣（生）,Endive raw,叶菜类,菊苣
+168389,芦笋（生）,Asparagus raw,叶菜类,石刁柏
+168390,芦笋（煮，沥干）,Asparagus cooked boiled drained,叶菜类,熟芦笋
+169260,秋葵（生）,Okra raw,叶菜类,羊角豆
+169261,秋葵（煮，不加盐）,Okra cooked boiled drained without salt,叶菜类,熟秋葵
+169205,洋蓟（生）,Artichokes globe or french raw,叶菜类,朝鲜蓟
+169961,四季豆（生）,Beans snap green raw,荚豆类,青豆角|刀豆
+169141,四季豆（煮，不加盐）,Beans snap green cooked boiled drained without salt,荚豆类,熟四季豆
+170419,青豌豆（生）,Peas green raw,荚豆类,豌豆
+170420,青豌豆（煮，不加盐）,Peas green cooked boiled drained without salt,荚豆类,熟豌豆
+170010,荷兰豆（生）,Peas edible-podded raw,荚豆类,甜豆荚|雪豆
+168405,豇豆（嫩荚，生）,Cowpeas young pods with seeds raw,荚豆类,长豆角
+170377,蚕豆（嫩，生）,Broadbeans immature seeds raw,荚豆类,胡豆|罗汉豆
+169998,甜玉米（生）,Corn sweet yellow raw,荚豆类,玉米棒
+169999,甜玉米（煮，不加盐）,Corn sweet yellow cooked boiled drained without salt,荚豆类,熟玉米
