@@ -40,6 +40,17 @@ Phase P5 adds:
                      ranges of PLAN.md P5 (egg, handful of nuts, fist and bowl
                      of cooked rice, cup of milk). The share of estimated
                      measures is printed.
+
+Phase P6 adds:
+    data-src/composites.csv - header, unique composite ids, Chinese and ASCII
+                     English names, at least two ingredients per dish, every
+                     ingredient fdc_id a curated food (never another composite),
+                     positive grams, grams per 100 g summing to 100 +/- 0.5,
+                     a note that says the recipe is a rough home recipe, and a
+                     household measure with exactly one default per composite.
+                     foods.json must carry every composite with estimate true, a
+                     basis that lists its ingredients and grams, and per-100 g
+                     values recomputed here from the ingredient values.
 """
 
 from __future__ import annotations
@@ -54,6 +65,19 @@ from pathlib import Path
 # data-src/measures.csv columns (PLAN.md 1.3).
 MEASURES_COLUMNS = ["food_key", "measure_id", "label_zh", "grams", "basis", "is_default"]
 MAX_MEASURES_PER_FOOD = 4
+
+# data-src/composites.csv columns (PLAN.md 1.3, phase P6).
+COMPOSITES_COLUMNS = [
+    "composite_id",
+    "name_zh",
+    "name_en",
+    "ingredient_fdc_id",
+    "grams_per_100g",
+    "note",
+]
+COMPOSITE_GRAMS_TOLERANCE = 0.5
+MIN_COMPOSITE_INGREDIENTS = 2
+MAX_COMPOSITES = 25
 
 # Sanity ranges from PLAN.md P5: (name, food+measure matcher, min g, max g).
 # Each matcher only picks the plain household measure it talks about, so a
@@ -702,6 +726,139 @@ def validate_measures_csv(checks):
     return total, share, dict(measures)
 
 
+def validate_composites_csv(checks, measures):
+    """Checks for data-src/composites.csv (phase P6).
+
+    Returns (composite count, {composite_id: [composite food dict]}), the
+    latter used to recompute the values written to foods.json.
+    """
+    path = DATA_SRC / "composites.csv"
+    if not checks.check(path.is_file(), "missing data-src/composites.csv"):
+        return 0, {}
+
+    header, rows = read_csv(path)
+    checks.check(
+        header == COMPOSITES_COLUMNS,
+        f"composites.csv columns are {header}, expected {COMPOSITES_COLUMNS}",
+    )
+
+    curated = {}
+    for row in read_csv(DATA_SRC / "foods_curated.csv")[1]:
+        raw_id = (row.get("fdc_id") or "").strip()
+        if raw_id.isdigit():
+            curated[int(raw_id)] = {
+                "name_zh": (row.get("name_zh") or "").strip(),
+                "category_zh": (row.get("category_zh") or "").strip(),
+            }
+
+    grouped = {}
+    order = []
+    for line_no, row in enumerate(rows, start=2):
+        composite_id = (row.get("composite_id") or "").strip()
+        label = f"composites.csv line {line_no} ({composite_id or 'no composite_id'})"
+
+        if not checks.check(composite_id != "", f"{label}: empty composite_id"):
+            continue
+        checks.check(
+            composite_id.isascii()
+            and composite_id.replace("-", "").replace("_", "").isalnum()
+            and composite_id == composite_id.lower(),
+            f"{label}: composite_id must be lowercase ASCII letters, digits, '-' or '_'",
+        )
+        if composite_id not in grouped:
+            grouped[composite_id] = {
+                "name_zh": (row.get("name_zh") or "").strip(),
+                "name_en": (row.get("name_en") or "").strip(),
+                "note": (row.get("note") or "").strip(),
+                "ingredients": [],
+            }
+            order.append(composite_id)
+        else:
+            entry = grouped[composite_id]
+            for key, column in (
+                ("name_zh", "name_zh"),
+                ("name_en", "name_en"),
+                ("note", "note"),
+            ):
+                checks.check(
+                    entry[key] == (row.get(column) or "").strip(),
+                    f"{label}: {column} differs from the first row of this composite",
+                )
+
+        raw_ingredient = (row.get("ingredient_fdc_id") or "").strip()
+        if not checks.check(
+            raw_ingredient.isdigit(), f"{label}: ingredient_fdc_id must be a number"
+        ):
+            continue
+        ingredient_id = int(raw_ingredient)
+        checks.check(
+            ingredient_id in curated,
+            f"{label}: ingredient fdc_id {ingredient_id} is not in foods_curated.csv "
+            "(composites may only use curated foods, never other composites)",
+        )
+
+        raw_grams = (row.get("grams_per_100g") or "").strip()
+        try:
+            grams = float(raw_grams)
+        except ValueError:
+            checks.fail(f"{label}: grams_per_100g {raw_grams!r} is not a number")
+            continue
+        checks.check(grams > 0, f"{label}: grams_per_100g must be positive, got {grams:g}")
+        checks.check(
+            any(item["fdc_id"] == ingredient_id for item in grouped[composite_id]["ingredients"]) is False,
+            f"{label}: duplicate ingredient fdc_id {ingredient_id}",
+        )
+        grouped[composite_id]["ingredients"].append({"fdc_id": ingredient_id, "grams": grams})
+
+    checks.check(
+        len(order) <= MAX_COMPOSITES,
+        f"composites.csv has {len(order)} composites, at most {MAX_COMPOSITES} planned",
+    )
+
+    result = {}
+    for composite_id in order:
+        entry = grouped[composite_id]
+        label = f"composites.csv {composite_id}"
+
+        checks.check(
+            entry["name_zh"] != "" and has_cjk(entry["name_zh"]),
+            f"{label}: name_zh must be a non-empty Chinese name, got {entry['name_zh']!r}",
+        )
+        checks.check(
+            entry["name_en"] != "" and entry["name_en"].isascii(),
+            f"{label}: name_en must be a non-empty ASCII English name, got {entry['name_en']!r}",
+        )
+        checks.check(
+            "rough" in entry["note"].lower() and "no cooking retention" in entry["note"].lower(),
+            f"{label}: note must say the recipe is a rough home recipe without "
+            f"cooking retention factors, got {entry['note']!r}",
+        )
+        checks.check(
+            len(entry["ingredients"]) >= MIN_COMPOSITE_INGREDIENTS,
+            f"{label}: needs at least {MIN_COMPOSITE_INGREDIENTS} ingredients, "
+            f"got {len(entry['ingredients'])}",
+        )
+        total = sum(ingredient["grams"] for ingredient in entry["ingredients"])
+        checks.check(
+            abs(total - 100) <= COMPOSITE_GRAMS_TOLERANCE,
+            f"{label}: grams per 100 g sum to {total:g}, expected 100 +/- "
+            f"{COMPOSITE_GRAMS_TOLERANCE:g}",
+        )
+
+        # The composite must have a default household measure (P6 gives every
+        # dish 一碗 / 一个 / 一盘 ...). Missing measures are reported once.
+        food_measures = measures.get(composite_id) or []
+        if checks.check(food_measures != [], f"{label}: no household measure in measures.csv"):
+            defaults = [measure for measure in food_measures if measure["isDefault"]]
+            checks.check(
+                len(defaults) == 1,
+                f"{label}: has {len(defaults)} default measures, expected exactly 1",
+            )
+
+        result[composite_id] = entry
+    return len(order), result
+
+
 def validate_food_measures(checks, label, measures):
     checks.check(len(measures) >= 1, f"{label}: needs at least one measure")
     defaults = [measure for measure in measures if measure.get("default") is True]
@@ -726,7 +883,7 @@ def validate_food_measures(checks, label, measures):
         )
 
 
-def validate_foods_json(checks, foods_data, curated_count, measures=None):
+def validate_foods_json(checks, foods_data, curated_count, measures=None, composite_rows=None):
     checks.check(
         (foods_data.get("source") or {}).get("name") == SR_SOURCE_NAME,
         "foods.json source.name is wrong",
@@ -819,13 +976,124 @@ def validate_foods_json(checks, foods_data, curated_count, measures=None):
         f"(missing {len(curated_ids - sr_ids)}, unexpected {len(sr_ids - curated_ids)})",
     )
     checks.check(null_values > 0, "foods.json has no null values: missing data must be preserved")
+
+    if composite_rows is not None:
+        validate_composite_values(checks, foods, composite_rows)
+        expected_composite_ids = {f"composite:{composite_id}" for composite_id in composite_rows}
+        found_composite_ids = {
+            str(food.get("id") or "") for food in foods if str(food.get("id") or "").startswith("composite:")
+        }
+        checks.check(
+            found_composite_ids == expected_composite_ids,
+            "foods.json composites must be exactly the composites.csv rows "
+            f"(missing {sorted(expected_composite_ids - found_composite_ids)}, "
+            f"unexpected {sorted(found_composite_ids - expected_composite_ids)})",
+        )
     return len(foods), composites
+
+
+def expected_composite_per100g(entry, values_by_id, nutrient_ids):
+    """Recompute a composite per 100 g from its ingredient values.
+
+    Returns (values, partial) where values has the same 4-significant-digit
+    rounding as build_foods.py and partial lists the nutrients for which some
+    ingredient has no value while another one does (those count as 0).
+    """
+    totals = {nutrient_id: 0.0 for nutrient_id in nutrient_ids}
+    known = {nutrient_id: False for nutrient_id in nutrient_ids}
+    missing = set()
+    for ingredient in entry["ingredients"]:
+        share = ingredient["grams"] / 100.0
+        for nutrient_id in nutrient_ids:
+            # An unknown ingredient is already reported by the caller; skip it
+            # here instead of crashing so every other failure is still listed.
+            value = values_by_id.get(ingredient["fdc_id"], {}).get(nutrient_id)
+            if value is None:
+                missing.add(nutrient_id)
+                continue
+            totals[nutrient_id] += value * share
+            known[nutrient_id] = True
+    partial = [nutrient_id for nutrient_id in nutrient_ids if nutrient_id in missing and known[nutrient_id]]
+    values = {}
+    for nutrient_id in nutrient_ids:
+        if not known[nutrient_id]:
+            values[nutrient_id] = None
+            continue
+        # Same rule as build_foods.py: at most 4 significant digits.
+        values[nutrient_id] = round_significant(totals[nutrient_id])
+    return values, partial
+
+
+def round_significant(value, digits=4):
+    """Round to at most `digits` significant digits (ROUND_HALF_UP), as the build does."""
+    from decimal import ROUND_HALF_UP
+
+    if value == 0:
+        return 0
+    decimal_value = Decimal(repr(float(value)))
+    exponent = decimal_value.adjusted() - (digits - 1)
+    rounded = decimal_value.scaleb(-exponent).quantize(Decimal(1), rounding=ROUND_HALF_UP).scaleb(exponent)
+    if rounded == rounded.to_integral_value():
+        return int(rounded)
+    return float(rounded)
+
+
+def validate_composite_values(checks, foods, composites):
+    """Every composite in foods.json must equal its recomputed ingredient sum."""
+    foods_by_id = {food.get("id"): food for food in foods}
+    values_by_id = {
+        food.get("fdcId"): food.get("per100g") or {}
+        for food in foods
+        if food.get("fdcId") is not None
+    }
+    nutrient_ids = list(EXPECTED_NUTRIENTS)
+
+    for composite_id, entry in composites.items():
+        food_id = f"composite:{composite_id}"
+        food = foods_by_id.get(food_id)
+        if not checks.check(food is not None, f"foods.json misses {food_id}"):
+            continue
+        label = f"foods.json {food_id}"
+
+        for ingredient in entry["ingredients"]:
+            ingredient_id = ingredient["fdc_id"]
+            if not checks.check(
+                ingredient_id in values_by_id,
+                f"{label}: ingredient fdc:{ingredient_id} is missing from foods.json",
+            ):
+                continue
+            checks.check(
+                f"fdc:{ingredient_id} {ingredient['grams']:g} g" in (food.get("basis") or ""),
+                f"{label}: basis must list 'fdc:{ingredient_id} {ingredient['grams']:g} g'",
+            )
+
+        expected, partial = expected_composite_per100g(entry, values_by_id, nutrient_ids)
+        actual = food.get("per100g") or {}
+        for nutrient_id in nutrient_ids:
+            checks.check(
+                actual.get(nutrient_id) == expected[nutrient_id],
+                f"{label} {nutrient_id}: {actual.get(nutrient_id)!r} != recomputed "
+                f"{expected[nutrient_id]!r}",
+            )
+
+        flags = food.get("flags") or {}
+        checks.check(
+            flags.get("partialNullNutrients") == partial,
+            f"{label}: flags.partialNullNutrients is {flags.get('partialNullNutrients')!r}, "
+            f"expected {partial!r}",
+        )
+        if partial:
+            checks.check(
+                "counted as 0" in (food.get("basis") or ""),
+                f"{label}: basis must say that ingredients without a value were counted as 0",
+            )
 
 
 def validate_measure_merge(checks, label, food, measures):
     """foods.json measures must be exactly the measures.csv rows of that food."""
     food_id = str(food.get("id") or "")
-    if not food_id.startswith("fdc:"):
+    # Composite dishes are keyed by their bare composite_id in measures.csv.
+    if not food_id.startswith("fdc:") and not food_id.startswith("composite:"):
         return
     food_key = food_id.split(":", 1)[1]
     csv_measures = measures.get(food_key)
@@ -851,7 +1119,7 @@ def validate_measure_merge(checks, label, food, measures):
         )
 
 
-def validate_generated_json(checks, curated_count, measures=None):
+def validate_generated_json(checks, curated_count, measures=None, composite_rows=None):
     """Checks for docs/data/*.json written by tools/build_foods.py (phase P4)."""
     foods_path = DOCS_DATA / "foods.json"
     if not checks.check(foods_path.is_file(), "missing docs/data/foods.json"):
@@ -882,7 +1150,7 @@ def validate_generated_json(checks, curated_count, measures=None):
     validate_nutrients_json(checks, nutrients_data)
     validate_meta_json(checks, meta_data)
     food_count, composite_count = validate_foods_json(
-        checks, foods_data, curated_count, measures
+        checks, foods_data, curated_count, measures, composite_rows
     )
     return food_count, composite_count, size
 
@@ -893,14 +1161,16 @@ def main():
     nutrient_count = validate_nutrients(checks, usda_nutrients)
     food_count = validate_foods(checks, load_usda_foods(), load_excluded_categories())
     measures_count, estimate_share, measures = validate_measures_csv(checks)
+    composite_count_csv, composites = validate_composites_csv(checks, measures)
     json_food_count, composite_count, foods_json_size = validate_generated_json(
-        checks, food_count, measures
+        checks, food_count, measures, composites if composites else None
     )
 
     if checks.failures:
         print(f"nutrients: {nutrient_count} rows checked")
         print(f"foods: {food_count} rows checked")
         print(f"measures: {measures_count} rows checked, {estimate_share:.1f}% estimates")
+        print(f"composites: {composite_count_csv} rows checked")
         print(f"foods.json: {json_food_count} foods checked")
         print(f"{len(checks.failures)} problem(s) found")
         return checks.report()
@@ -908,9 +1178,10 @@ def main():
     print(f"nutrients: {nutrient_count} OK")
     print(f"foods: {food_count} OK")
     print(
-        f"measures: {measures_count} rows OK for {food_count} foods, "
+        f"measures: {measures_count} rows OK for {food_count + composite_count_csv} foods, "
         f"{estimate_share:.1f}% estimates"
     )
+    print(f"composites: {composite_count_csv} OK (ingredients sum to 100 g +/- {COMPOSITE_GRAMS_TOLERANCE:g})")
     print(
         f"foods.json: {json_food_count} foods OK "
         f"({composite_count} composites, {foods_json_size} bytes)"

@@ -1,0 +1,123 @@
+composite_id,name_zh,name_en,ingredient_fdc_id,grams_per_100g,note
+mantou,馒头,Steamed wheat bun,168894,64,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; dough weight taken as finished weight
+mantou,馒头,Steamed wheat bun,173647,35,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; dough weight taken as finished weight
+mantou,馒头,Steamed wheat bun,175043,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; dough weight taken as finished weight
+zhurou-baicai-jiaozi,猪肉白菜饺子,Pork and napa cabbage dumplings,168894,35,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; wrapper and filling are raw weights
+zhurou-baicai-jiaozi,猪肉白菜饺子,Pork and napa cabbage dumplings,173647,18,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; wrapper and filling are raw weights
+zhurou-baicai-jiaozi,猪肉白菜饺子,Pork and napa cabbage dumplings,167902,25,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; wrapper and filling are raw weights
+zhurou-baicai-jiaozi,猪肉白菜饺子,Pork and napa cabbage dumplings,169979,17,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; wrapper and filling are raw weights
+zhurou-baicai-jiaozi,猪肉白菜饺子,Pork and napa cabbage dumplings,171016,1.5,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; wrapper and filling are raw weights
+zhurou-baicai-jiaozi,猪肉白菜饺子,Pork and napa cabbage dumplings,174277,1.5,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; wrapper and filling are raw weights
+zhurou-baicai-jiaozi,猪肉白菜饺子,Pork and napa cabbage dumplings,170926,0.3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; wrapper and filling are raw weights
+zhurou-baicai-jiaozi,猪肉白菜饺子,Pork and napa cabbage dumplings,170005,1.7,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; wrapper and filling are raw weights
+baizhou,白粥,Plain rice congee,168931,10,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; 1 part raw rice to 9 parts water with evaporation not modelled
+baizhou,白粥,Plain rice congee,173647,90,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; 1 part raw rice to 9 parts water with evaporation not modelled
+fanqie-chaodan,番茄炒蛋,Tomato and egg stir-fry,170457,70,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+fanqie-chaodan,番茄炒蛋,Tomato and egg stir-fry,171287,23,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+fanqie-chaodan,番茄炒蛋,Tomato and egg stir-fry,171410,5.5,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+fanqie-chaodan,番茄炒蛋,Tomato and egg stir-fry,170005,1.5,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+danchaofan,蛋炒饭,Egg fried rice,168878,75,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; made from already-cooked rice and cooked peas
+danchaofan,蛋炒饭,Egg fried rice,171287,10,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; made from already-cooked rice and cooked peas
+danchaofan,蛋炒饭,Egg fried rice,171410,6,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; made from already-cooked rice and cooked peas
+danchaofan,蛋炒饭,Egg fried rice,170393,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; made from already-cooked rice and cooked peas
+danchaofan,蛋炒饭,Egg fried rice,170420,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; made from already-cooked rice and cooked peas
+danchaofan,蛋炒饭,Egg fried rice,170005,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; made from already-cooked rice and cooked peas
+zicai-danhuatang,紫菜蛋花汤,Laver and egg drop soup,173647,92,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; soup water counted at its raw weight with evaporation not modelled
+zicai-danhuatang,紫菜蛋花汤,Laver and egg drop soup,168458,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; soup water counted at its raw weight with evaporation not modelled
+zicai-danhuatang,紫菜蛋花汤,Laver and egg drop soup,171287,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; soup water counted at its raw weight with evaporation not modelled
+zicai-danhuatang,紫菜蛋花汤,Laver and egg drop soup,171016,1.5,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; soup water counted at its raw weight with evaporation not modelled
+zicai-danhuatang,紫菜蛋花汤,Laver and egg drop soup,170005,1.5,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; soup water counted at its raw weight with evaporation not modelled
+qingjiao-rousi,青椒肉丝,Shredded pork with green pepper,170427,60,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qingjiao-rousi,青椒肉丝,Shredded pork with green pepper,168312,30,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qingjiao-rousi,青椒肉丝,Shredded pork with green pepper,171410,5,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qingjiao-rousi,青椒肉丝,Shredded pork with green pepper,174277,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qingjiao-rousi,青椒肉丝,Shredded pork with green pepper,169230,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+mapo-doufu,麻婆豆腐,Mapo tofu,172476,70,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; doubanjiang is not in SR Legacy so cayenne chili powder and soy sauce stand in for it
+mapo-doufu,麻婆豆腐,Mapo tofu,167902,15,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; doubanjiang is not in SR Legacy so cayenne chili powder and soy sauce stand in for it
+mapo-doufu,麻婆豆腐,Mapo tofu,171410,7,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; doubanjiang is not in SR Legacy so cayenne chili powder and soy sauce stand in for it
+mapo-doufu,麻婆豆腐,Mapo tofu,174277,4,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; doubanjiang is not in SR Legacy so cayenne chili powder and soy sauce stand in for it
+mapo-doufu,麻婆豆腐,Mapo tofu,170932,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; doubanjiang is not in SR Legacy so cayenne chili powder and soy sauce stand in for it
+mapo-doufu,麻婆豆腐,Mapo tofu,170005,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; doubanjiang is not in SR Legacy so cayenne chili powder and soy sauce stand in for it
+jiachang-doufu,家常豆腐,Home-style braised tofu,172476,72,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+jiachang-doufu,家常豆腐,Home-style braised tofu,167902,10,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+jiachang-doufu,家常豆腐,Home-style braised tofu,171410,8,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+jiachang-doufu,家常豆腐,Home-style braised tofu,174277,5,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+jiachang-doufu,家常豆腐,Home-style braised tofu,170005,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+jiachang-doufu,家常豆腐,Home-style braised tofu,169230,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+chao-qingcai,炒青菜,Stir-fried bok choy,170390,89,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+chao-qingcai,炒青菜,Stir-fried bok choy,171410,7,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+chao-qingcai,炒青菜,Stir-fried bok choy,169230,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+chao-qingcai,炒青菜,Stir-fried bok choy,170005,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+suanrong-xilanhua,蒜蓉西兰花,Broccoli with garlic,170379,87,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+suanrong-xilanhua,蒜蓉西兰花,Broccoli with garlic,171410,8,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+suanrong-xilanhua,蒜蓉西兰花,Broccoli with garlic,169230,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+suanrong-xilanhua,蒜蓉西兰花,Broccoli with garlic,174277,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+ganbian-sijidou,干煸四季豆,Dry-fried green beans,169961,81,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+ganbian-sijidou,干煸四季豆,Dry-fried green beans,167902,10,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+ganbian-sijidou,干煸四季豆,Dry-fried green beans,171410,6,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+ganbian-sijidou,干煸四季豆,Dry-fried green beans,170932,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+ganbian-sijidou,干煸四季豆,Dry-fried green beans,169230,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+culiu-tudousi,醋溜土豆丝,Shredded potato with vinegar,170026,84,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+culiu-tudousi,醋溜土豆丝,Shredded potato with vinegar,171410,7,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+culiu-tudousi,醋溜土豆丝,Shredded potato with vinegar,172237,4,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+culiu-tudousi,醋溜土豆丝,Shredded potato with vinegar,170932,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+culiu-tudousi,醋溜土豆丝,Shredded potato with vinegar,170005,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+culiu-tudousi,醋溜土豆丝,Shredded potato with vinegar,169230,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+liangban-huanggua,凉拌黄瓜,Cucumber salad,168409,87,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+liangban-huanggua,凉拌黄瓜,Cucumber salad,171016,4,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+liangban-huanggua,凉拌黄瓜,Cucumber salad,172237,4,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+liangban-huanggua,凉拌黄瓜,Cucumber salad,169230,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+liangban-huanggua,凉拌黄瓜,Cucumber salad,170932,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+liangban-huanggua,凉拌黄瓜,Cucumber salad,170005,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+xianggu-youcai,香菇油菜,Bok choy with shiitake,170390,68,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+xianggu-youcai,香菇油菜,Bok choy with shiitake,169242,20,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+xianggu-youcai,香菇油菜,Bok choy with shiitake,171410,8,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+xianggu-youcai,香菇油菜,Bok choy with shiitake,169230,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+xianggu-youcai,香菇油菜,Bok choy with shiitake,174277,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+donggua-xiaren,冬瓜炒虾仁,Stir-fried shrimp with wax gourd,170069,75,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+donggua-xiaren,冬瓜炒虾仁,Stir-fried shrimp with wax gourd,175179,18,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+donggua-xiaren,冬瓜炒虾仁,Stir-fried shrimp with wax gourd,171410,5,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+donggua-xiaren,冬瓜炒虾仁,Stir-fried shrimp with wax gourd,170005,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+hongshao-rou,红烧肉,Red-braised pork belly,167812,82,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+hongshao-rou,红烧肉,Red-braised pork belly,174277,10,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+hongshao-rou,红烧肉,Red-braised pork belly,171410,4,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+hongshao-rou,红烧肉,Red-braised pork belly,170926,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+hongshao-rou,红烧肉,Red-braised pork belly,170005,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+huiguo-rou,回锅肉,Twice-cooked pork,167812,55,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+huiguo-rou,回锅肉,Twice-cooked pork,169979,30,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+huiguo-rou,回锅肉,Twice-cooked pork,174277,6,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+huiguo-rou,回锅肉,Twice-cooked pork,171410,6,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+huiguo-rou,回锅肉,Twice-cooked pork,170932,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+huiguo-rou,回锅肉,Twice-cooked pork,169230,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+gongbao-jiding,宫保鸡丁,Kung pao chicken,171077,60,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; dried chili is not in SR Legacy so cayenne chili powder is used
+gongbao-jiding,宫保鸡丁,Kung pao chicken,172430,12,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; dried chili is not in SR Legacy so cayenne chili powder is used
+gongbao-jiding,宫保鸡丁,Kung pao chicken,171410,9,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; dried chili is not in SR Legacy so cayenne chili powder is used
+gongbao-jiding,宫保鸡丁,Kung pao chicken,172237,6,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; dried chili is not in SR Legacy so cayenne chili powder is used
+gongbao-jiding,宫保鸡丁,Kung pao chicken,174277,8,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; dried chili is not in SR Legacy so cayenne chili powder is used
+gongbao-jiding,宫保鸡丁,Kung pao chicken,170932,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; dried chili is not in SR Legacy so cayenne chili powder is used
+gongbao-jiding,宫保鸡丁,Kung pao chicken,169230,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; dried chili is not in SR Legacy so cayenne chili powder is used
+qingzheng-luyu,清蒸鲈鱼,Steamed sea bass,174184,87,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qingzheng-luyu,清蒸鲈鱼,Steamed sea bass,170005,5,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qingzheng-luyu,清蒸鲈鱼,Steamed sea bass,174277,4,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qingzheng-luyu,清蒸鲈鱼,Steamed sea bass,171016,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qingzheng-luyu,清蒸鲈鱼,Steamed sea bass,170926,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qingzheng-luyu,清蒸鲈鱼,Steamed sea bass,169230,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+disanxian,地三鲜,Potato eggplant and pepper stir-fry,170026,40,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+disanxian,地三鲜,Potato eggplant and pepper stir-fry,169228,35,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+disanxian,地三鲜,Potato eggplant and pepper stir-fry,170427,15,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+disanxian,地三鲜,Potato eggplant and pepper stir-fry,171410,8,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+disanxian,地三鲜,Potato eggplant and pepper stir-fry,174277,2,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qincai-rousi,芹菜肉丝,Celery with shredded pork,169988,65,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qincai-rousi,芹菜肉丝,Celery with shredded pork,168312,25,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qincai-rousi,芹菜肉丝,Celery with shredded pork,171410,6,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qincai-rousi,芹菜肉丝,Celery with shredded pork,174277,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+qincai-rousi,芹菜肉丝,Celery with shredded pork,169230,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+xiaocong-doufu,小葱拌豆腐,Tofu with scallion,172476,88,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+xiaocong-doufu,小葱拌豆腐,Tofu with scallion,171016,4,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+xiaocong-doufu,小葱拌豆腐,Tofu with scallion,170005,5,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+xiaocong-doufu,小葱拌豆腐,Tofu with scallion,174277,3,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors
+chao-mian,炒面,Stir-fried noodles,169732,75,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; made from already-cooked noodles
+chao-mian,炒面,Stir-fried noodles,169979,12,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; made from already-cooked noodles
+chao-mian,炒面,Stir-fried noodles,168312,8,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; made from already-cooked noodles
+chao-mian,炒面,Stir-fried noodles,171410,4,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; made from already-cooked noodles
+chao-mian,炒面,Stir-fried noodles,174277,1,rough typical home recipe; raw-weight grams per 100 g of finished dish; no cooking retention factors; made from already-cooked noodles

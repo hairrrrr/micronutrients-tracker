@@ -47,6 +47,7 @@ from usda_lib import (
 DATA_SRC = REPO_ROOT / "data-src"
 MEASURES_CSV = DATA_SRC / "measures.csv"
 CURATED_CSV = DATA_SRC / "foods_curated.csv"
+COMPOSITES_CSV = DATA_SRC / "composites.csv"
 
 MEASURE_COLUMNS = ["food_key", "measure_id", "label_zh", "grams", "basis", "is_default"]
 
@@ -408,6 +409,7 @@ FOOD_OVERRIDES = {
     169250: [("cup", "半杯", 60, "half a cup of sliced lotus root, about 60 g")],
     169087: [("spoon", "一勺", 10, "one tablespoon of dried litchis, about 10 g")],
     169907: [("spoon", "一勺", 8, "one tablespoon of dried longans, about 8 g")],
+    173647: [("cup", "一杯", 240, "one cup of drinking water, about 240 g")],
     173410: [("stick", "一长条", 113, "one US stick of butter, about 113 g")],
     173430: [("stick", "一长条", 113, "one US stick of butter, about 113 g")],
 }
@@ -723,6 +725,136 @@ def cap_classifiers(measures):
     return sorted(kept, key=lambda measure: order[id(measure)])
 
 
+# Composite dish measures (phase P6). One default household measure per dish
+# and, where the dish is normally counted, a per-piece measure next to it.
+# Grams are rough typical portions, hence basis "estimate:<reason>".
+COMPOSITE_MEASURES = {
+    "mantou": [
+        ("piece", "一个", 100, "one steamed bun, about 100 g", True),
+        ("serving", "两个", 200, "two steamed buns, about 200 g", False),
+    ],
+    "zhurou-baicai-jiaozi": [
+        ("bowl", "一碗", 250, "one bowl of boiled dumplings, about 250 g", True),
+        ("piece", "一个", 20, "one dumpling, about 20 g", False),
+        ("ten", "十个", 200, "ten dumplings, about 200 g", False),
+    ],
+    "baizhou": [
+        ("bowl", "一碗", 300, "one bowl of congee, about 300 g", True),
+    ],
+    "fanqie-chaodan": [
+        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
+        ("spoon", "一勺", 20, "one spoonful, about 20 g", False),
+    ],
+    "danchaofan": [
+        ("bowl", "一碗", 300, "one bowl of fried rice, about 300 g", True),
+        ("plate", "一盘", 400, "one plate of fried rice, about 400 g", False),
+    ],
+    "zicai-danhuatang": [
+        ("bowl", "一碗", 300, "one bowl of soup, about 300 g", True),
+    ],
+    "qingjiao-rousi": [
+        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
+        ("spoon", "一勺", 20, "one spoonful, about 20 g", False),
+    ],
+    "mapo-doufu": [
+        ("plate", "一盘", 300, "one plate of mapo tofu, about 300 g", True),
+        ("spoon", "一勺", 25, "one spoonful, about 25 g", False),
+    ],
+    "jiachang-doufu": [
+        ("plate", "一盘", 300, "one home-style plate, about 300 g", True),
+    ],
+    "chao-qingcai": [
+        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
+    ],
+    "suanrong-xilanhua": [
+        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
+    ],
+    "ganbian-sijidou": [
+        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
+    ],
+    "culiu-tudousi": [
+        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
+    ],
+    "liangban-huanggua": [
+        ("plate", "一盘", 200, "one cold-dish plate, about 200 g", True),
+    ],
+    "xianggu-youcai": [
+        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
+    ],
+    "donggua-xiaren": [
+        ("plate", "一盘", 300, "one home-style plate, about 300 g", True),
+    ],
+    "hongshao-rou": [
+        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
+        ("piece", "一块", 20, "one piece of braised pork belly, about 20 g", False),
+    ],
+    "huiguo-rou": [
+        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
+    ],
+    "gongbao-jiding": [
+        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
+    ],
+    "qingzheng-luyu": [
+        ("plate", "一盘", 300, "one whole steamed fish, about 300 g edible", True),
+    ],
+    "disanxian": [
+        ("plate", "一盘", 300, "one home-style plate, about 300 g", True),
+    ],
+    "qincai-rousi": [
+        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
+    ],
+    "xiaocong-doufu": [
+        ("plate", "一盘", 200, "one cold-dish plate, about 200 g", True),
+    ],
+    "chao-mian": [
+        ("plate", "一盘", 300, "one plate of fried noodles, about 300 g", True),
+        ("bowl", "一碗", 250, "one bowl of fried noodles, about 250 g", False),
+    ],
+}
+
+
+def load_composite_ids():
+    """Composite ids in composites.csv order (phase P6); [] when absent."""
+    if not COMPOSITES_CSV.is_file():
+        return []
+    ids = []
+    with COMPOSITES_CSV.open(newline="", encoding="utf-8-sig") as handle:
+        for row in csv.DictReader(handle):
+            composite_id = (row.get("composite_id") or "").strip()
+            if composite_id and composite_id not in ids:
+                ids.append(composite_id)
+    return ids
+
+
+def build_composite_measures(composite_ids):
+    """composite_id -> list of measures, one default each."""
+    result = {}
+    for composite_id in composite_ids:
+        rows = COMPOSITE_MEASURES.get(composite_id)
+        if not rows:
+            raise SystemExit(
+                f"composites.csv: no household measures for composite {composite_id!r}; "
+                "add it to COMPOSITE_MEASURES"
+            )
+        result[composite_id] = [
+            {
+                "id": slug,
+                "label": label,
+                "grams": grams,
+                "basis": f"estimate:{reason}",
+                "kind": slug,
+                "is_default": is_default,
+            }
+            for slug, label, grams, reason, is_default in rows
+        ]
+        defaults = [measure for measure in result[composite_id] if measure["is_default"]]
+        if len(defaults) != 1:
+            raise SystemExit(
+                f"composites.csv: composite {composite_id!r} needs exactly one default measure"
+            )
+    return result
+
+
 def build_measures(curated, portions):
     """food_key -> list of measures, one default each."""
     result = {}
@@ -775,6 +907,7 @@ def build_measures(curated, portions):
         for measure in measures:
             measure["is_default"] = measure is default_measure
         result[str(fdc_id)] = measures
+    result.update(build_composite_measures(load_composite_ids()))
     return result
 
 

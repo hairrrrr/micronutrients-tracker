@@ -188,7 +188,13 @@ def load_measures():
 
 
 def load_composites(nutrient_meta, foods_by_id, measures):
-    """Composite dish rows from data-src/composites.csv (P6), grouped by id."""
+    """Composite dish rows from data-src/composites.csv (P6), grouped by id.
+
+    Every dish is an estimate over its ingredient foods (never another
+    composite): per 100 g = sum(ingredient per100g * grams/100). A nutrient is
+    null only when no ingredient has a value for it; missing values of single
+    ingredients count as 0 and are listed in flags.partialNullNutrients.
+    """
     rows = read_csv(DATA_SRC / "composites.csv", COMPOSITE_COLUMNS)
     if not rows:
         return [], 0
@@ -214,6 +220,10 @@ def load_composites(nutrient_meta, foods_by_id, measures):
         per100g = {}
         totals = {nutrient["id"]: 0.0 for nutrient in nutrient_meta}
         known = {nutrient["id"]: False for nutrient in nutrient_meta}
+        # Nutrient ids where at least one ingredient has no value while another
+        # one does: the missing part counts as 0 and the dish is marked, so the
+        # UI can say the value is a lower bound.
+        missing = set()
         for ingredient in entry["ingredients"]:
             food = foods_by_id.get(ingredient["fdc_id"])
             if food is None:
@@ -224,12 +234,19 @@ def load_composites(nutrient_meta, foods_by_id, measures):
             share = ingredient["grams"] / 100.0
             for nutrient_id, value in food["per100g"].items():
                 if value is None:
+                    missing.add(nutrient_id)
                     continue
                 totals[nutrient_id] += value * share
                 known[nutrient_id] = True
+        partial = {
+            nutrient_id for nutrient_id in missing if known[nutrient_id]
+        }
         for nutrient in nutrient_meta:
             nutrient_id = nutrient["id"]
             per100g[nutrient_id] = round_sig(totals[nutrient_id]) if known[nutrient_id] else None
+        partial_nutrients = [
+            nutrient["id"] for nutrient in nutrient_meta if nutrient["id"] in partial
+        ]
         basis = "; ".join(
             f"fdc:{ingredient['fdc_id']} {ingredient['grams']:g} g"
             for ingredient in entry["ingredients"]
@@ -245,9 +262,19 @@ def load_composites(nutrient_meta, foods_by_id, measures):
                 "aliases": [],
                 "estimate": True,
                 "basis": f"recipe estimate, raw-weight ingredients per 100 g finished dish: {basis}"
-                + (f"; {entry['note']}" if entry["note"] else ""),
+                + (f"; {entry['note']}" if entry["note"] else "")
+                + (
+                    "; ingredients without a value for "
+                    + ", ".join(partial_nutrients)
+                    + " were counted as 0"
+                    if partial_nutrients
+                    else ""
+                ),
                 "per100g": per100g,
-                "flags": {"niacinNoTryptophan": False},
+                "flags": {
+                    "niacinNoTryptophan": False,
+                    "partialNullNutrients": partial_nutrients,
+                },
                 "measures": measures.get(composite_id, [dict(DEFAULT_MEASURE)]),
             }
         )
@@ -358,7 +385,12 @@ def main():
             "Values are rounded to at most 4 significant digits, never otherwise changed.",
             "Niacin is in mg NE = niacin + tryptophan*1000/60; when tryptophan is missing "
             "only niacin is used and flags.niacinNoTryptophan is true.",
-            "Composite dishes are labeled estimates computed from ingredient values.",
+            "Composite dishes are labeled estimates: per 100 g is the sum of the "
+            "ingredient per-100 g values times grams/100, on a raw-weight basis "
+            "without cooking retention factors.",
+            "When an ingredient has no value for a nutrient but another ingredient does, "
+            "the missing part counts as 0 and flags.partialNullNutrients lists that "
+            "nutrient, so the value is a lower bound.",
         ],
     }
 

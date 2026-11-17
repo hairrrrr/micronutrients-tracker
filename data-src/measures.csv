@@ -1173,3 +1173,37 @@ food_key,measure_id,label_zh,grams,basis,is_default
 171325,usda88439,一小勺,3.1,usda_portion:88439,1
 171325,usda88440,一勺,9.7,usda_portion:88440,0
 171328,usda88445,一小勺,1,usda_portion:88445,1
+173647,cup,一杯,240,"estimate:one cup of drinking water, about 240 g",1
+mantou,piece,一个,100,"estimate:one steamed bun, about 100 g",1
+mantou,serving,两个,200,"estimate:two steamed buns, about 200 g",0
+zhurou-baicai-jiaozi,bowl,一碗,250,"estimate:one bowl of boiled dumplings, about 250 g",1
+zhurou-baicai-jiaozi,piece,一个,20,"estimate:one dumpling, about 20 g",0
+zhurou-baicai-jiaozi,ten,十个,200,"estimate:ten dumplings, about 200 g",0
+baizhou,bowl,一碗,300,"estimate:one bowl of congee, about 300 g",1
+fanqie-chaodan,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
+fanqie-chaodan,spoon,一勺,20,"estimate:one spoonful, about 20 g",0
+danchaofan,bowl,一碗,300,"estimate:one bowl of fried rice, about 300 g",1
+danchaofan,plate,一盘,400,"estimate:one plate of fried rice, about 400 g",0
+zicai-danhuatang,bowl,一碗,300,"estimate:one bowl of soup, about 300 g",1
+qingjiao-rousi,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
+qingjiao-rousi,spoon,一勺,20,"estimate:one spoonful, about 20 g",0
+mapo-doufu,plate,一盘,300,"estimate:one plate of mapo tofu, about 300 g",1
+mapo-doufu,spoon,一勺,25,"estimate:one spoonful, about 25 g",0
+jiachang-doufu,plate,一盘,300,"estimate:one home-style plate, about 300 g",1
+chao-qingcai,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
+suanrong-xilanhua,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
+ganbian-sijidou,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
+culiu-tudousi,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
+liangban-huanggua,plate,一盘,200,"estimate:one cold-dish plate, about 200 g",1
+xianggu-youcai,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
+donggua-xiaren,plate,一盘,300,"estimate:one home-style plate, about 300 g",1
+hongshao-rou,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
+hongshao-rou,piece,一块,20,"estimate:one piece of braised pork belly, about 20 g",0
+huiguo-rou,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
+gongbao-jiding,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
+qingzheng-luyu,plate,一盘,300,"estimate:one whole steamed fish, about 300 g edible",1
+disanxian,plate,一盘,300,"estimate:one home-style plate, about 300 g",1
+qincai-rousi,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
+xiaocong-doufu,plate,一盘,200,"estimate:one cold-dish plate, about 200 g",1
+chao-mian,plate,一盘,300,"estimate:one plate of fried noodles, about 300 g",1
+chao-mian,bowl,一碗,250,"estimate:one bowl of fried noodles, about 250 g",0
