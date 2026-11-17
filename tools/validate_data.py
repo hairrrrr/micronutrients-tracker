@@ -20,12 +20,23 @@ Phase P3 adds:
                      food, fast food, restaurant food, branded, QC material),
                      non-empty Chinese name_zh / category_zh and Chinese
                      aliases; the total row count is printed.
+
+Phase P4 adds:
+    docs/data/*.json - foods.json exists and is < 1.5 MB, holds every curated
+                     food (plus composites), every food has all 22 nutrients
+                     and >= 1 measure with exactly 1 default, values are null or
+                     non-negative numbers with at most 4 significant digits,
+                     nutrients.json has the 22 nutrients in nutrients.csv
+                     order, meta.json carries the source and a build date, and
+                     no JSON contains an absolute URL path.
 """
 
 from __future__ import annotations
 
 import csv
+import json
 import sys
+from decimal import Decimal
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -374,20 +385,254 @@ def validate_foods(checks, usda_foods, excluded_categories):
     return len(rows)
 
 
+# --- P4: generated JSON under docs/data -------------------------------------
+
+DOCS_DATA = REPO_ROOT / "docs" / "data"
+FOODS_JSON_MAX_BYTES = 1_500_000
+DATA_FILENAMES = ["foods.json", "nutrients.json", "meta.json"]
+SR_SOURCE_NAME = "USDA FoodData Central SR Legacy"
+SR_SOURCE_URL = (
+    "https://fdc.nal.usda.gov/fdc-datasets/"
+    "FoodData_Central_sr_legacy_food_csv_2018-04.zip"
+)
+
+
+def significant_digits(value):
+    """Number of significant digits of a non-zero number as written in JSON.
+
+    Trailing zeros of whole numbers are not significant (10750 has four), so the
+    decimal is normalized before counting.
+    """
+    return len(Decimal(repr(value)).normalize().as_tuple().digits)
+
+
+def load_json(checks, path):
+    if not checks.check(path.is_file(), f"missing {path.relative_to(REPO_ROOT)}"):
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        checks.fail(f"{path.relative_to(REPO_ROOT)} is not valid JSON: {error}")
+        return None
+
+
+def validate_nutrients_json(checks, nutrients_data):
+    checks.check(
+        (nutrients_data.get("source") or {}).get("name") == SR_SOURCE_NAME,
+        "nutrients.json source.name is wrong",
+    )
+    nutrient_rows = nutrients_data.get("nutrients") or []
+    checks.check(
+        [row.get("id") for row in nutrient_rows] == list(EXPECTED_NUTRIENTS),
+        "nutrients.json must list the 22 nutrient ids in nutrients.csv order",
+    )
+    for row in nutrient_rows:
+        checks.check(
+            isinstance(row.get("nameZh"), str) and has_cjk(row["nameZh"]),
+            f"nutrients.json {row.get('id')}: nameZh must be Chinese",
+        )
+        checks.check(
+            isinstance(row.get("unit"), str) and row["unit"] != "",
+            f"nutrients.json {row.get('id')}: empty unit",
+        )
+        checks.check(
+            isinstance(row.get("color"), str) and parse_hex(row["color"]) is not None,
+            f"nutrients.json {row.get('id')}: color must be #rrggbb",
+        )
+
+
+def validate_meta_json(checks, meta_data):
+    source = meta_data.get("source") or {}
+    checks.check(source.get("name") == SR_SOURCE_NAME, "meta.json source.name is wrong")
+    checks.check(source.get("release") == "2018-04", "meta.json source.release must be 2018-04")
+    checks.check(
+        source.get("url") == SR_SOURCE_URL,
+        "meta.json source.url must be the SR Legacy 2018-04 zip URL",
+    )
+    build_date = meta_data.get("buildDate")
+    checks.check(
+        isinstance(build_date, str)
+        and len(build_date) == 10
+        and build_date[4] == "-"
+        and build_date[7] == "-",
+        f"meta.json buildDate must be an ISO date, got {build_date!r}",
+    )
+
+
+def validate_food_measures(checks, label, measures):
+    checks.check(len(measures) >= 1, f"{label}: needs at least one measure")
+    defaults = [measure for measure in measures if measure.get("default") is True]
+    checks.check(len(defaults) == 1, f"{label}: needs exactly one default measure")
+    for measure in measures:
+        measure_label = f"{label} measure {measure.get('id') or 'no id'}"
+        grams = measure.get("grams")
+        checks.check(
+            isinstance(grams, (int, float))
+            and not isinstance(grams, bool)
+            and 1 <= grams <= 1000,
+            f"{measure_label}: grams must be 1..1000, got {grams!r}",
+        )
+        basis = measure.get("basis") or ""
+        checks.check(
+            basis.startswith("usda_portion:") or basis.startswith("estimate:"),
+            f"{measure_label}: basis must be usda_portion:<id> or estimate:<text>, got {basis!r}",
+        )
+        checks.check(
+            isinstance(measure.get("labelZh"), str) and has_cjk(measure["labelZh"]),
+            f"{measure_label}: labelZh must be Chinese",
+        )
+
+
+def validate_foods_json(checks, foods_data, curated_count):
+    checks.check(
+        (foods_data.get("source") or {}).get("name") == SR_SOURCE_NAME,
+        "foods.json source.name is wrong",
+    )
+    foods = foods_data.get("foods") or []
+    checks.check(
+        len(foods) >= curated_count,
+        f"foods.json has {len(foods)} foods but foods_curated.csv has {curated_count} rows",
+    )
+
+    expected_nutrients = list(EXPECTED_NUTRIENTS)
+    sr_ids = set()
+    seen_food_ids = set()
+    composites = 0
+    null_values = 0
+
+    for food in foods:
+        food_id = str(food.get("id") or "")
+        label = f"foods.json {food_id or 'no id'}"
+        if food_id in seen_food_ids:
+            checks.fail(f"{label}: duplicate food id")
+        seen_food_ids.add(food_id)
+
+        is_composite = food_id.startswith("composite:")
+        if is_composite:
+            composites += 1
+            checks.check(food.get("estimate") is True, f"{label}: composite must have estimate true")
+            checks.check(
+                isinstance(food.get("basis"), str) and food["basis"] != "",
+                f"{label}: composite needs a non-empty basis",
+            )
+        else:
+            checks.check(
+                food_id == f"fdc:{food.get('fdcId')}",
+                f"{label}: id must be 'fdc:<fdcId>'",
+            )
+            checks.check(
+                food.get("estimate") is False, f"{label}: curated food must have estimate false"
+            )
+            checks.check(food.get("basis") is None, f"{label}: curated food must have basis null")
+            sr_ids.add(food.get("fdcId"))
+
+        for key in ("nameZh", "nameEn", "category"):
+            checks.check(
+                isinstance(food.get(key), str) and food[key] != "",
+                f"{label}: {key} must be a non-empty string",
+            )
+        checks.check(has_cjk(str(food.get("nameZh") or "")), f"{label}: nameZh must be Chinese")
+        checks.check(isinstance(food.get("aliases"), list), f"{label}: aliases must be a list")
+
+        per100g = food.get("per100g") or {}
+        checks.check(
+            sorted(per100g) == sorted(expected_nutrients),
+            f"{label}: per100g keys must be exactly the 22 nutrient ids",
+        )
+        for nutrient_id, value in per100g.items():
+            if value is None:
+                null_values += 1
+                continue
+            if not checks.check(
+                isinstance(value, (int, float))
+                and not isinstance(value, bool)
+                and value >= 0,
+                f"{label} {nutrient_id}: value must be null or a non-negative number, "
+                f"got {value!r}",
+            ):
+                continue
+            checks.check(
+                value == 0 or significant_digits(value) <= 4,
+                f"{label} {nutrient_id}: {value} has more than 4 significant digits",
+            )
+
+        flags = food.get("flags") or {}
+        checks.check(
+            flags.get("niacinNoTryptophan") in (True, False),
+            f"{label}: flags.niacinNoTryptophan must be a boolean",
+        )
+        validate_food_measures(checks, label, food.get("measures") or [])
+
+    curated_ids = set()
+    for row in read_csv(DATA_SRC / "foods_curated.csv")[1]:
+        raw_id = (row.get("fdc_id") or "").strip()
+        if raw_id.isdigit():
+            curated_ids.add(int(raw_id))
+    checks.check(
+        curated_ids == sr_ids,
+        "foods.json must contain every curated fdc_id exactly once "
+        f"(missing {len(curated_ids - sr_ids)}, unexpected {len(sr_ids - curated_ids)})",
+    )
+    checks.check(null_values > 0, "foods.json has no null values: missing data must be preserved")
+    return len(foods), composites
+
+
+def validate_generated_json(checks, curated_count):
+    """Checks for docs/data/*.json written by tools/build_foods.py (phase P4)."""
+    foods_path = DOCS_DATA / "foods.json"
+    if not checks.check(foods_path.is_file(), "missing docs/data/foods.json"):
+        return 0, 0, 0
+
+    size = foods_path.stat().st_size
+    checks.check(
+        size < FOODS_JSON_MAX_BYTES,
+        f"foods.json is {size} bytes, must stay under {FOODS_JSON_MAX_BYTES}",
+    )
+
+    for name in DATA_FILENAMES:
+        path = DOCS_DATA / name
+        if not checks.check(path.is_file(), f"missing docs/data/{name}"):
+            continue
+        text = path.read_text(encoding="utf-8")
+        checks.check(
+            ":/" not in text.replace("https://", "").replace("http://", ""),
+            f"{name} must not contain absolute URL paths",
+        )
+
+    foods_data = load_json(checks, foods_path)
+    nutrients_data = load_json(checks, DOCS_DATA / "nutrients.json")
+    meta_data = load_json(checks, DOCS_DATA / "meta.json")
+    if foods_data is None or nutrients_data is None or meta_data is None:
+        return 0, 0, 0
+
+    validate_nutrients_json(checks, nutrients_data)
+    validate_meta_json(checks, meta_data)
+    food_count, composite_count = validate_foods_json(checks, foods_data, curated_count)
+    return food_count, composite_count, size
+
+
 def main():
     checks = Checks()
     usda_nutrients = load_usda_nutrients()
     nutrient_count = validate_nutrients(checks, usda_nutrients)
     food_count = validate_foods(checks, load_usda_foods(), load_excluded_categories())
+    json_food_count, composite_count, foods_json_size = validate_generated_json(
+        checks, food_count
+    )
 
     if checks.failures:
         print(f"nutrients: {nutrient_count} rows checked")
         print(f"foods: {food_count} rows checked")
+        print(f"foods.json: {json_food_count} foods checked")
         print(f"{len(checks.failures)} problem(s) found")
         return checks.report()
 
     print(f"nutrients: {nutrient_count} OK")
     print(f"foods: {food_count} OK")
+    print(
+        f"foods.json: {json_food_count} foods OK "
+        f"({composite_count} composites, {foods_json_size} bytes)"
+    )
     return 0
 
 

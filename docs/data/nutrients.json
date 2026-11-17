@@ -1,0 +1,276 @@
+{
+  "source": {
+    "name": "USDA FoodData Central SR Legacy",
+    "release": "2018-04",
+    "url": "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_csv_2018-04.zip",
+    "sha256": "b80817294b8850530aaedf2e515c02593b1824f763a0ff356e5c2081643e6fd0",
+    "dataset": "FoodData_Central_sr_legacy_food_csv_2018-04"
+  },
+  "nutrients": [
+    {
+      "id": "vitA",
+      "nameZh": "维生素A",
+      "nameEn": "Vitamin A",
+      "unit": "ug RAE",
+      "usdaNutrientIds": [
+        1106
+      ],
+      "color": "#f3daba",
+      "kind": "vitamin",
+      "note": "RAE = retinol activity equivalents; USDA 1106 is vitamin A RAE"
+    },
+    {
+      "id": "vitD",
+      "nameZh": "维生素D",
+      "nameEn": "Vitamin D",
+      "unit": "ug",
+      "usdaNutrientIds": [
+        1114
+      ],
+      "color": "#ede7b6",
+      "kind": "vitamin",
+      "note": "USDA 1114 = vitamin D (D2 + D3)"
+    },
+    {
+      "id": "vitE",
+      "nameZh": "维生素E",
+      "nameEn": "Vitamin E",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1109
+      ],
+      "color": "#d5e7c0",
+      "kind": "vitamin",
+      "note": "USDA = alpha-tocopherol only; CN target is alpha-TE"
+    },
+    {
+      "id": "vitK",
+      "nameZh": "维生素K",
+      "nameEn": "Vitamin K",
+      "unit": "ug",
+      "usdaNutrientIds": [
+        1185
+      ],
+      "color": "#c9ede1",
+      "kind": "vitamin",
+      "note": "phylloquinone"
+    },
+    {
+      "id": "vitC",
+      "nameZh": "维生素C",
+      "nameEn": "Vitamin C",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1162
+      ],
+      "color": "#c2ebe7",
+      "kind": "vitamin",
+      "note": null
+    },
+    {
+      "id": "thiamin",
+      "nameZh": "维生素B1",
+      "nameEn": "Vitamin B1",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1165
+      ],
+      "color": "#c5e6ed",
+      "kind": "vitamin",
+      "note": null
+    },
+    {
+      "id": "riboflavin",
+      "nameZh": "维生素B2",
+      "nameEn": "Vitamin B2",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1166
+      ],
+      "color": "#c3dfef",
+      "kind": "vitamin",
+      "note": null
+    },
+    {
+      "id": "niacin",
+      "nameZh": "烟酸",
+      "nameEn": "Niacin",
+      "unit": "mg NE",
+      "usdaNutrientIds": [
+        1167,
+        1210
+      ],
+      "color": "#f0c7c7",
+      "kind": "vitamin",
+      "note": "USDA 1167 (niacin) plus tryptophan 1210 for NE: NE = niacin_mg + tryptophan_g*1000/60; if tryptophan is missing use niacin only and set the flag"
+    },
+    {
+      "id": "vitB6",
+      "nameZh": "维生素B6",
+      "nameEn": "Vitamin B6",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1175
+      ],
+      "color": "#f1cec5",
+      "kind": "vitamin",
+      "note": null
+    },
+    {
+      "id": "folate",
+      "nameZh": "叶酸",
+      "nameEn": "Folate",
+      "unit": "ug DFE",
+      "usdaNutrientIds": [
+        1190
+      ],
+      "color": "#f2d7c0",
+      "kind": "vitamin",
+      "note": "DFE = dietary folate equivalents; USDA 1190 is folate DFE"
+    },
+    {
+      "id": "vitB12",
+      "nameZh": "维生素B12",
+      "nameEn": "Vitamin B12",
+      "unit": "ug",
+      "usdaNutrientIds": [
+        1178
+      ],
+      "color": "#e1ebc1",
+      "kind": "vitamin",
+      "note": null
+    },
+    {
+      "id": "pantothenic",
+      "nameZh": "泛酸",
+      "nameEn": "Pantothenic acid",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1170
+      ],
+      "color": "#f0deb2",
+      "kind": "vitamin",
+      "note": null
+    },
+    {
+      "id": "choline",
+      "nameZh": "胆碱",
+      "nameEn": "Choline",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1180
+      ],
+      "color": "#eee3ba",
+      "kind": "vitamin",
+      "note": null
+    },
+    {
+      "id": "calcium",
+      "nameZh": "钙",
+      "nameEn": "Calcium",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1087
+      ],
+      "color": "#cad3f2",
+      "kind": "mineral",
+      "note": null
+    },
+    {
+      "id": "phosphorus",
+      "nameZh": "磷",
+      "nameEn": "Phosphorus",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1091
+      ],
+      "color": "#cdccf0",
+      "kind": "mineral",
+      "note": null
+    },
+    {
+      "id": "potassium",
+      "nameZh": "钾",
+      "nameEn": "Potassium",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1092
+      ],
+      "color": "#dad0f1",
+      "kind": "mineral",
+      "note": null
+    },
+    {
+      "id": "magnesium",
+      "nameZh": "镁",
+      "nameEn": "Magnesium",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1090
+      ],
+      "color": "#e1d0f0",
+      "kind": "mineral",
+      "note": null
+    },
+    {
+      "id": "iron",
+      "nameZh": "铁",
+      "nameEn": "Iron",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1089
+      ],
+      "color": "#ecd5f1",
+      "kind": "mineral",
+      "note": null
+    },
+    {
+      "id": "zinc",
+      "nameZh": "锌",
+      "nameEn": "Zinc",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1095
+      ],
+      "color": "#f1d5ec",
+      "kind": "mineral",
+      "note": null
+    },
+    {
+      "id": "selenium",
+      "nameZh": "硒",
+      "nameEn": "Selenium",
+      "unit": "ug",
+      "usdaNutrientIds": [
+        1103
+      ],
+      "color": "#f3d3e3",
+      "kind": "mineral",
+      "note": null
+    },
+    {
+      "id": "copper",
+      "nameZh": "铜",
+      "nameEn": "Copper",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1098
+      ],
+      "color": "#f5d6db",
+      "kind": "mineral",
+      "note": null
+    },
+    {
+      "id": "manganese",
+      "nameZh": "锰",
+      "nameEn": "Manganese",
+      "unit": "mg",
+      "usdaNutrientIds": [
+        1101
+      ],
+      "color": "#f5d6eb",
+      "kind": "mineral",
+      "note": null
+    }
+  ]
+}
