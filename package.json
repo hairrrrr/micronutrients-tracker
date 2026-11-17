@@ -1,0 +1,14 @@
+{
+  "name": "micronutrients-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Static micronutrient intake tracker with Chinese and US reference intakes",
+  "scripts": {
+    "test": "node --test \"tests/unit/*.test.mjs\"",
+    "serve": "python3 -m http.server 8000 -d docs",
+    "build:data": "python3 tools/build_foods.py && python3 tools/build_dri.py",
+    "validate": "python3 tools/validate_data.py",
+    "e2e": "playwright test"
+  }
+}

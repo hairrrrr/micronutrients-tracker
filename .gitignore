@@ -1,2 +1,6 @@
 HANDOFF.md
 node_modules/
+.monitor/
+data-raw/
+test-results/
+playwright-report/
