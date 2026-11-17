@@ -1,0 +1,23 @@
+id,name_zh,name_en,unit,usda_nutrient_id,color,kind,note
+vitA,维生素A,Vitamin A,ug RAE,1106,#f3daba,vitamin,RAE = retinol activity equivalents; USDA 1106 is vitamin A RAE
+vitD,维生素D,Vitamin D,ug,1114,#ede7b6,vitamin,USDA 1114 = vitamin D (D2 + D3)
+vitE,维生素E,Vitamin E,mg,1109,#d5e7c0,vitamin,USDA = alpha-tocopherol only; CN target is alpha-TE
+vitK,维生素K,Vitamin K,ug,1185,#c9ede1,vitamin,phylloquinone
+vitC,维生素C,Vitamin C,mg,1162,#c2ebe7,vitamin,
+thiamin,维生素B1,Vitamin B1,mg,1165,#c5e6ed,vitamin,
+riboflavin,维生素B2,Vitamin B2,mg,1166,#c3dfef,vitamin,
+niacin,烟酸,Niacin,mg NE,1167+1210,#f0c7c7,vitamin,"USDA 1167 (niacin) plus tryptophan 1210 for NE: NE = niacin_mg + tryptophan_g*1000/60; if tryptophan is missing use niacin only and set the flag"
+vitB6,维生素B6,Vitamin B6,mg,1175,#f1cec5,vitamin,
+folate,叶酸,Folate,ug DFE,1190,#f2d7c0,vitamin,DFE = dietary folate equivalents; USDA 1190 is folate DFE
+vitB12,维生素B12,Vitamin B12,ug,1178,#e1ebc1,vitamin,
+pantothenic,泛酸,Pantothenic acid,mg,1170,#f0deb2,vitamin,
+choline,胆碱,Choline,mg,1180,#eee3ba,vitamin,
+calcium,钙,Calcium,mg,1087,#cad3f2,mineral,
+phosphorus,磷,Phosphorus,mg,1091,#cdccf0,mineral,
+potassium,钾,Potassium,mg,1092,#dad0f1,mineral,
+magnesium,镁,Magnesium,mg,1090,#e1d0f0,mineral,
+iron,铁,Iron,mg,1089,#ecd5f1,mineral,
+zinc,锌,Zinc,mg,1095,#f1d5ec,mineral,
+selenium,硒,Selenium,ug,1103,#f3d3e3,mineral,
+copper,铜,Copper,mg,1098,#f5d6db,mineral,
+manganese,锰,Manganese,mg,1101,#f5d6eb,mineral,
