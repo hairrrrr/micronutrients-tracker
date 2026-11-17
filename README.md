@@ -54,6 +54,15 @@ under `docs/` (no CDN, no runtime dependency), as noted per item.
   nutrition-tracker pattern of a dense goal/nutrient card grid: nutrient name,
   target, remaining or surplus amount, and a thin progress bar under it. The
   markup and CSS are written from scratch for this project.
+- **Cronometer / MyFitnessPal** - https://cronometer.com and
+  https://www.myfitnesspal.com - design reference only, no code copied (both
+  sites are not open source). The nutrient chip row in `docs/js/ui/tabs.js`
+  and the food card grid in `docs/js/ui/foods.js` follow the usual
+  nutrition-tracker layout of a horizontally scrollable nutrient tab row above
+  a dense food grid whose cards show a name, a small secondary name and one
+  number per food. The markup, the CSS and the 2-column (mobile) / 4-column
+  (desktop) grid are written from scratch in `docs/css/style.css`, using the
+  same hand-written `repeat(n, minmax(0, 1fr))` idea as the target cards.
 
 ## Disclaimer
 

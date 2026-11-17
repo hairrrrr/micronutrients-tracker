@@ -597,6 +597,240 @@ select.input {
 }
 
 /* ---------------------------------------------------------------------------
+ * Nutrient tabs (chip row)
+ *
+ * One horizontally scrollable row of chips. The active chip is filled with its
+ * nutrient colour through the inline `--tab-bg` custom property set by
+ * tabs.js, so the data colours stay out of the stylesheet. Inactive chips keep
+ * a neutral surface and show a small colour dot instead. The row scrolls
+ * itself, never the page (PLAN.md 1.8 item 4, no horizontal page scroll at
+ * 360-390 px).
+ * ------------------------------------------------------------------------ */
+.panel--tabs {
+  padding: 10px 0;
+}
+
+.tabs__row {
+  display: flex;
+  gap: 6px;
+  padding: 0 var(--pad);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tabs__row::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab.is-active {
+  border-color: var(--text);
+  background: var(--tab-bg, var(--surface-muted));
+  font-weight: 650;
+  box-shadow: inset 0 0 0 1px var(--text);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tab__dot {
+  display: block;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(31, 35, 40, 0.25);
+}
+
+/* The active chip is already tinted; the dot would only add noise. */
+.tab.is-active .tab__dot {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Food cards
+ *
+ * 2 columns at the 390 px design width, 4 from 760 px. Each card = Chinese
+ * name, small English name, amount of the active nutrient per 100 g with its
+ * unit, and a 估算 badge for a composite dish. Cards are <button>s with
+ * `aria-pressed`; the selected state (next sub-step) reuses the single "met"
+ * green so a selected food reads the same everywhere in the app.
+ * ------------------------------------------------------------------------ */
+.panel--foods {
+  padding: 14px var(--pad) var(--pad);
+}
+
+.foods__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 8px;
+  margin-bottom: 10px;
+}
+
+.foods__title {
+  flex: none;
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.foods__hint {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-align: right;
+}
+
+.foods__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.food-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  min-height: 84px;
+  padding: 8px 9px 9px;
+  border: 1px solid var(--food-border, var(--border));
+  border-radius: var(--radius-sm);
+  background: var(--food-bg, var(--surface));
+  color: var(--food-text, var(--text));
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.food-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Selected: the single "met" green from nutrients.js comes in as inline
+ * custom properties, the same way the target cards carry their colour. */
+.food-card.is-selected {
+  border-width: 2px;
+  padding: 7px 8px 8px;
+}
+
+.food-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.food-card__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.food-card__badge {
+  flex: none;
+  padding: 1px 4px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1.3;
+  opacity: 0.7;
+}
+
+.food-card__en {
+  color: var(--text-muted);
+  font-size: 0.625rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.food-card.is-selected .food-card__en {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.food-card__amount {
+  margin-top: auto;
+  padding-top: 4px;
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.foods__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.foods__count {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.foods__more {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.foods__more:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.foods__note {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------------
  * Utilities
  * ------------------------------------------------------------------------ */
 .visually-hidden {
@@ -681,6 +915,29 @@ select.input {
   }
 
   .target-card__status {
+    font-size: 0.8125rem;
+  }
+
+  /* Food cards: 4 columns on desktop (PLAN.md 1.8 item 5). */
+  .foods__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .food-card {
+    min-height: 92px;
+    padding: 10px 11px 11px;
+  }
+
+  .food-card__name {
+    font-size: 0.875rem;
+  }
+
+  .food-card__en {
+    font-size: 0.6875rem;
+  }
+
+  .food-card__amount {
     font-size: 0.8125rem;
   }
 }
