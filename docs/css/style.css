@@ -1026,6 +1026,195 @@ select.input {
 }
 
 /* ---------------------------------------------------------------------------
+ * About / data sources / disclaimer (PLAN.md 1.8 item 6, phase P12)
+ *
+ * A stacked "sources - notes - disclaimer" block, the pattern used by the
+ * documentation footers of nutrition trackers. Each source row is a card with
+ * the name, one line of context, the link and the bare URL; the "not tracked"
+ * nutrients are compact chips. The clear-all button is an outlined danger
+ * button so it never looks like a primary action.
+ * ------------------------------------------------------------------------ */
+.panel--about {
+  padding: 14px var(--pad) var(--pad);
+}
+
+.about__head {
+  margin-bottom: 4px;
+}
+
+.about__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.about__intro {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.about__section {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.about__subtitle {
+  margin: 0 0 8px;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.about__list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about__item {
+  padding: 9px 10px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+}
+
+.about__item-name {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.about__item-text {
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.about__link {
+  display: inline-block;
+  min-height: 32px;
+  margin-top: 4px;
+  color: var(--accent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.about__link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* The bare URL is the traceable address, small and muted under the link. */
+.about__url {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.about__text {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.about__untracked-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about__untracked {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.about__untracked-name {
+  font-weight: 650;
+}
+
+.about__untracked-reason {
+  color: var(--text-muted);
+}
+
+.about__clear {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-top: 12px;
+}
+
+.about__clear-btn {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--danger);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.about__clear-btn:hover:not(:disabled) {
+  background: #fdf1f0;
+}
+
+.about__clear-btn:disabled {
+  border-color: var(--border-strong);
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.about__clear-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.about__clear-meta {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+/* The disclaimer is the last thing on the page: readable, not shouting. */
+.about__disclaimer {
+  margin-top: 16px;
+  padding: 9px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------------
  * Utilities
  * ------------------------------------------------------------------------ */
 .visually-hidden {
@@ -1079,6 +1268,12 @@ select.input {
 
   .standards__table {
     font-size: 0.9375rem;
+  }
+
+  /* Source rows side by side on desktop; the intro line keeps full width. */
+  .about__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
 }
 

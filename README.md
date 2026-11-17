@@ -63,6 +63,15 @@ under `docs/` (no CDN, no runtime dependency), as noted per item.
   number per food. The markup, the CSS and the 2-column (mobile) / 4-column
   (desktop) grid are written from scratch in `docs/css/style.css`, using the
   same hand-written `repeat(n, minmax(0, 1fr))` idea as the target cards.
+- **Cronometer / USDA FoodData Central documentation pages** -
+  https://cronometer.com and https://fdc.nal.usda.gov - design reference only,
+  no code copied (neither is an open-source codebase). The data-sources block
+  in `docs/js/ui/about.js` and `docs/css/style.css` follows the common
+  "sources - notes - disclaimer" footer of nutrition trackers and dataset
+  documentation: a heading, one card per source with its name, one line of
+  context, an outbound link and the bare URL, then short note sections and a
+  final disclaimer box. The markup and CSS are written from scratch; the URLs
+  are plain links and are never fetched at runtime.
 - **Cronometer / MyFitnessPal / Lose It!** - https://cronometer.com,
   https://www.myfitnesspal.com and https://www.loseit.com - design reference
   only, no code copied (none of the three is open source). The selected food

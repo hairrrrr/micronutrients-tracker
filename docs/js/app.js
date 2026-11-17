@@ -10,6 +10,7 @@
 // https://host/ and at https://host/any/sub/path/ (PLAN.md rule 7).
 
 import { load, reduce, save } from "./core/state.js";
+import { renderAbout } from "./ui/about.js";
 import { renderFoods } from "./ui/foods.js";
 import { renderProfile } from "./ui/profile.js";
 import { renderTabs } from "./ui/tabs.js";
@@ -51,7 +52,7 @@ function storage() {
  * @param {string} message
  */
 function showError(message) {
-  for (const id of ["profile", "targets", "tabs", "foods"]) {
+  for (const id of ["profile", "targets", "tabs", "foods", "about"]) {
     const section = document.getElementById(id);
     if (!section) continue;
     section.setAttribute("aria-busy", "false");
@@ -79,6 +80,7 @@ async function main() {
   const targetsSection = document.getElementById("targets");
   const tabsSection = document.getElementById("tabs");
   const foodsSection = document.getElementById("foods");
+  const aboutSection = document.getElementById("about");
   if (!section) return;
 
   const store = storage();
@@ -124,6 +126,7 @@ async function main() {
     renderTargets(targetsSection, context);
     renderTabs(tabsSection, context);
     renderFoods(foodsSection, context);
+    renderAbout(aboutSection, context);
   }
 
   const context = {
