@@ -77,3 +77,33 @@ test("missing USDA data stays null and is never turned into 0", () => {
     }
   }
 });
+
+test("every food has measures with exactly one default", () => {
+  for (const food of data.foods) {
+    assert.ok(food.measures.length >= 1, `${food.id} has no measure`);
+    const defaults = food.measures.filter((measure) => measure.default);
+    assert.equal(defaults.length, 1, `${food.id} has ${defaults.length} defaults`);
+    for (const measure of food.measures) {
+      assert.ok(measure.grams >= 1 && measure.grams <= 1000, `${food.id} ${measure.id}`);
+      assert.match(measure.basis, /^(usda_portion:\d+|estimate:.+)$/);
+    }
+  }
+});
+
+test("household measures stay in their sanity ranges (PLAN P5)", () => {
+  const ranges = [
+    { id: "fdc:171287", label: "一个", low: 40, high: 60 }, // one egg
+    { id: "fdc:170567", label: "一把", low: 15, high: 35 }, // handful of almonds
+    { id: "fdc:168878", label: "一拳", low: 100, high: 200 }, // fist of cooked rice
+    { id: "fdc:168878", label: "一碗", low: 120, high: 250 }, // bowl of cooked rice
+    { id: "fdc:171265", label: "一杯", low: 200, high: 260 }, // cup of milk
+  ];
+  for (const range of ranges) {
+    const measure = food(range.id).measures.find((item) => item.labelZh === range.label);
+    assert.ok(measure, `${range.id} has no ${range.label} measure`);
+    assert.ok(
+      measure.grams >= range.low && measure.grams <= range.high,
+      `${range.id} ${range.label} is ${measure.grams} g, expected ${range.low}-${range.high} g`,
+    );
+  }
+});

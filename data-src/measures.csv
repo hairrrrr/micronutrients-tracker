@@ -1,0 +1,1175 @@
+food_key,measure_id,label_zh,grams,basis,is_default
+168877,usda83927,一杯,185,usda_portion:83927,1
+168931,usda84019,一杯,200,usda_portion:84019,1
+168883,usda83933,一杯,185,usda_portion:83933,1
+169711,usda85385,一杯,174,usda_portion:85385,0
+169711,bowl,一碗,200,"estimate:one Chinese bowl of cooked rice, about 200 g",1
+169711,fist,一拳,150,"estimate:one fist of cooked rice, about 150 g",0
+169703,usda85377,一杯,185,usda_portion:85377,1
+169704,usda85378,一杯,202,usda_portion:85378,0
+169704,bowl,一碗,200,"estimate:one Chinese bowl of cooked rice, about 200 g",1
+169704,fist,一拳,150,"estimate:one fist of cooked rice, about 150 g",0
+168878,usda83928,一杯,158,usda_portion:83928,0
+168878,bowl,一碗,200,"estimate:one Chinese bowl of cooked rice, about 200 g",1
+168878,fist,一拳,150,"estimate:one fist of cooked rice, about 150 g",0
+169757,usda85462,一杯,158,usda_portion:85462,0
+169757,bowl,一碗,200,"estimate:one Chinese bowl of cooked rice, about 200 g",1
+169757,fist,一拳,150,"estimate:one fist of cooked rice, about 150 g",0
+168932,usda84020,一杯,205,usda_portion:84020,0
+168932,bowl,一碗,200,"estimate:one Chinese bowl of cooked rice, about 200 g",1
+168932,fist,一拳,150,"estimate:one fist of cooked rice, about 150 g",0
+169726,usda85400,一杯,160,usda_portion:85400,1
+168897,usda83947,一杯,164,usda_portion:83947,0
+168897,bowl,一碗,200,"estimate:one Chinese bowl of cooked rice, about 200 g",1
+168897,fist,一拳,150,"estimate:one fist of cooked rice, about 150 g",0
+168874,usda83924,一杯,170,usda_portion:83924,1
+168917,usda83990,一杯,185,usda_portion:83990,0
+168917,bowl,一碗,200,"estimate:one Chinese bowl of cooked rice, about 200 g",1
+169702,usda85376,一杯,200,usda_portion:85376,1
+168871,usda83921,一杯,174,usda_portion:83921,0
+168871,bowl,一碗,200,"estimate:one Chinese bowl of cooked rice, about 200 g",1
+170284,usda86367,一杯,200,usda_portion:86367,1
+170285,usda86368,一杯,157,usda_portion:86368,0
+170285,bowl,一碗,200,"estimate:one Chinese bowl of cooked rice, about 200 g",1
+170286,usda86369,一杯,170,usda_portion:86369,1
+170685,usda87081,一杯,164,usda_portion:87081,1
+168893,usda83943,一杯,120,usda_portion:83943,1
+168894,usda83944,一杯,125,usda_portion:83944,1
+168896,usda83946,一杯,137,usda_portion:83946,1
+168898,usda83948,一杯,158,usda_portion:83948,1
+169714,usda85388,一杯,158,usda_portion:85388,1
+169697,usda85369,一杯,122,usda_portion:85369,1
+170288,usda86372,一杯,166,usda_portion:86372,1
+169698,usda85370,一杯,128,usda_portion:85370,1
+169705,usda85379,一杯,156,usda_portion:85379,1
+169741,usda85438,一杯,104,usda_portion:85438,1
+168872,usda83922,一杯,94,usda_portion:83922,1
+168892,usda83942,一杯,115,usda_portion:83942,1
+168933,usda84021,一杯,167,usda_portion:84021,1
+170687,usda87083,一杯,120,usda_portion:87083,1
+169716,usda85390,一杯,192,usda_portion:85390,1
+168943,usda84026,一杯,121,usda_portion:84026,1
+168885,usda83935,一杯,128,usda_portion:83935,1
+168446,usda83110,一杯,160,usda_portion:83110,1
+168914,usda83974,一杯,176,usda_portion:83974,0
+168914,bowl,一碗,200,"estimate:one Chinese bowl of cooked noodles, about 200 g",1
+174258,usda94033,一杯,140,usda_portion:94033,0
+174258,bowl,一碗,50,"estimate:one bowl of dried glass noodles, about 50 g",1
+168907,usda83960,一杯,114,usda_portion:83960,0
+168907,bowl,一碗,200,"estimate:one Chinese bowl of cooked noodles, about 200 g",1
+169732,usda85407,一杯,160,usda_portion:85407,0
+169732,bowl,一碗,200,"estimate:one Chinese bowl of cooked noodles, about 200 g",1
+169737,usda85420,一杯,124,usda_portion:85420,0
+169737,bowl,一碗,200,"estimate:one Chinese bowl of cooked noodles, about 200 g",1
+168910,usda83963,一杯,117,usda_portion:83963,0
+168910,bowl,一碗,200,"estimate:one Chinese bowl of cooked noodles, about 200 g",1
+174915,usda95146,一个,60,usda_portion:95146,1
+174915,usda95147,一个（小）,28,usda_portion:95147,0
+172688,usda91108,一片,32,usda_portion:91108,1
+174924,usda95169,一片,29,usda_portion:95169,1
+174924,usda95171,一杯,45,usda_portion:95171,0
+172684,usda91098,一片,32,usda_portion:91098,1
+172675,slice,一片,30,"estimate:one slice of bread, about 30 g",1
+174899,usda95097,一个,99,usda_portion:95097,1
+174899,usda95099,一个（小）,69,usda_portion:95099,0
+174899,usda95100,一个（中）,105,usda_portion:95100,0
+172793,usda91406,一个,28,usda_portion:91406,1
+172746,usda91258,五块,14.9,usda_portion:91258,1
+172746,usda91260,一杯,70,usda_portion:91260,0
+172746,usda91262,一块,3,usda_portion:91262,0
+172749,usda91271,一份,28,usda_portion:91271,0
+172749,usda91272,六块,28,usda_portion:91272,1
+172749,usda91273,一块,4.6,usda_portion:91273,0
+172749,usda91275,一杯,94,usda_portion:91275,0
+175036,usda95472,一张,24,usda_portion:95472,1
+170026,usda85917,半杯,75,usda_portion:85917,0
+170026,usda85918,一个,369,usda_portion:85918,0
+170026,usda85919,一个（中）,213,usda_portion:85919,1
+170029,usda85929,半杯,75,usda_portion:85929,0
+170029,usda85930,一个,369,usda_portion:85930,0
+170029,usda85931,一个（中）,213,usda_portion:85931,1
+170093,usda86028,一个,299,usda_portion:86028,0
+170093,usda86029,一个（中）,173,usda_portion:86029,1
+170093,usda86030,一个（小）,138,usda_portion:86030,0
+170438,usda86648,半杯,78,usda_portion:86648,0
+170438,usda86649,一个,136,usda_portion:86649,1
+168482,usda83166,一杯,133,usda_portion:83166,1
+168482,usda83167,一个,130,usda_portion:83167,0
+168483,usda83168,一杯,200,usda_portion:83168,1
+168483,usda83169,一个,180,usda_portion:83169,0
+168483,usda83170,一个（中）,114,usda_portion:83170,0
+170071,usda85996,一杯,150,usda_portion:85996,1
+170072,usda85997,一杯,136,usda_portion:85997,1
+170072,usda85998,半杯,68,usda_portion:85998,0
+169308,usda84632,一杯,104,usda_portion:84632,1
+168486,usda83176,一杯,132,usda_portion:83176,1
+169985,usda85816,一杯,206,usda_portion:85816,1
+170066,usda85987,半杯,62,usda_portion:85987,1
+170066,usda85988,四颗,36,usda_portion:85988,0
+170073,usda85999,一杯,120,usda_portion:85999,1
+170073,usda86002,一个（中）,659,usda_portion:86002,0
+170073,usda86003,一片,6,usda_portion:86003,0
+170073,usda86004,一个（小）,365,usda_portion:86004,0
+169236,usda84490,一杯,150,usda_portion:84490,1
+168215,usda82681,一根,267,usda_portion:82681,1
+168462,usda83132,一杯,30,usda_portion:83132,1
+168462,usda83133,一捆,340,usda_portion:83133,0
+168462,usda83134,一片（叶）,10,usda_portion:83134,0
+168462,usda83135,一包,284,usda_portion:83135,0
+168463,usda83136,一杯,180,usda_portion:83136,1
+168421,usda83066,一杯,21,usda_portion:83066,1
+169238,usda84493,一杯,118,usda_portion:84493,1
+170406,usda86586,一杯,36,usda_portion:86586,1
+170407,usda86587,一杯,190,usda_portion:86587,1
+169256,usda84547,一杯,56,usda_portion:84547,1
+169257,usda84548,一杯,140,usda_portion:84548,1
+170061,usda85981,一杯,55,usda_portion:85981,1
+170466,usda86714,一杯,144,usda_portion:86714,1
+170375,usda86521,一杯,38,usda_portion:86521,1
+170375,usda86522,一片（叶）,32,usda_portion:86522,0
+170375,usda86523,半杯,19,usda_portion:86523,0
+170376,usda86524,一杯,144,usda_portion:86524,1
+170376,usda86525,半杯,72,usda_portion:86525,0
+169991,usda85834,一杯,36,usda_portion:85834,1
+169991,usda85835,一片（叶）,48,usda_portion:85835,0
+170401,usda86579,一杯,175,usda_portion:86579,1
+169226,usda84472,一杯,55,usda_portion:84472,1
+169227,usda84473,一杯,105,usda_portion:84473,1
+169387,usda84770,一片（叶）,2,usda_portion:84770,0
+169387,usda84771,半杯,10,usda_portion:84771,1
+168385,usda83003,一杯,28,usda_portion:83003,1
+168385,usda83004,一片（叶）,14,usda_portion:83004,0
+169202,usda84423,一杯,132,usda_portion:84423,1
+168419,usda83064,一杯,28,usda_portion:83064,1
+168420,usda83065,一杯,87,usda_portion:83065,1
+169301,usda84622,一杯,56,usda_portion:84622,1
+169301,usda84623,一根,13,usda_portion:84623,0
+169302,usda84624,一杯,98,usda_portion:84624,1
+168491,usda83184,一杯,51,usda_portion:83184,1
+168491,usda83185,一片（叶）,18,usda_portion:83185,0
+170405,usda86585,一杯,100,usda_portion:86585,1
+170390,usda86550,一杯,70,usda_portion:86550,1
+170390,usda86551,一颗,840,usda_portion:86551,0
+170390,usda86552,一片（叶）,14,usda_portion:86552,0
+170391,usda86553,一杯,170,usda_portion:86553,1
+169979,usda85809,一杯,76,usda_portion:85809,1
+169980,usda85810,一杯,119,usda_portion:85810,1
+169980,usda85811,一片（叶）,14,usda_portion:85811,0
+169975,usda85791,一杯,89,usda_portion:85791,1
+169975,usda85794,一片（叶）,33,usda_portion:85794,0
+169975,usda85795,一颗（中）,908,usda_portion:85795,0
+169975,usda85797,一颗（小）,714,usda_portion:85797,0
+169976,usda85799,半杯,75,usda_portion:85799,1
+169977,usda85801,一杯,89,usda_portion:85801,1
+169977,usda85804,一片（叶）,23,usda_portion:85804,0
+169977,usda85805,一颗（中）,839,usda_portion:85805,0
+169977,usda85806,一颗（小）,567,usda_portion:85806,0
+169978,usda85807,一片（叶）,22,usda_portion:85807,0
+169978,usda85808,半杯,75,usda_portion:85808,1
+170388,usda86548,一杯,70,usda_portion:86548,1
+170389,usda86549,一杯,145,usda_portion:86549,1
+170383,usda86540,一杯,88,usda_portion:86540,1
+169971,usda85784,半杯,78,usda_portion:85784,1
+169404,bunch,一捆,250,"estimate:one bunch of Chinese broccoli, about 250 g",1
+169392,usda84781,一杯,88,usda_portion:84781,1
+170379,usda86528,一杯,91,usda_portion:86528,1
+170379,usda86529,一捆,608,usda_portion:86529,0
+170379,usda86530,一根,31,usda_portion:86530,0
+170379,usda86532,半杯,44,usda_portion:86532,0
+169967,usda85772,半杯,78,usda_portion:85772,1
+169967,usda85773,一根,280,usda_portion:85773,0
+169967,usda85774,一根（中）,180,usda_portion:85774,0
+169986,usda85818,一杯,107,usda_portion:85818,1
+169986,usda85819,一朵,13,usda_portion:85819,0
+169986,usda85820,一颗,840,usda_portion:85820,0
+169986,usda85821,一颗（中）,588,usda_portion:85821,0
+170397,usda86573,半杯,62,usda_portion:86573,1
+170397,usda86574,三朵,54,usda_portion:86574,0
+168429,usda83077,一杯,55,usda_portion:83077,1
+168429,usda83078,一颗,163,usda_portion:83078,0
+168429,usda83079,一片（叶）,15,usda_portion:83079,0
+168431,usda83084,一杯,28,usda_portion:83084,1
+168431,usda83085,一片（叶）,2.6,usda_portion:83085,0
+168431,usda83087,一颗,309,usda_portion:83087,0
+169247,usda84506,一杯,47,usda_portion:84506,1
+169247,usda84507,一片（叶）,6,usda_portion:84507,0
+169247,usda84509,一颗,626,usda_portion:84509,0
+169248,usda84511,一杯,72,usda_portion:84511,1
+169248,usda84513,一颗,755,usda_portion:84513,0
+169248,usda84514,一颗（中）,539,usda_portion:84514,0
+169248,usda84516,一片（叶）,15,usda_portion:84516,0
+169249,usda84520,一杯,36,usda_portion:84520,1
+169249,usda84521,一颗,360,usda_portion:84521,0
+169249,usda84522,一片（叶）,4.8,usda_portion:84522,0
+170393,usda86555,一杯,128,usda_portion:86555,1
+170393,usda86558,一个,72,usda_portion:86558,0
+170393,usda86559,一个（中）,61,usda_portion:86559,0
+170393,usda86561,一片,3,usda_portion:86561,0
+170394,usda86564,一勺,9.7,usda_portion:86564,0
+170394,usda86565,半杯,78,usda_portion:86565,1
+170394,usda86566,一根,46,usda_portion:86566,0
+170500,usda86768,一杯,74,usda_portion:86768,1
+170491,usda86753,一杯,236,usda_portion:86753,1
+169145,usda84325,一杯,136,usda_portion:84325,1
+169146,usda84327,半杯,85,usda_portion:84327,1
+169276,usda84582,一杯,116,usda_portion:84582,1
+169276,usda84583,一个,9,usda_portion:84583,0
+169276,usda84585,一片,1,usda_portion:84585,0
+169276,usda84584,一个（中）,4.5,usda_portion:84584,0
+168451,usda83115,一杯,116,usda_portion:83115,1
+168452,usda83117,一杯,147,usda_portion:83117,1
+168453,usda83118,一杯,116,usda_portion:83118,1
+170465,usda86708,一杯,130,usda_portion:86708,1
+170465,usda86710,一个（中）,122,usda_portion:86710,0
+170465,usda86711,一片,15,usda_portion:86711,0
+170465,usda86709,一个,183,usda_portion:86709,0
+170058,usda85976,一杯,156,usda_portion:85976,1
+168454,usda83119,一杯,140,usda_portion:83119,1
+168454,usda83120,一个,772,usda_portion:83120,0
+168454,usda83121,一个（中）,386,usda_portion:83121,0
+168455,usda83123,一杯,170,usda_portion:83123,1
+170417,usda86610,一杯,133,usda_portion:86610,1
+170009,usda85888,半杯,78,usda_portion:85888,1
+170400,usda86578,一杯,156,usda_portion:86578,1
+169987,usda85823,一杯,155,usda_portion:85823,1
+169974,usda85789,一杯,118,usda_portion:85789,1
+170384,usda86542,一杯,125,usda_portion:86542,1
+169250,usda84524,十片,81,usda_portion:84524,0
+169250,cup,半杯,60,"estimate:half a cup of sliced lotus root, about 60 g",1
+168430,usda83082,半杯,60,usda_portion:83082,1
+168430,usda83083,十片,89,usda_portion:83083,0
+168583,usda83368,一杯,130,usda_portion:83368,1
+170457,usda86681,一杯,149,usda_portion:86681,1
+170457,usda86686,一个（中）,123,usda_portion:86686,0
+170457,usda86691,一角,31,usda_portion:86691,0
+170457,usda86687,一片,20,usda_portion:86687,0
+170050,usda85961,一杯,240,usda_portion:85961,1
+170050,usda85962,两个（中）,246,usda_portion:85962,0
+170054,usda85971,一杯,245,usda_portion:85971,1
+170460,usda86700,一杯,250,usda_portion:86700,1
+168567,usda83339,一杯,54,usda_portion:83339,1
+168567,usda83340,一块,2,usda_portion:83340,0
+168409,usda83049,半杯,52,usda_portion:83049,1
+168409,usda83050,一根,301,usda_portion:83050,0
+169225,usda84465,一杯,133,usda_portion:84465,1
+169225,usda84467,一个,280,usda_portion:84467,0
+169225,usda84468,一个（中）,201,usda_portion:84468,0
+169225,usda84469,一片,7,usda_portion:84469,0
+170108,usda86062,一杯,149,usda_portion:86062,1
+170108,usda86065,一个,164,usda_portion:86065,0
+170108,usda86068,一圈,10,usda_portion:86068,0
+170108,usda86064,一勺,9.3,usda_portion:86064,0
+170427,usda86623,一杯,149,usda_portion:86623,1
+170427,usda86626,一个,164,usda_portion:86626,0
+170427,usda86628,一圈,10,usda_portion:86628,0
+170427,usda86625,一勺,9.3,usda_portion:86625,0
+169383,usda84762,一个,186,usda_portion:84762,1
+170110,usda86072,一杯,135,usda_portion:86072,1
+170110,usda86073,一勺,11.6,usda_portion:86073,0
+170110,usda86074,半杯,68,usda_portion:86074,0
+170428,usda86631,一杯,135,usda_portion:86631,1
+170428,usda86632,一勺,11.6,usda_portion:86632,0
+170497,usda86763,一个,45,usda_portion:86763,1
+170497,usda86764,半杯,75,usda_portion:86764,0
+170106,usda86058,一个,45,usda_portion:86058,1
+170106,usda86059,半杯,75,usda_portion:86059,0
+168576,usda83356,一杯,90,usda_portion:83356,1
+168576,usda83357,一个,14,usda_portion:83357,0
+169228,usda84474,一杯,82,usda_portion:84474,1
+169228,usda84476,一个,548,usda_portion:84476,0
+169229,usda84477,一杯,99,usda_portion:84477,1
+169291,usda84607,一杯,124,usda_portion:84607,0
+169291,usda84609,一个,323,usda_portion:84609,1
+169291,usda84610,一个（中）,196,usda_portion:84610,0
+169291,usda84611,一片,9.9,usda_portion:84611,0
+169292,usda84613,一杯,180,usda_portion:84613,0
+169292,usda84614,半杯,120,usda_portion:84614,1
+168448,usda83112,一杯,116,usda_portion:83112,1
+168449,usda83113,一杯,245,usda_portion:83113,1
+168450,usda83114,一杯,245,usda_portion:83114,1
+169210,usda84439,一杯,151,usda_portion:84439,1
+169210,usda84440,半杯,76,usda_portion:84440,0
+169211,usda84441,一杯,120,usda_portion:84441,1
+169211,usda84442,一根,144,usda_portion:84442,0
+169212,usda84443,一杯,131,usda_portion:84443,1
+169957,usda85751,一杯,104,usda_portion:85751,1
+169957,usda85752,一包,340,usda_portion:85752,0
+169137,usda84314,一杯,124,usda_portion:84314,1
+169138,usda84315,一杯,124,usda_portion:84315,1
+168384,usda83001,一杯,33,usda_portion:83001,1
+168384,usda83002,一勺,3,usda_portion:83002,0
+169232,usda84485,半杯,58,usda_portion:84485,1
+169232,usda84486,一个,771,usda_portion:84486,0
+169233,usda84487,一杯,146,usda_portion:84487,1
+170069,usda85994,一杯,132,usda_portion:85994,1
+170475,usda86731,一杯,175,usda_portion:86731,1
+168393,usda83023,一杯,93,usda_portion:83023,1
+168393,usda83024,一根,124,usda_portion:83024,0
+168394,usda83025,一杯,124,usda_portion:83025,1
+168394,usda83026,半杯,62,usda_portion:83026,0
+168414,usda83057,一杯,95,usda_portion:83057,1
+168414,usda83058,一个,178,usda_portion:83058,0
+168415,usda83059,一杯,178,usda_portion:83059,1
+168415,usda83060,半杯,89,usda_portion:83060,0
+170402,usda86580,一杯,132,usda_portion:86580,1
+170402,usda86581,一个,203,usda_portion:86581,0
+170403,usda86582,一杯,160,usda_portion:86582,1
+170000,usda85860,一个（中）,110,usda_portion:85860,1
+170000,usda85864,十圈,60,usda_portion:85864,0
+170000,usda85859,一片,38,usda_portion:85859,0
+170000,usda85855,一杯,160,usda_portion:85855,0
+170001,usda85869,一个（中）,94,usda_portion:85869,1
+170001,usda85868,一片,32,usda_portion:85868,0
+170001,usda85865,一杯,210,usda_portion:85865,0
+170001,usda85866,一勺,15,usda_portion:85866,0
+170005,usda85878,一杯,100,usda_portion:85878,0
+170005,usda85879,一勺,6,usda_portion:85879,0
+170005,usda85880,一根,25,usda_portion:85880,1
+170005,usda85881,一根（中）,15,usda_portion:85881,0
+169230,usda84478,一杯,136,usda_portion:84478,0
+169230,usda84479,一小勺,2.8,usda_portion:84479,0
+169230,usda84480,一瓣,3,usda_portion:84480,1
+169230,usda84481,三瓣,9,usda_portion:84481,0
+169246,usda84503,一杯,89,usda_portion:84503,1
+169246,usda84505,一片,6,usda_portion:84505,0
+169994,usda85839,一勺,3,usda_portion:85839,1
+169994,usda85840,一小勺,1,usda_portion:85840,0
+169988,usda85824,一杯,101,usda_portion:85824,0
+169988,usda85826,一勺,7.5,usda_portion:85826,0
+169988,usda85827,一根,64,usda_portion:85827,0
+169988,usda85828,一根（中）,40,usda_portion:85828,1
+169989,usda85831,一杯,150,usda_portion:85831,1
+169989,usda85832,两根,75,usda_portion:85832,0
+169385,usda84766,一杯,87,usda_portion:84766,1
+168424,usda83071,一杯,135,usda_portion:83071,1
+168424,usda83072,一片,16,usda_portion:83072,0
+170068,usda85991,一杯,34,usda_portion:85991,1
+170068,usda85992,一小枝,2.5,usda_portion:85992,0
+170068,usda85993,十小枝,25,usda_portion:85993,0
+168412,usda83054,半杯,25,usda_portion:83054,1
+168412,usda83055,一颗,513,usda_portion:83055,0
+168389,usda83012,一杯,134,usda_portion:83012,1
+168389,usda83014,一根（中）,16,usda_portion:83014,0
+168389,usda83015,一根,20,usda_portion:83015,0
+168389,usda83017,一小段,3.5,usda_portion:83017,0
+168390,usda83018,半杯,90,usda_portion:83018,1
+168390,usda83019,四根,60,usda_portion:83019,0
+169260,usda84553,一杯,100,usda_portion:84553,1
+169260,usda84554,八根,95,usda_portion:84554,0
+169261,usda84555,半杯,80,usda_portion:84555,1
+169261,usda84556,八根,85,usda_portion:84556,0
+169205,usda84427,一个（中）,128,usda_portion:84427,1
+169205,usda84428,一个,162,usda_portion:84428,0
+169961,usda85758,一杯,100,usda_portion:85758,1
+169141,usda84317,一杯,125,usda_portion:84317,1
+170419,usda86613,一杯,145,usda_portion:86613,1
+170420,usda86614,一杯,160,usda_portion:86614,1
+170010,usda85890,一杯,98,usda_portion:85890,1
+170010,usda85892,十根,34,usda_portion:85892,0
+168405,usda83042,一杯,94,usda_portion:83042,1
+168405,usda83043,一根,12,usda_portion:83043,0
+170377,usda86526,一杯,109,usda_portion:86526,1
+170377,usda86527,一个,8,usda_portion:86527,0
+169998,usda85846,一杯,145,usda_portion:85846,1
+169998,usda85849,一根（小）,73,usda_portion:85849,0
+169999,usda85851,一根（中）,103,usda_portion:85851,0
+169999,usda85852,一根,118,usda_portion:85852,0
+169999,usda85853,一杯,149,usda_portion:85853,1
+171688,usda89191,一杯,109,usda_portion:89191,0
+171688,usda89192,一个,223,usda_portion:89192,1
+171688,usda89193,一个（中）,182,usda_portion:89193,0
+171689,usda89197,一杯,110,usda_portion:89197,0
+171689,usda89198,一个,216,usda_portion:89198,1
+171689,usda89199,一个（中）,161,usda_portion:89199,0
+171691,usda89202,一杯,86,usda_portion:89202,1
+171691,usda89203,一圈,6.4,usda_portion:89203,0
+171697,usda89209,一杯,155,usda_portion:89209,0
+171697,usda89211,一个,35,usda_portion:89211,1
+173941,usda93507,一杯,130,usda_portion:93507,1
+171705,usda89223,一杯,150,usda_portion:89223,0
+171705,usda89226,一个,201,usda_portion:89226,1
+173944,usda93511,一杯,225,usda_portion:93511,0
+173944,usda93515,一个（中）,118,usda_portion:93515,0
+173944,usda93516,一个,136,usda_portion:93516,1
+173946,usda93521,一杯,144,usda_portion:93521,1
+171710,usda89236,一杯,151,usda_portion:89236,1
+171710,usda89237,一包,510,usda_portion:89237,0
+171711,usda89238,一杯,148,usda_portion:89238,1
+173950,usda93525,一杯,155,usda_portion:93525,1
+173950,usda93526,一包,567,usda_portion:93526,0
+171719,usda89255,一杯,154,usda_portion:89255,1
+171719,usda89256,一颗,8.2,usda_portion:89256,0
+173954,usda93533,一杯,155,usda_portion:93533,1
+171718,usda89252,一杯,155,usda_portion:89252,1
+171718,usda89253,一包,510,usda_portion:89253,0
+173963,usda93544,一杯,112,usda_portion:93544,1
+173964,usda93545,一杯,112,usda_portion:93545,1
+173021,usda91820,一个,64,usda_portion:91820,1
+173021,usda91821,一个（中）,50,usda_portion:91821,0
+173021,usda91822,一个（小）,40,usda_portion:91822,0
+174665,usda94719,一杯,149,usda_portion:94719,0
+174665,usda94720,一个,8.4,usda_portion:94720,1
+173030,usda91835,一杯,150,usda_portion:91835,1
+174682,usda94746,一杯,92,usda_portion:94746,1
+174682,usda94747,一颗,2.4,usda_portion:94747,0
+174683,usda94748,一杯,151,usda_portion:94748,1
+174683,usda94749,十颗,49,usda_portion:94749,0
+173033,usda91838,一杯,230,usda_portion:91838,0
+173033,usda91839,半个,166,usda_portion:91839,1
+173033,usda91840,半个（中）,128,usda_portion:91840,0
+173039,usda91849,一杯,247,usda_portion:91849,1
+167774,usda81951,一杯,247,usda_portion:81951,1
+173044,usda91858,一杯,165,usda_portion:91858,0
+173044,usda91859,一个,55,usda_portion:91859,1
+174687,usda94754,一杯,165,usda_portion:94754,1
+168192,usda82635,一杯,243,usda_portion:82635,1
+168192,usda82636,一个,602,usda_portion:82636,0
+168153,usda82566,一杯,180,usda_portion:82566,0
+168153,usda82567,一个,69,usda_portion:82567,1
+168154,usda82569,一个,19,usda_portion:82569,1
+167746,usda81882,一杯,212,usda_portion:81882,0
+167746,usda81883,一个,58,usda_portion:81883,1
+167746,usda81885,一片,7,usda_portion:81885,0
+167747,usda81887,一杯,244,usda_portion:81887,1
+168155,usda82570,一个,67,usda_portion:82570,1
+168156,usda82572,一杯,242,usda_portion:82572,1
+169086,usda84200,一杯,190,usda_portion:84200,1
+169086,usda84201,一个,9.6,usda_portion:84201,0
+169087,usda84202,一个,2.5,usda_portion:84202,0
+169087,spoon,一勺,10,"estimate:one tablespoon of dried litchis, about 10 g",1
+169089,usda84204,一个,3.2,usda_portion:84204,1
+169907,usda85645,一个,1.7,usda_portion:85645,0
+169907,spoon,一勺,8,"estimate:one tablespoon of dried longans, about 8 g",1
+169910,usda85651,一杯,165,usda_portion:85651,0
+169910,usda85652,一个,336,usda_portion:85652,1
+169092,usda84207,一杯,177,usda_portion:84207,1
+169092,usda84210,一个,814,usda_portion:84210,0
+169092,usda84211,一角,102,usda_portion:84211,0
+169092,usda84212,一个（中）,552,usda_portion:84212,0
+169911,usda85653,一杯,170,usda_portion:85653,1
+169911,usda85655,一个,1000,usda_portion:85655,0
+169911,usda85657,一角,125,usda_portion:85657,0
+169913,usda85662,一杯,140,usda_portion:85662,1
+169913,usda85663,十个,15,usda_portion:85663,0
+169914,usda85664,一杯,143,usda_portion:85664,0
+169914,usda85666,一个（中）,142,usda_portion:85666,0
+169914,usda85667,一个,156,usda_portion:85667,1
+169097,usda84227,一杯,180,usda_portion:84227,0
+169097,usda84228,一个,184,usda_portion:84228,1
+169097,usda84229,一个（小）,96,usda_portion:84229,0
+169917,usda85673,一杯,165,usda_portion:85673,0
+169917,usda85674,一个,140,usda_portion:85674,1
+169918,usda85676,一杯,185,usda_portion:85676,0
+169918,usda85677,一个,141,usda_portion:85677,1
+169098,usda84231,一杯,248,usda_portion:84231,1
+169105,usda84247,一杯,195,usda_portion:84247,0
+169105,usda84249,一个（中）,88,usda_portion:84249,0
+169105,usda84250,一个,120,usda_portion:84250,1
+169925,usda85690,一杯,247,usda_portion:85690,1
+169926,usda85692,一杯,145,usda_portion:85692,1
+169926,usda85694,一个（小）,157,usda_portion:85694,0
+169926,usda85695,一个,781,usda_portion:85695,0
+169928,usda85697,一杯,154,usda_portion:85697,0
+169928,usda85699,一个（中）,150,usda_portion:85699,0
+169928,usda85700,一个,175,usda_portion:85700,1
+169934,usda85711,一杯,160,usda_portion:85711,1
+169118,usda84272,一杯,140,usda_portion:84272,0
+169118,usda84275,一个（中）,178,usda_portion:84275,0
+169118,usda84276,一个,230,usda_portion:84276,1
+168177,usda82613,一个,122,usda_portion:82613,1
+169121,usda84282,一杯,180,usda_portion:84282,1
+169941,usda85724,一个,168,usda_portion:85724,1
+169942,usda85725,一个,34,usda_portion:85725,1
+169124,usda84287,一杯,165,usda_portion:84287,1
+169124,usda84288,一个,905,usda_portion:84288,0
+169124,usda84289,一片,166,usda_portion:84289,0
+169949,usda85734,一杯,165,usda_portion:85734,0
+169949,usda85735,一个,66,usda_portion:85735,1
+168162,usda82582,一杯,174,usda_portion:82582,1
+169134,usda84309,半杯,87,usda_portion:84309,0
+169134,usda84310,一个,282,usda_portion:84310,1
+167754,usda81903,一杯,190,usda_portion:81903,1
+167754,usda81904,一个,609,usda_portion:81904,0
+168165,usda82587,一杯,165,usda_portion:82587,1
+168165,usda82590,一个（小）,43,usda_portion:82590,0
+168164,usda82585,一杯,165,usda_portion:82585,1
+167755,usda81905,一杯,123,usda_portion:81905,1
+168209,usda82674,一杯,140,usda_portion:82674,1
+167762,usda81919,一杯,152,usda_portion:81919,1
+167762,usda81924,一个,18,usda_portion:81924,0
+167762,usda81925,一个（中）,12,usda_portion:81925,0
+168173,usda82602,一杯,221,usda_portion:82602,1
+168173,usda82604,一颗,10.6,usda_portion:82604,0
+168173,usda82605,一包,567,usda_portion:82605,0
+167763,usda81929,一杯,120,usda_portion:81929,1
+167763,usda81930,一个,2,usda_portion:81930,0
+167765,usda81932,一杯,154,usda_portion:81932,1
+167765,usda81935,一角,286,usda_portion:81935,0
+167765,usda81936,十个,122,usda_portion:81936,0
+168175,usda82608,一杯,250,usda_portion:82608,1
+168175,usda82609,一个,155,usda_portion:82609,0
+171715,usda89245,一杯,132,usda_portion:89245,0
+171715,usda89247,一个,124,usda_portion:89247,1
+171715,usda89248,一个（中）,91,usda_portion:89248,0
+173032,usda91837,五勺,28,usda_portion:91837,0
+173032,spoon,一勺,6,"estimate:one tablespoon of dried goji berries, about 6 g",1
+168151,piece,一颗,20,"estimate:one fresh jujube, about 20 g",1
+168152,piece,一颗,8,"estimate:one dried red date, about 8 g",1
+169908,usda85646,一杯,149,usda_portion:85646,0
+169908,usda85647,一个,20,usda_portion:85647,1
+169908,usda85648,一个（中）,16,usda_portion:85648,0
+171695,usda89207,一杯,244,usda_portion:89207,1
+169130,usda84302,一根,270,usda_portion:84302,0
+169130,usda84303,一杯,148,usda_portion:84303,1
+168216,usda82682,一杯,137,usda_portion:82682,1
+169483,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+169484,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174760,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+170208,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171790,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171791,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168664,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168665,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168668,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168669,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+169433,usda84858,一块,202,usda_portion:84858,0
+169433,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168724,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168722,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168726,usda83654,一块,608,usda_portion:83654,0
+168726,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168727,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168677,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168613,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+170199,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+170200,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+169451,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168626,usda83448,一片,68,usda_portion:83448,0
+168626,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168625,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+169449,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+170196,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168297,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167812,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167853,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167854,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167902,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167839,usda82069,一块,185,usda_portion:82069,0
+167839,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168312,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167843,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167844,usda82077,一杯,135,usda_portion:82077,0
+167844,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168226,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167862,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167863,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168267,usda82783,一根,226,usda_portion:82783,0
+168267,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168270,usda82789,一个,233,usda_portion:82789,0
+168270,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168275,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167867,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168323,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167859,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168290,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168266,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168277,usda82801,一片,28,usda_portion:82801,0
+168277,usda82802,一包,442,usda_portion:82802,0
+168277,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167712,usda81810,一片,8,usda_portion:81810,0
+167712,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167871,usda82128,一杯,140,usda_portion:82128,0
+167871,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171477,usda88817,一杯,140,usda_portion:88817,0
+171477,usda88819,半块,86,usda_portion:88819,0
+171477,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171077,usda87920,一块,272,usda_portion:87920,0
+171077,usda87921,一包,926,usda_portion:87921,0
+171077,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171474,usda88811,半块,145,usda_portion:88811,0
+171474,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172385,usda90505,一块,193,usda_portion:90505,0
+172385,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173625,usda92972,一块,137,usda_portion:92972,0
+173625,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172373,usda90468,一只,133,usda_portion:90468,0
+172373,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173612,usda92937,一只,96,usda_portion:92937,0
+173612,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172390,usda90518,一块,107,usda_portion:90518,0
+172390,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173630,usda92983,一块,85,usda_portion:92983,0
+173630,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171447,usda88746,半只,460,usda_portion:88746,0
+171447,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171450,usda88754,一杯,140,usda_portion:88754,0
+171450,usda88756,一只,299,usda_portion:88756,0
+171450,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171119,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171061,usda87880,一块,44,usda_portion:87880,0
+171061,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171060,usda87878,一块,44,usda_portion:87878,0
+171060,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171457,usda88772,一杯,145,usda_portion:88772,0
+171457,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171116,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171479,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171081,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171496,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171098,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171506,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171487,usda88840,一块,53,usda_portion:88840,0
+171487,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172408,usda90566,半只,634,usda_portion:90566,0
+172408,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172409,usda90567,一杯,140,usda_portion:90567,0
+172409,usda90569,半只,382,usda_portion:90569,0
+172409,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174467,usda94396,一块,44,usda_portion:94396,0
+174467,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174470,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172415,usda90583,一块,94,usda_portion:90583,0
+172415,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172418,usda90590,一只,109,usda_portion:90590,0
+172418,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174472,usda94411,半只,400,usda_portion:94411,0
+174472,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171287,usda88374,一个,50,usda_portion:88374,1
+171287,usda88377,一杯,243,usda_portion:88377,0
+171287,usda88378,一个（中）,44,usda_portion:88378,0
+173424,usda92498,一杯,136,usda_portion:92498,0
+173424,usda92499,一勺,8.5,usda_portion:92499,0
+173424,usda92500,一个,50,usda_portion:92500,1
+173423,usda92497,一个,46,usda_portion:92497,1
+172187,usda90050,一个,61,usda_portion:90050,1
+172187,usda90051,一勺,13.7,usda_portion:90051,0
+172187,usda90052,一杯,220,usda_portion:90052,0
+172183,usda90043,一个,33,usda_portion:90043,1
+172183,usda90044,一杯,243,usda_portion:90044,0
+172184,usda90045,一个,17,usda_portion:90045,1
+172184,usda90046,一杯,243,usda_portion:90046,0
+172189,usda90055,一个,70,usda_portion:90055,1
+172191,usda90057,一个,9,usda_portion:90057,1
+174311,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174312,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172496,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174370,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172531,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172532,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175290,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173855,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173851,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175301,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172521,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175303,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171955,usda89621,一片（鱼柳）,231,usda_portion:89621,0
+171955,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174190,usda93894,一块,80,usda_portion:93894,0
+174190,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171964,usda89638,一片（鱼柳）,193,usda_portion:89638,0
+171964,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173725,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175129,usda95702,半片（鱼柳）,193,usda_portion:95702,0
+175129,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174196,usda93910,一片（鱼柳）,163,usda_portion:93910,0
+174196,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173686,usda93107,半片（鱼柳）,198,usda_portion:93107,0
+173686,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175167,usda95787,半片（鱼柳）,198,usda_portion:95787,0
+175167,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173691,usda93119,半片（鱼柳）,198,usda_portion:93119,0
+173691,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175136,usda95717,半片（鱼柳）,198,usda_portion:95717,0
+175136,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175168,usda95789,半片（鱼柳）,178,usda_portion:95789,0
+175168,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173693,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175159,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175156,usda95764,半片（鱼柳）,198,usda_portion:95764,0
+175156,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173706,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172006,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171986,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175158,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175139,usda95722,一杯,149,usda_portion:95722,0
+175139,usda95726,一条（小）,12,usda_portion:95726,0
+175139,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174182,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175116,usda95669,一片（鱼柳）,184,usda_portion:95669,0
+175116,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175119,usda95677,一片（鱼柳）,112,usda_portion:95677,0
+175119,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174193,usda93901,一片（鱼柳）,204,usda_portion:93901,0
+174193,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174194,usda93905,一片（鱼柳）,159,usda_portion:93905,0
+174194,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171952,usda89615,一片（鱼柳）,218,usda_portion:89615,0
+171952,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174185,usda93884,一片（鱼柳）,170,usda_portion:93884,0
+174185,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174184,usda93881,一片（鱼柳）,79,usda_portion:93881,0
+174184,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171959,usda89629,一片（鱼柳）,204,usda_portion:89629,0
+171959,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171962,usda89634,一片（鱼柳）,259,usda_portion:89634,0
+171962,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174200,usda93920,半片（鱼柳）,204,usda_portion:93920,0
+174200,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171965,usda89640,半片（鱼柳）,204,usda_portion:89640,0
+171965,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173675,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173676,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173678,usda93089,一片（鱼柳）,60,usda_portion:93089,0
+173678,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173682,usda93098,一片（鱼柳）,112,usda_portion:93098,0
+173682,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173684,usda93103,一片（鱼柳）,191,usda_portion:93103,0
+173684,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173705,usda93146,半片（鱼柳）,193,usda_portion:93146,0
+173705,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175134,usda95713,半片（鱼柳）,193,usda_portion:95713,0
+175134,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173703,usda93142,一块,136,usda_portion:93142,0
+173703,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173698,usda93133,一片（鱼柳）,218,usda_portion:93133,0
+173698,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175176,usda95803,一片（鱼柳）,116,usda_portion:95803,0
+175176,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173711,usda93162,一片（鱼柳）,198,usda_portion:93162,0
+173711,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175123,usda95688,一片（鱼柳）,119,usda_portion:95688,0
+175123,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175146,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171956,usda89623,一片（鱼柳）,180,usda_portion:89623,0
+171956,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175165,usda95783,一片（鱼柳）,159,usda_portion:95783,0
+175165,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+173717,usda93175,一片（鱼柳）,79,usda_portion:93175,0
+173717,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175154,usda95760,一片（鱼柳）,159,usda_portion:95760,0
+175154,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171990,usda89692,一片（鱼柳）,90,usda_portion:89692,0
+171990,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175179,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175180,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174210,usda93939,一个（中）,6,usda_portion:93939,0
+174210,usda93940,一个（小）,5,usda_portion:93940,0
+174210,usda93942,四个,28,usda_portion:93942,0
+174210,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171971,usda89652,四个,22,usda_portion:89652,0
+171971,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174204,usda93927,一只,21,usda_portion:93927,0
+174204,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174205,usda93928,一杯,118,usda_portion:93928,0
+174205,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171968,usda89647,一只,163,usda_portion:89647,0
+171968,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172007,usda89726,一只,127,usda_portion:89726,0
+172007,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175164,usda95781,一只,172,usda_portion:95781,0
+175164,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174202,usda93923,一只,134,usda_portion:93923,0
+174202,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174208,usda93935,一只,150,usda_portion:93935,0
+174208,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174209,usda93937,一杯,145,usda_portion:93937,0
+174209,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174211,usda93944,一只,209,usda_portion:93944,0
+174211,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172009,usda89729,一只,163,usda_portion:89729,0
+172009,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174206,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174207,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174214,usda93948,一个,20,usda_portion:93948,0
+174214,usda93950,一个（中）,14.5,usda_portion:93950,0
+174214,usda93952,一杯,227,usda_portion:93952,0
+174214,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171975,usda89662,二十个（小）,190,usda_portion:89662,0
+171975,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171976,usda89664,一杯,160,usda_portion:89664,0
+171976,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174216,usda93954,一杯,150,usda_portion:93954,0
+174216,usda93956,一个,20,usda_portion:93956,0
+174216,usda93957,一个（中）,16,usda_portion:93957,0
+174216,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174217,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174219,usda93962,一个（中）,50,usda_portion:93962,0
+174219,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174250,usda94021,一个（中）,25,usda_portion:94021,0
+174250,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171978,usda89667,六个（中）,84,usda_portion:89667,0
+171978,usda89668,一杯,248,usda_portion:89668,0
+171978,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171980,usda89672,六个（中）,42,usda_portion:89672,0
+171980,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171981,usda89674,一杯,248,usda_portion:89674,0
+171981,usda89676,一罐,272,usda_portion:89676,0
+171981,usda89677,一只,8,usda_portion:89677,0
+171981,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174220,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167742,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174223,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174218,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174249,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174215,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172010,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174212,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171983,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167744,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+175132,usda95707,一勺,14,usda_portion:95707,0
+175132,usda95709,一罐,227,usda_portion:95709,0
+175132,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171265,usda88314,一杯,244,usda_portion:88314,1
+171265,usda88316,一勺,15,usda_portion:88316,0
+171267,usda88320,一杯,244,usda_portion:88320,1
+170872,usda87459,一杯,244,usda_portion:87459,1
+171269,usda88325,一杯,245,usda_portion:88325,1
+173432,usda92516,一杯,245,usda_portion:92516,1
+167697,usda81780,一杯,245,usda_portion:81780,1
+170876,usda87470,四分之一杯,32,usda_portion:87470,1
+170876,usda87471,一杯,128,usda_portion:87471,0
+172195,usda90063,四分之一杯,30,usda_portion:90063,1
+172195,usda90064,一杯,120,usda_portion:90064,0
+171276,usda88344,一杯,252,usda_portion:88344,1
+171276,usda88346,半杯,126,usda_portion:88346,0
+171275,usda88342,一杯,306,usda_portion:88342,1
+171278,usda88350,一杯,244,usda_portion:88350,1
+170858,usda87429,一杯,120,usda_portion:87429,0
+170858,usda87431,一勺,15,usda_portion:87431,1
+170859,usda87432,一杯,120,usda_portion:87432,0
+170859,usda87434,一勺,15,usda_portion:87434,1
+171255,usda88291,一勺,15,usda_portion:88291,1
+171255,usda88292,一杯,242,usda_portion:88292,0
+171255,usda88293,一盒,15,usda_portion:88293,0
+171257,usda88296,一勺,12,usda_portion:88296,1
+171257,usda88297,一杯,230,usda_portion:88297,0
+173410,usda92457,一勺,14.2,usda_portion:92457,1
+173410,usda92458,一杯,227,usda_portion:92458,0
+173410,stick,一长条,113,"estimate:one US stick of butter, about 113 g",0
+173430,usda92512,一勺,14.2,usda_portion:92512,1
+173430,usda92513,一杯,227,usda_portion:92513,0
+173430,stick,一长条,113,"estimate:one US stick of butter, about 113 g",0
+171314,spoon,一勺,13,"estimate:one tablespoon of ghee, about 13 g",1
+173414,usda92467,一杯,132,usda_portion:92467,0
+173414,usda92472,一片,28,usda_portion:92472,1
+170845,usda87381,一杯,112,usda_portion:87381,0
+170845,usda87383,六片,170,usda_portion:87383,0
+170845,slice,一片,28,"estimate:one slice of mozzarella, about 28 g",1
+170847,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+171251,usda88271,一杯,132,usda_portion:88271,0
+171251,usda88276,一片,28,usda_portion:88276,1
+170848,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+171247,usda88261,一杯,100,usda_portion:88261,0
+171247,usda88262,一勺,5,usda_portion:88262,0
+171247,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+170851,usda87401,半杯,124,usda_portion:87401,0
+170851,usda87402,一杯,246,usda_portion:87402,0
+170851,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+172179,usda90035,一杯,210,usda_portion:90035,0
+172179,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+173418,usda92481,一勺,14.5,usda_portion:92481,0
+173418,usda92482,一杯,232,usda_portion:92482,0
+173418,usda92486,一包,85,usda_portion:92486,0
+173418,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+172175,usda90019,一杯,135,usda_portion:90019,0
+172175,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+172177,usda90026,一杯,144,usda_portion:90026,0
+172177,usda90029,一包,128,usda_portion:90029,0
+172177,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+173420,usda92489,一杯,150,usda_portion:92489,0
+173420,usda92492,一角,38,usda_portion:92492,0
+173420,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+171241,usda88236,一包,198,usda_portion:88236,0
+171241,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+170850,usda87396,一杯,132,usda_portion:87396,0
+170850,usda87399,一片,28,usda_portion:87399,1
+170850,usda87400,一包,170,usda_portion:87400,0
+173416,usda92474,一杯,132,usda_portion:92474,0
+173416,usda92478,一片,28,usda_portion:92478,1
+171290,usda88384,一片,21,usda_portion:88384,1
+171290,usda88387,一杯,140,usda_portion:88387,0
+172223,usda90115,一杯,122,usda_portion:90115,0
+172223,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+173433,slice,一片,28,"estimate:one slice of cheese, about 28 g",1
+171284,usda88362,一盒,170,usda_portion:88362,0
+171284,usda88364,半盒,113,usda_portion:88364,0
+171284,usda88365,一杯,245,usda_portion:88365,1
+170886,usda87494,一盒,170,usda_portion:87494,0
+170886,usda87496,半盒,113,usda_portion:87496,0
+170886,usda87497,一杯,245,usda_portion:87497,1
+171304,cup,一杯,240,"estimate:one cup of Greek yogurt, about 240 g",1
+170894,usda87513,一盒,170,usda_portion:87513,0
+170894,cup,一杯,245,"estimate:one cup of Greek yogurt, about 245 g",1
+172475,usda90683,半杯,126,usda_portion:90683,1
+172475,usda90684,四分之一块,81,usda_portion:90684,0
+172476,usda90685,半杯,124,usda_portion:90685,1
+172476,usda90686,四分之一块,116,usda_portion:90686,0
+172448,usda90638,半杯,126,usda_portion:90638,1
+172448,usda90639,四分之一块,81,usda_portion:90639,0
+172448,usda90640,五分之一块,91,usda_portion:90640,0
+172449,usda90641,一块,120,usda_portion:90641,1
+172449,usda90642,一杯,248,usda_portion:90642,0
+172449,usda90644,四分之一块,116,usda_portion:90644,0
+172451,usda90648,一块,13,usda_portion:90648,1
+172450,usda90646,一块,17,usda_portion:90646,1
+172452,usda90649,一杯,122,usda_portion:90649,1
+172446,usda90635,一杯,243,usda_portion:90635,1
+172456,usda90654,一杯,243,usda_portion:90654,1
+172442,usda90629,一勺,17,usda_portion:90629,1
+172442,usda90630,一杯,275,usda_portion:90630,0
+172443,usda90631,一杯,175,usda_portion:90631,1
+174272,usda94061,一杯,166,usda_portion:94061,1
+174273,usda94062,一杯,84,usda_portion:94062,1
+174273,usda94063,一勺,5.2,usda_portion:94063,0
+174276,serving,一份,30,"estimate:one scoop of soy protein powder, about 30 g",1
+174270,usda94058,一杯,186,usda_portion:94058,1
+174271,usda94059,一杯,172,usda_portion:94059,1
+174271,usda94060,一勺,10.7,usda_portion:94060,0
+174300,usda94103,一杯,172,usda_portion:94103,1
+169282,usda84594,一杯,256,usda_portion:84594,1
+169283,usda84595,一杯,180,usda_portion:84595,1
+169284,usda84596,半杯,35,usda_portion:84596,1
+169284,usda84597,十根,10,usda_portion:84597,0
+168460,usda83131,一杯,94,usda_portion:83131,1
+173734,usda93198,一杯,194,usda_portion:93198,1
+173734,usda93199,一勺,12.1,usda_portion:93199,0
+173735,usda93200,一杯,172,usda_portion:93200,1
+173740,usda93205,一杯,177,usda_portion:93205,1
+173740,usda93206,一勺,11,usda_portion:93206,0
+175193,usda95821,一杯,184,usda_portion:95821,1
+173741,usda93207,一杯,256,usda_portion:93207,1
+173745,usda93212,一杯,208,usda_portion:93212,1
+173746,usda93213,一杯,182,usda_portion:93213,1
+175202,usda95836,一杯,202,usda_portion:95836,1
+175202,usda95837,一勺,12.6,usda_portion:95837,0
+175203,usda95838,一杯,179,usda_portion:95838,1
+175203,usda95839,一勺,11.2,usda_portion:95839,0
+173756,usda93224,一杯,200,usda_portion:93224,1
+173756,usda93225,一勺,12.5,usda_portion:93225,0
+173757,usda93226,一杯,164,usda_portion:93226,1
+173800,usda93273,一罐,253,usda_portion:93273,0
+173800,cup,一杯,180,"estimate:one cup of cooked beans, about 180 g",1
+172420,usda90594,一杯,192,usda_portion:90594,1
+172420,usda90595,一勺,12,usda_portion:90595,0
+172421,usda90596,一杯,198,usda_portion:90596,1
+172421,usda90597,一勺,12.3,usda_portion:90597,0
+174284,usda94081,一杯,192,usda_portion:94081,1
+174256,usda94030,一杯,207,usda_portion:94030,1
+174256,usda94031,一勺,13,usda_portion:94031,0
+174257,usda94032,一杯,202,usda_portion:94032,1
+173727,usda93191,一杯,197,usda_portion:93191,1
+173728,usda93192,一杯,230,usda_portion:93192,1
+172428,usda90605,一杯,196,usda_portion:90605,1
+172429,usda90606,一杯,196,usda_portion:90606,1
+172429,usda90607,一勺,12.2,usda_portion:90607,0
+175205,usda95841,一杯,150,usda_portion:95841,1
+175205,usda95842,一勺,9.4,usda_portion:95842,0
+173753,usda93220,一杯,170,usda_portion:93220,1
+173758,usda93227,一杯,167,usda_portion:93227,1
+173758,usda93228,一勺,10.5,usda_portion:93228,0
+173759,usda93229,一杯,171,usda_portion:93229,1
+174288,usda94085,一杯,92,usda_portion:94085,1
+170567,usda86863,一杯,143,usda_portion:86863,0
+170567,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170158,usda86148,一杯,138,usda_portion:86148,0
+170158,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170581,usda86896,一杯,115,usda_portion:86896,0
+170581,usda86900,十颗,14,usda_portion:86900,0
+170581,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170187,usda86201,一杯,117,usda_portion:86201,0
+170187,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170182,usda86188,一杯,109,usda_portion:86188,0
+170182,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170162,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170571,usda86878,一杯,137,usda_portion:86878,0
+170571,usda86879,一勺,8.6,usda_portion:86879,0
+170571,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170184,usda86192,一杯,123,usda_portion:86192,0
+170184,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170178,usda86182,一杯,134,usda_portion:86182,0
+170178,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170569,usda86872,一杯,133,usda_portion:86872,0
+170569,usda86873,一颗,5,usda_portion:86873,0
+170569,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170591,usda86915,一杯,135,usda_portion:86915,0
+170591,usda86917,十颗,1.7,usda_portion:86917,0
+170591,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170164,piece,一颗,10,"estimate:one chestnut kernel, about 10 g",0
+170164,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170166,piece,一颗,10,"estimate:one cooked chestnut kernel, about 10 g",0
+170166,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170169,usda86163,一杯,80,usda_portion:86163,0
+170169,usda86164,一个（中）,397,usda_portion:86164,0
+170169,usda86165,一块,45,usda_portion:86165,0
+170169,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170170,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170585,usda86904,一杯,131,usda_portion:86904,0
+170585,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170584,piece,一颗,3,"estimate:one ginkgo nut, about 3 g",0
+170584,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170175,piece,一颗,3,"estimate:one dried ginkgo nut, about 3 g",0
+170175,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+168591,spoon,一勺,10,"estimate:one tablespoon of dried lotus seeds, about 10 g",0
+168591,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170150,usda86135,一杯,144,usda_portion:86135,0
+170150,usda86136,一勺,9,usda_portion:86136,0
+170150,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170151,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170152,usda86138,一杯,128,usda_portion:86138,0
+170152,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170189,usda86209,一勺,15,usda_portion:86209,1
+170554,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+169414,usda84816,一勺,10.3,usda_portion:84816,0
+169414,usda84817,一杯,168,usda_portion:84817,0
+169414,usda84819,一小勺,3.4,usda_portion:84819,0
+169414,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170562,usda86856,一杯,140,usda_portion:86856,0
+170562,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170563,usda86857,一杯,128,usda_portion:86857,0
+170563,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170556,usda86847,一杯,129,usda_portion:86847,0
+170556,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+170557,usda86849,一杯,118,usda_portion:86849,0
+170557,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+172430,usda90609,一杯,146,usda_portion:90609,0
+172430,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+173806,usda93280,一杯,146,usda_portion:93280,0
+173806,usda93282,一颗,1,usda_portion:93282,0
+173806,handful,一把,25,"estimate:handful of nuts or seeds, about 25 g",1
+169251,usda84528,一朵,23,usda_portion:84528,1
+169251,usda84530,一片,6,usda_portion:84530,0
+169251,usda84532,半杯,35,usda_portion:84532,0
+169251,usda84529,一朵（中）,18,usda_portion:84529,0
+169252,usda84533,一杯,156,usda_portion:84533,0
+169252,usda84534,一勺,9.8,usda_portion:84534,0
+169252,usda84535,一朵,12,usda_portion:84535,1
+168434,usda83092,一杯,87,usda_portion:83092,0
+168434,usda83094,一朵,20,usda_portion:83094,1
+169242,usda84500,一朵,19,usda_portion:84500,1
+168436,usda83098,一朵,3.6,usda_portion:83098,1
+168436,usda83099,四朵,15,usda_portion:83099,0
+168437,usda83100,一杯,145,usda_portion:83100,1
+168437,usda83101,四朵,72,usda_portion:83101,0
+168580,usda83361,一朵,148,usda_portion:83361,1
+168580,usda83362,一朵（小）,15,usda_portion:83362,0
+168580,usda83363,一杯,86,usda_portion:83363,0
+169382,usda84758,一根,5,usda_portion:84758,0
+169382,usda84759,一根（中）,3,usda_portion:84759,0
+169382,usda84760,一杯,64,usda_portion:84760,1
+169255,usda84545,一杯,86,usda_portion:84545,0
+169255,usda84546,一朵,84,usda_portion:84546,1
+168422,usda83067,一杯,54,usda_portion:83067,1
+168422,usda83068,一块,5.4,usda_portion:83068,0
+168423,usda83069,一杯,66,usda_portion:83069,1
+168423,usda83070,一块,12.9,usda_portion:83070,0
+168581,usda83364,一杯,28,usda_portion:83364,1
+168581,usda83365,一块,4.5,usda_portion:83365,0
+168457,usda83126,两勺,10,usda_portion:83126,1
+168458,usda83127,十张,26,usda_portion:83127,1
+168458,usda83128,两勺,10,usda_portion:83128,0
+170496,usda86762,两勺,10,usda_portion:86762,1
+170090,spoon_small,一小勺,3,"estimate:one teaspoon of dried agar, about 3 g",1
+169280,usda84592,两勺,10,usda_portion:84592,1
+170495,usda86760,一杯,112,usda_portion:86760,1
+170495,usda86761,一勺,7,usda_portion:86761,0
+171413,usda88667,一勺,13.5,usda_portion:88667,1
+171413,usda88668,一杯,216,usda_portion:88668,0
+171413,usda88669,一小勺,4.5,usda_portion:88669,0
+172336,usda90374,一勺,14,usda_portion:90374,1
+172336,usda90375,一杯,218,usda_portion:90375,0
+172336,usda90376,一小勺,4.5,usda_portion:90376,0
+171410,usda88658,一勺,13.5,usda_portion:88658,1
+171410,usda88659,一杯,216,usda_portion:88659,0
+171410,usda88660,一小勺,4.5,usda_portion:88660,0
+171016,usda87777,一勺,13.6,usda_portion:87777,1
+171016,usda87778,一杯,218,usda_portion:87778,0
+171016,usda87779,一小勺,4.5,usda_portion:87779,0
+171411,usda88661,一勺,13.6,usda_portion:88661,1
+171411,usda88662,一杯,218,usda_portion:88662,0
+171411,usda88663,一小勺,4.5,usda_portion:88663,0
+171017,usda87780,一勺,13.6,usda_portion:87780,1
+171017,usda87781,一杯,218,usda_portion:87781,0
+171017,usda87782,一小勺,4.5,usda_portion:87782,0
+171029,usda87809,一勺,13.6,usda_portion:87809,1
+171029,usda87810,一杯,218,usda_portion:87810,0
+171029,usda87811,一小勺,4.5,usda_portion:87811,0
+171412,usda88664,一勺,13.6,usda_portion:88664,1
+171412,usda88665,一杯,218,usda_portion:88665,0
+171412,usda88666,一小勺,4.5,usda_portion:88666,0
+171013,usda87768,一勺,13.6,usda_portion:87768,1
+171013,usda87769,一杯,218,usda_portion:87769,0
+171013,usda87770,一小勺,4.5,usda_portion:87770,0
+167702,usda81791,一勺,13.6,usda_portion:81791,1
+167702,usda81792,一杯,218,usda_portion:81792,0
+167702,spoon_small,一小勺,4.5,"estimate:one teaspoon of cooking oil, about 4.5 g",0
+171401,usda88638,一勺,12.8,usda_portion:88638,1
+171401,usda88639,一杯,205,usda_portion:88639,0
+171401,spoon_small,一小勺,4.5,"estimate:one teaspoon of cooking oil, about 4.5 g",0
+174277,usda94068,一勺,16,usda_portion:94068,1
+174277,usda94069,一小勺,5.3,usda_portion:94069,0
+174277,usda94070,一杯,255,usda_portion:94070,0
+174277,usda94071,一包,8.9,usda_portion:94071,0
+172473,usda90677,一勺,14.2,usda_portion:90677,1
+172473,usda90678,一小勺,4.5,usda_portion:90678,0
+172473,usda90679,一杯,255,usda_portion:90679,0
+174278,usda94072,一勺,18,usda_portion:94072,1
+174278,usda94073,一小勺,6,usda_portion:94073,0
+168556,usda83301,一勺,17,usda_portion:83301,1
+168556,usda83302,一包,9,usda_portion:83302,0
+168556,usda83303,一杯,240,usda_portion:83303,0
+170459,usda86696,四分之一杯,66,usda_portion:86696,0
+170459,usda86697,一杯,262,usda_portion:86697,0
+170459,usda86698,一勺,16,usda_portion:86698,1
+172237,usda90136,一勺,14.9,usda_portion:90136,1
+172237,usda90137,一杯,238,usda_portion:90137,0
+172237,usda90138,一小勺,5,usda_portion:90138,0
+172241,usda90145,一勺,16,usda_portion:90145,1
+172241,usda90146,一杯,255,usda_portion:90146,0
+172241,usda90147,一小勺,5.3,usda_portion:90147,0
+172234,usda90130,一小勺,5,usda_portion:90130,0
+172234,usda90131,一杯,249,usda_portion:90131,0
+172234,spoon,一勺,16,"estimate:one tablespoon of sauce or paste, about 16 g",1
+173472,usda92606,一小勺,5,usda_portion:92606,0
+173472,usda92607,一勺,15,usda_portion:92607,1
+174529,usda94524,一勺,18,usda_portion:94524,1
+174531,usda94526,一勺,18,usda_portion:94526,1
+172886,usda91633,一勺,16,usda_portion:91633,1
+172879,usda91623,一勺,19,usda_portion:91623,1
+172879,usda91624,一杯,305,usda_portion:91624,0
+171009,usda87758,一勺,13.8,usda_portion:87758,1
+171009,usda87759,一杯,220,usda_portion:87759,0
+171009,usda87760,一包,10,usda_portion:87760,0
+168820,usda83829,一杯,337,usda_portion:83829,0
+168820,spoon,一勺,21,"estimate:one tablespoon of molasses, about 21 g",1
+169593,usda85186,一杯,86,usda_portion:85186,0
+169593,usda85187,一勺,5.4,usda_portion:85187,1
+175043,usda95489,一小勺,4,usda_portion:95489,0
+175043,usda95490,一勺,12,usda_portion:95490,1
+175043,usda95491,一包,7.2,usda_portion:95491,0
+172470,usda90673,两勺,32,usda_portion:90673,0
+172470,usda90674,一杯,258,usda_portion:90674,0
+172470,spoon,一勺,16,"estimate:one tablespoon of sauce or paste, about 16 g",1
+172469,usda90671,两勺,32,usda_portion:90671,0
+172469,usda90672,一杯,258,usda_portion:90672,0
+172469,spoon,一勺,16,"estimate:one tablespoon of sauce or paste, about 16 g",1
+170922,usda87542,一小勺,1.8,usda_portion:87542,1
+170922,usda87543,一勺,5,usda_portion:87543,0
+170923,usda87544,一小勺,2.1,usda_portion:87544,1
+170923,usda87545,一勺,6,usda_portion:87545,0
+170926,usda87550,一小勺,1.8,usda_portion:87550,1
+170926,usda87551,一勺,5.2,usda_portion:87551,0
+171320,usda88429,一小勺,2.6,usda_portion:88429,1
+171320,usda88430,一勺,7.8,usda_portion:88430,0
+171321,usda88431,一小勺,2.1,usda_portion:88431,1
+171321,usda88432,一勺,6.5,usda_portion:88432,0
+170931,usda87560,一小勺,2.3,usda_portion:87560,1
+170931,usda87561,一勺,6.9,usda_portion:87561,0
+170932,usda87564,一小勺,1.8,usda_portion:87564,1
+170932,usda87565,一勺,5.3,usda_portion:87565,0
+172231,usda90123,一小勺,3,usda_portion:90123,1
+172231,usda90124,一勺,9.4,usda_portion:90124,0
+171319,usda88427,一小勺,2.7,usda_portion:88427,1
+171319,usda88428,一勺,8,usda_portion:88428,0
+171325,usda88439,一小勺,3.1,usda_portion:88439,1
+171325,usda88440,一勺,9.7,usda_portion:88440,0
+171328,usda88445,一小勺,1,usda_portion:88445,1

@@ -29,6 +29,17 @@ Phase P4 adds:
                      nutrients.json has the 22 nutrients in nutrients.csv
                      order, meta.json carries the source and a build date, and
                      no JSON contains an absolute URL path.
+
+Phase P5 adds:
+    data-src/measures.csv - header, one row per measure of every curated food,
+                     a single default per food, 1..1000 g, every basis either
+                     `usda_portion:<food_portion.id>` for a portion row of that
+                     same food or `estimate:<text>`, Chinese labels, no
+                     duplicate label per food, at most 4 measures per food, the
+                     measures in foods.json match the CSV, and the five sanity
+                     ranges of PLAN.md P5 (egg, handful of nuts, fist and bowl
+                     of cooked rice, cup of milk). The share of estimated
+                     measures is printed.
 """
 
 from __future__ import annotations
@@ -36,8 +47,62 @@ from __future__ import annotations
 import csv
 import json
 import sys
+from collections import defaultdict
 from decimal import Decimal
 from pathlib import Path
+
+# data-src/measures.csv columns (PLAN.md 1.3).
+MEASURES_COLUMNS = ["food_key", "measure_id", "label_zh", "grams", "basis", "is_default"]
+MAX_MEASURES_PER_FOOD = 4
+
+# Sanity ranges from PLAN.md P5: (name, food+measure matcher, min g, max g).
+# Each matcher only picks the plain household measure it talks about, so a
+# cooked scramble (mass changed by the pan) or a quail egg (a different bird)
+# does not have to fit the hen's egg weight.
+SANITY_RANGES = [
+    (
+        "one whole hen egg",
+        lambda food, measure: food["category_zh"] == "蛋类"
+        and "鸡蛋" in food["name_zh"]
+        and "炒" not in food["name_zh"]
+        and "煎" not in food["name_zh"]
+        and measure["label"] == "一个",
+        40,
+        60,
+    ),
+    (
+        "handful of nuts or seeds",
+        lambda food, measure: food["category_zh"] in ("坚果类", "种子类")
+        and measure["label"] == "一把",
+        15,
+        35,
+    ),
+    (
+        "fist of cooked rice",
+        lambda food, measure: food["category_zh"] == "谷物与面食"
+        and "饭" in food["name_zh"]
+        and measure["label"] == "一拳",
+        100,
+        200,
+    ),
+    (
+        "bowl of cooked rice",
+        lambda food, measure: food["category_zh"] == "谷物与面食"
+        and "饭" in food["name_zh"]
+        and measure["label"] == "一碗",
+        120,
+        250,
+    ),
+    (
+        "cup of milk",
+        lambda food, measure: food["category_zh"] == "奶类"
+        and any(word in food["name_zh"] for word in ("牛奶", "山羊奶", "酪乳"))
+        and measure["label"] == "一杯",
+        200,
+        260,
+    ),
+]
+
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_SRC = REPO_ROOT / "data-src"
@@ -459,6 +524,184 @@ def validate_meta_json(checks, meta_data):
     )
 
 
+def load_usda_portions():
+    """fdc_id -> {food_portion.id: gram_weight} from the SR Legacy table."""
+    from usda_lib import load_food_portion  # local import: keeps --help cheap
+
+    return {
+        fdc_id: {row["id"]: row["gram_weight"] for row in rows}
+        for fdc_id, rows in load_food_portion().items()
+    }
+
+
+def validate_measures_csv(checks):
+    """Checks for data-src/measures.csv (phase P5).
+
+    Returns (row count, share of estimate rows in percent, food_key -> measures)
+    so that the generated foods.json can be compared with the CSV.
+    """
+    path = DATA_SRC / "measures.csv"
+    if not checks.check(path.is_file(), "missing data-src/measures.csv"):
+        return 0, 0.0, {}
+
+    header, rows = read_csv(path)
+    checks.check(
+        header == MEASURES_COLUMNS,
+        f"measures.csv columns are {header}, expected {MEASURES_COLUMNS}",
+    )
+
+    portions = load_usda_portions()
+
+    curated = {}
+    for row in read_csv(DATA_SRC / "foods_curated.csv")[1]:
+        raw_id = (row.get("fdc_id") or "").strip()
+        if raw_id.isdigit():
+            curated[raw_id] = {
+                "category_zh": (row.get("category_zh") or "").strip(),
+                "name_zh": (row.get("name_zh") or "").strip(),
+            }
+    # Composite ids (phase P6) are allowed as food_key too, but only with
+    # estimate measures; they have no USDA portion table.
+    composite_ids = set()
+    composites_path = DATA_SRC / "composites.csv"
+    if composites_path.is_file():
+        for row in read_csv(composites_path)[1]:
+            composite_id = (row.get("composite_id") or "").strip()
+            if composite_id:
+                composite_ids.add(composite_id)
+
+    measures = defaultdict(list)
+    for line_no, row in enumerate(rows, start=2):
+        food_key = (row.get("food_key") or "").strip()
+        measure_id = (row.get("measure_id") or "").strip()
+        label = f"measures.csv line {line_no} ({food_key or 'no food_key'}/{measure_id or 'no id'})"
+
+        if not checks.check(food_key != "", f"{label}: empty food_key"):
+            continue
+        checks.check(
+            food_key in curated or food_key in composite_ids,
+            f"{label}: food_key is neither a curated fdc_id nor a known composite id",
+        )
+        if not checks.check(measure_id != "", f"{label}: empty measure_id"):
+            continue
+
+        if any(item["id"] == measure_id for item in measures[food_key]):
+            checks.fail(f"{label}: duplicate measure_id for this food")
+
+        try:
+            grams = float(row.get("grams") or "")
+        except ValueError:
+            checks.fail(f"{label}: grams {row.get('grams')!r} is not a number")
+            continue
+        checks.check(
+            1 <= grams <= 1000, f"{label}: grams must be 1..1000, got {grams!r}"
+        )
+
+        is_default = (row.get("is_default") or "").strip()
+        checks.check(is_default in ("0", "1"), f"{label}: is_default must be 0 or 1")
+
+        checks.check(
+            has_cjk((row.get("label_zh") or "").strip()),
+            f"{label}: label_zh must be Chinese, got {row.get('label_zh')!r}",
+        )
+
+        basis = (row.get("basis") or "").strip()
+        if basis.startswith("usda_portion:"):
+            raw_portion_id = basis.split(":", 1)[1]
+            if not checks.check(
+                raw_portion_id.isdigit(), f"{label}: usda_portion basis needs a numeric id"
+            ):
+                continue
+            portion_id = int(raw_portion_id)
+            food_portions = portions.get(int(food_key), {}) if food_key.isdigit() else {}
+            if not checks.check(
+                portion_id in food_portions,
+                f"{label}: {basis} is not a food_portion id of fdc_id {food_key}",
+            ):
+                continue
+            portion_grams = food_portions[portion_id]
+            checks.check(
+                portion_grams is not None and abs(portion_grams - grams) < 0.05,
+                f"{label}: grams {grams} != food_portion gram_weight {portion_grams}",
+            )
+        elif basis.startswith("estimate:"):
+            checks.check(
+                len(basis) > len("estimate:") + 5,
+                f"{label}: estimate basis needs a reason, got {basis!r}",
+            )
+        else:
+            checks.fail(
+                f"{label}: basis must be usda_portion:<id> or estimate:<text>, got {basis!r}"
+            )
+
+        measures[food_key].append(
+            {
+                "id": measure_id,
+                "label": (row.get("label_zh") or "").strip(),
+                "grams": grams,
+                "basis": basis,
+                "isDefault": is_default == "1",
+            }
+        )
+
+    for food_key, food in curated.items():
+        food_measures = measures.get(food_key, [])
+        if not checks.check(
+            len(food_measures) >= 1, f"measures.csv: fdc_id {food_key} has no measure"
+        ):
+            continue
+        defaults = [measure for measure in food_measures if measure["isDefault"]]
+        checks.check(
+            len(defaults) == 1,
+            f"measures.csv: fdc_id {food_key} has {len(defaults)} default measures, "
+            "expected exactly 1",
+        )
+        checks.check(
+            len(food_measures) <= MAX_MEASURES_PER_FOOD,
+            f"measures.csv: fdc_id {food_key} has {len(food_measures)} measures, "
+            f"at most {MAX_MEASURES_PER_FOOD} allowed",
+        )
+        labels = [measure["label"] for measure in food_measures]
+        checks.check(
+            len(labels) == len(set(labels)),
+            f"measures.csv: fdc_id {food_key} repeats a label: {labels}",
+        )
+
+    unknown_keys = sorted(set(measures) - set(curated) - composite_ids)
+    checks.check(
+        not unknown_keys,
+        f"measures.csv has measures for unknown foods: {', '.join(unknown_keys)}",
+    )
+
+    # Sanity ranges from PLAN.md P5. Each range must find at least one measure,
+    # otherwise the rule would silently check nothing.
+    for name, matcher, low, high in SANITY_RANGES:
+        hits = [
+            (food_key, measure)
+            for food_key, food in curated.items()
+            for measure in measures.get(food_key, [])
+            if matcher(food, measure)
+        ]
+        if checks.check(hits != [], f"sanity: no food found for the {name} range"):
+            for food_key, measure in hits:
+                if not (
+                    checks.check(
+                        low <= measure["grams"] <= high,
+                        f"sanity: {curated[food_key]['name_zh']} {measure['label']} "
+                        f"is {measure['grams']:g} g, expected {low}-{high} g ({name})",
+                    )
+                ):
+                    break
+
+    total = len(rows)
+    estimates = sum(
+        1 for measure_rows in measures.values() for measure in measure_rows
+        if measure["basis"].startswith("estimate:")
+    )
+    share = (estimates / total * 100) if total else 0.0
+    return total, share, dict(measures)
+
+
 def validate_food_measures(checks, label, measures):
     checks.check(len(measures) >= 1, f"{label}: needs at least one measure")
     defaults = [measure for measure in measures if measure.get("default") is True]
@@ -483,7 +726,7 @@ def validate_food_measures(checks, label, measures):
         )
 
 
-def validate_foods_json(checks, foods_data, curated_count):
+def validate_foods_json(checks, foods_data, curated_count, measures=None):
     checks.check(
         (foods_data.get("source") or {}).get("name") == SR_SOURCE_NAME,
         "foods.json source.name is wrong",
@@ -562,6 +805,8 @@ def validate_foods_json(checks, foods_data, curated_count):
             f"{label}: flags.niacinNoTryptophan must be a boolean",
         )
         validate_food_measures(checks, label, food.get("measures") or [])
+        if measures is not None:
+            validate_measure_merge(checks, label, food, measures)
 
     curated_ids = set()
     for row in read_csv(DATA_SRC / "foods_curated.csv")[1]:
@@ -577,7 +822,36 @@ def validate_foods_json(checks, foods_data, curated_count):
     return len(foods), composites
 
 
-def validate_generated_json(checks, curated_count):
+def validate_measure_merge(checks, label, food, measures):
+    """foods.json measures must be exactly the measures.csv rows of that food."""
+    food_id = str(food.get("id") or "")
+    if not food_id.startswith("fdc:"):
+        return
+    food_key = food_id.split(":", 1)[1]
+    csv_measures = measures.get(food_key)
+    checks.check(csv_measures is not None, f"{label}: no measures.csv rows for this food")
+    if not csv_measures:
+        return
+    json_measures = food.get("measures") or []
+    checks.check(
+        len(json_measures) == len(csv_measures),
+        f"{label}: foods.json has {len(json_measures)} measures, "
+        f"measures.csv has {len(csv_measures)}",
+    )
+    for csv_measure, json_measure in zip(csv_measures, json_measures):
+        checks.check(
+            json_measure.get("id") == csv_measure["id"]
+            and json_measure.get("labelZh") == csv_measure["label"]
+            and json_measure.get("basis") == csv_measure["basis"]
+            and json_measure.get("default") is csv_measure["isDefault"]
+            and isinstance(json_measure.get("grams"), (int, float))
+            and abs(json_measure["grams"] - csv_measure["grams"]) < 0.05,
+            f"{label}: foods.json measure {json_measure.get('id')} does not match "
+            f"measures.csv ({json_measure} vs {csv_measure})",
+        )
+
+
+def validate_generated_json(checks, curated_count, measures=None):
     """Checks for docs/data/*.json written by tools/build_foods.py (phase P4)."""
     foods_path = DOCS_DATA / "foods.json"
     if not checks.check(foods_path.is_file(), "missing docs/data/foods.json"):
@@ -607,7 +881,9 @@ def validate_generated_json(checks, curated_count):
 
     validate_nutrients_json(checks, nutrients_data)
     validate_meta_json(checks, meta_data)
-    food_count, composite_count = validate_foods_json(checks, foods_data, curated_count)
+    food_count, composite_count = validate_foods_json(
+        checks, foods_data, curated_count, measures
+    )
     return food_count, composite_count, size
 
 
@@ -616,19 +892,25 @@ def main():
     usda_nutrients = load_usda_nutrients()
     nutrient_count = validate_nutrients(checks, usda_nutrients)
     food_count = validate_foods(checks, load_usda_foods(), load_excluded_categories())
+    measures_count, estimate_share, measures = validate_measures_csv(checks)
     json_food_count, composite_count, foods_json_size = validate_generated_json(
-        checks, food_count
+        checks, food_count, measures
     )
 
     if checks.failures:
         print(f"nutrients: {nutrient_count} rows checked")
         print(f"foods: {food_count} rows checked")
+        print(f"measures: {measures_count} rows checked, {estimate_share:.1f}% estimates")
         print(f"foods.json: {json_food_count} foods checked")
         print(f"{len(checks.failures)} problem(s) found")
         return checks.report()
 
     print(f"nutrients: {nutrient_count} OK")
     print(f"foods: {food_count} OK")
+    print(
+        f"measures: {measures_count} rows OK for {food_count} foods, "
+        f"{estimate_share:.1f}% estimates"
+    )
     print(
         f"foods.json: {json_food_count} foods OK "
         f"({composite_count} composites, {foods_json_size} bytes)"

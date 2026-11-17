@@ -15,8 +15,8 @@
     "nutrients": 22
   },
   "measures": {
-    "curatedFoods": 0,
-    "defaultGramsOnly": 641
+    "curatedFoods": 641,
+    "defaultGramsOnly": 0
   },
   "notes": [
     "Values are per 100 g of the food as described in usdaDescription.",
