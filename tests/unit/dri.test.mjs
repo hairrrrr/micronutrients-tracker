@@ -304,3 +304,61 @@ for (const [standard, expectedGroups] of Object.entries(EXPECTED_GROUPS)) {
     assert.deepEqual([...groups].sort(), [...expectedGroups].sort());
   });
 }
+
+// P7b fixed checks on the real docs/data/dri.json. These values were
+// confirmed by the supervisor against the official sources (CNS DRIs 2023
+// tables 9-14 and 20-23; NIH ODS fact sheets) before being added here.
+// Only the supervisor may change them.
+async function realDri() {
+  const url = new URL("../../docs/data/dri.json", import.meta.url);
+  return JSON.parse(await readFile(url, "utf8"));
+}
+
+function valueOf(dri, standard, sex, age, nutrient) {
+  const { values } = targetsFor(dri, standard, { sex, age });
+  assert.ok(values[nutrient], `${standard} ${sex} ${age} has no ${nutrient}`);
+  return values[nutrient];
+}
+
+test("real DRI fixtures: China 2023", async () => {
+  const dri = await realDri();
+  const ironM = valueOf(dri, "cn2023", "male", 35, "iron");
+  assert.equal(ironM.target, 12);
+  assert.equal(ironM.ul, 42);
+  assert.equal(valueOf(dri, "cn2023", "female", 35, "iron").target, 18);
+  assert.equal(valueOf(dri, "cn2023", "male", 35, "vitA").target, 770);
+  assert.equal(valueOf(dri, "cn2023", "female", 35, "vitA").target, 660);
+  for (const sex of ["male", "female"]) {
+    for (const age of [18, 29, 30, 49]) {
+      assert.equal(valueOf(dri, "cn2023", sex, age, "calcium").target, 800, `${sex} ${age}`);
+    }
+  }
+});
+
+test("real DRI fixtures: US (NASEM via NIH ODS)", async () => {
+  const dri = await realDri();
+  assert.equal(valueOf(dri, "us", "male", 40, "iron").target, 8);
+  assert.equal(valueOf(dri, "us", "female", 40, "iron").target, 18);
+  for (const sex of ["male", "female"]) {
+    for (const age of [19, 30, 31, 50]) {
+      assert.equal(valueOf(dri, "us", sex, age, "calcium").target, 1000, `${sex} ${age}`);
+    }
+    for (const age of [19, 40, 60, 70]) {
+      assert.equal(valueOf(dri, "us", sex, age, "vitD").target, 15, `${sex} ${age}`);
+    }
+  }
+  assert.equal(valueOf(dri, "us", "male", 40, "vitC").target, 90);
+  assert.equal(valueOf(dri, "us", "female", 40, "vitC").target, 75);
+});
+
+test("every real DRI row is verified and sourced", async () => {
+  const dri = await realDri();
+  for (const [key, standard] of Object.entries(dri.standards)) {
+    for (const group of standard.groups) {
+      for (const [nutrient, value] of Object.entries(group.values)) {
+        assert.ok(Number.isFinite(value.target) && value.target > 0, `${key} ${group.id} ${nutrient}`);
+        assert.ok(value.ref && value.ref.length > 0, `${key} ${group.id} ${nutrient} ref`);
+      }
+    }
+  }
+});

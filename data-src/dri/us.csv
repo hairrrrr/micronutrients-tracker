@@ -1,221 +1,221 @@
 standard,group_id,sex,age_min,age_max,life_stage,nutrient_id,target,target_type,ul,ul_applies_to_food,source_ref,verified_by
-us,us-m-14-18,male,14,18,none,vitA,,,,,NIH ODS Vitamin A fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,vitD,,,,,NIH ODS Vitamin D fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,vitE,,,,,NIH ODS Vitamin E fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,vitK,,,,,NIH ODS Vitamin K fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,vitC,,,,,NIH ODS Vitamin C fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,thiamin,,,,,NIH ODS Thiamin fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,riboflavin,,,,,NIH ODS Riboflavin fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,niacin,,,,,NIH ODS Niacin fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,vitB6,,,,,NIH ODS Vitamin B6 fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,folate,,,,,NIH ODS Folate fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,vitB12,,,,,NIH ODS Vitamin B12 fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,pantothenic,,,,,NIH ODS Pantothenic Acid fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,choline,,,,,NIH ODS Choline fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,calcium,,,,,NIH ODS Calcium fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,phosphorus,,,,,NIH ODS Phosphorus fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,potassium,,,,,NIH ODS Potassium fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,magnesium,,,,,NIH ODS Magnesium fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,iron,,,,,NIH ODS Iron fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,zinc,,,,,NIH ODS Zinc fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,selenium,,,,,NIH ODS Selenium fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,copper,,,,,NIH ODS Copper fact sheet RDA/AI table,
-us,us-m-14-18,male,14,18,none,manganese,,,,,NIH ODS Manganese fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,vitA,,,,,NIH ODS Vitamin A fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,vitD,,,,,NIH ODS Vitamin D fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,vitE,,,,,NIH ODS Vitamin E fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,vitK,,,,,NIH ODS Vitamin K fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,vitC,,,,,NIH ODS Vitamin C fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,thiamin,,,,,NIH ODS Thiamin fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,riboflavin,,,,,NIH ODS Riboflavin fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,niacin,,,,,NIH ODS Niacin fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,vitB6,,,,,NIH ODS Vitamin B6 fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,folate,,,,,NIH ODS Folate fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,vitB12,,,,,NIH ODS Vitamin B12 fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,pantothenic,,,,,NIH ODS Pantothenic Acid fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,choline,,,,,NIH ODS Choline fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,calcium,,,,,NIH ODS Calcium fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,phosphorus,,,,,NIH ODS Phosphorus fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,potassium,,,,,NIH ODS Potassium fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,magnesium,,,,,NIH ODS Magnesium fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,iron,,,,,NIH ODS Iron fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,zinc,,,,,NIH ODS Zinc fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,selenium,,,,,NIH ODS Selenium fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,copper,,,,,NIH ODS Copper fact sheet RDA/AI table,
-us,us-m-19-30,male,19,30,none,manganese,,,,,NIH ODS Manganese fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,vitA,,,,,NIH ODS Vitamin A fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,vitD,,,,,NIH ODS Vitamin D fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,vitE,,,,,NIH ODS Vitamin E fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,vitK,,,,,NIH ODS Vitamin K fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,vitC,,,,,NIH ODS Vitamin C fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,thiamin,,,,,NIH ODS Thiamin fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,riboflavin,,,,,NIH ODS Riboflavin fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,niacin,,,,,NIH ODS Niacin fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,vitB6,,,,,NIH ODS Vitamin B6 fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,folate,,,,,NIH ODS Folate fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,vitB12,,,,,NIH ODS Vitamin B12 fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,pantothenic,,,,,NIH ODS Pantothenic Acid fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,choline,,,,,NIH ODS Choline fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,calcium,,,,,NIH ODS Calcium fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,phosphorus,,,,,NIH ODS Phosphorus fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,potassium,,,,,NIH ODS Potassium fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,magnesium,,,,,NIH ODS Magnesium fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,iron,,,,,NIH ODS Iron fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,zinc,,,,,NIH ODS Zinc fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,selenium,,,,,NIH ODS Selenium fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,copper,,,,,NIH ODS Copper fact sheet RDA/AI table,
-us,us-m-31-50,male,31,50,none,manganese,,,,,NIH ODS Manganese fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,vitA,,,,,NIH ODS Vitamin A fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,vitD,,,,,NIH ODS Vitamin D fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,vitE,,,,,NIH ODS Vitamin E fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,vitK,,,,,NIH ODS Vitamin K fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,vitC,,,,,NIH ODS Vitamin C fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,thiamin,,,,,NIH ODS Thiamin fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,riboflavin,,,,,NIH ODS Riboflavin fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,niacin,,,,,NIH ODS Niacin fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,vitB6,,,,,NIH ODS Vitamin B6 fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,folate,,,,,NIH ODS Folate fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,vitB12,,,,,NIH ODS Vitamin B12 fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,pantothenic,,,,,NIH ODS Pantothenic Acid fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,choline,,,,,NIH ODS Choline fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,calcium,,,,,NIH ODS Calcium fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,phosphorus,,,,,NIH ODS Phosphorus fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,potassium,,,,,NIH ODS Potassium fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,magnesium,,,,,NIH ODS Magnesium fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,iron,,,,,NIH ODS Iron fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,zinc,,,,,NIH ODS Zinc fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,selenium,,,,,NIH ODS Selenium fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,copper,,,,,NIH ODS Copper fact sheet RDA/AI table,
-us,us-m-51-70,male,51,70,none,manganese,,,,,NIH ODS Manganese fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,vitA,,,,,NIH ODS Vitamin A fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,vitD,,,,,NIH ODS Vitamin D fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,vitE,,,,,NIH ODS Vitamin E fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,vitK,,,,,NIH ODS Vitamin K fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,vitC,,,,,NIH ODS Vitamin C fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,thiamin,,,,,NIH ODS Thiamin fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,riboflavin,,,,,NIH ODS Riboflavin fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,niacin,,,,,NIH ODS Niacin fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,vitB6,,,,,NIH ODS Vitamin B6 fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,folate,,,,,NIH ODS Folate fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,vitB12,,,,,NIH ODS Vitamin B12 fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,pantothenic,,,,,NIH ODS Pantothenic Acid fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,choline,,,,,NIH ODS Choline fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,calcium,,,,,NIH ODS Calcium fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,phosphorus,,,,,NIH ODS Phosphorus fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,potassium,,,,,NIH ODS Potassium fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,magnesium,,,,,NIH ODS Magnesium fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,iron,,,,,NIH ODS Iron fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,zinc,,,,,NIH ODS Zinc fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,selenium,,,,,NIH ODS Selenium fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,copper,,,,,NIH ODS Copper fact sheet RDA/AI table,
-us,us-m-71-,male,71,,none,manganese,,,,,NIH ODS Manganese fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,vitA,,,,,NIH ODS Vitamin A fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,vitD,,,,,NIH ODS Vitamin D fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,vitE,,,,,NIH ODS Vitamin E fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,vitK,,,,,NIH ODS Vitamin K fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,vitC,,,,,NIH ODS Vitamin C fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,thiamin,,,,,NIH ODS Thiamin fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,riboflavin,,,,,NIH ODS Riboflavin fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,niacin,,,,,NIH ODS Niacin fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,vitB6,,,,,NIH ODS Vitamin B6 fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,folate,,,,,NIH ODS Folate fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,vitB12,,,,,NIH ODS Vitamin B12 fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,pantothenic,,,,,NIH ODS Pantothenic Acid fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,choline,,,,,NIH ODS Choline fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,calcium,,,,,NIH ODS Calcium fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,phosphorus,,,,,NIH ODS Phosphorus fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,potassium,,,,,NIH ODS Potassium fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,magnesium,,,,,NIH ODS Magnesium fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,iron,,,,,NIH ODS Iron fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,zinc,,,,,NIH ODS Zinc fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,selenium,,,,,NIH ODS Selenium fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,copper,,,,,NIH ODS Copper fact sheet RDA/AI table,
-us,us-f-14-18,female,14,18,none,manganese,,,,,NIH ODS Manganese fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,vitA,,,,,NIH ODS Vitamin A fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,vitD,,,,,NIH ODS Vitamin D fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,vitE,,,,,NIH ODS Vitamin E fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,vitK,,,,,NIH ODS Vitamin K fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,vitC,,,,,NIH ODS Vitamin C fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,thiamin,,,,,NIH ODS Thiamin fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,riboflavin,,,,,NIH ODS Riboflavin fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,niacin,,,,,NIH ODS Niacin fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,vitB6,,,,,NIH ODS Vitamin B6 fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,folate,,,,,NIH ODS Folate fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,vitB12,,,,,NIH ODS Vitamin B12 fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,pantothenic,,,,,NIH ODS Pantothenic Acid fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,choline,,,,,NIH ODS Choline fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,calcium,,,,,NIH ODS Calcium fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,phosphorus,,,,,NIH ODS Phosphorus fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,potassium,,,,,NIH ODS Potassium fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,magnesium,,,,,NIH ODS Magnesium fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,iron,,,,,NIH ODS Iron fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,zinc,,,,,NIH ODS Zinc fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,selenium,,,,,NIH ODS Selenium fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,copper,,,,,NIH ODS Copper fact sheet RDA/AI table,
-us,us-f-19-30,female,19,30,none,manganese,,,,,NIH ODS Manganese fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,vitA,,,,,NIH ODS Vitamin A fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,vitD,,,,,NIH ODS Vitamin D fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,vitE,,,,,NIH ODS Vitamin E fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,vitK,,,,,NIH ODS Vitamin K fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,vitC,,,,,NIH ODS Vitamin C fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,thiamin,,,,,NIH ODS Thiamin fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,riboflavin,,,,,NIH ODS Riboflavin fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,niacin,,,,,NIH ODS Niacin fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,vitB6,,,,,NIH ODS Vitamin B6 fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,folate,,,,,NIH ODS Folate fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,vitB12,,,,,NIH ODS Vitamin B12 fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,pantothenic,,,,,NIH ODS Pantothenic Acid fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,choline,,,,,NIH ODS Choline fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,calcium,,,,,NIH ODS Calcium fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,phosphorus,,,,,NIH ODS Phosphorus fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,potassium,,,,,NIH ODS Potassium fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,magnesium,,,,,NIH ODS Magnesium fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,iron,,,,,NIH ODS Iron fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,zinc,,,,,NIH ODS Zinc fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,selenium,,,,,NIH ODS Selenium fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,copper,,,,,NIH ODS Copper fact sheet RDA/AI table,
-us,us-f-31-50,female,31,50,none,manganese,,,,,NIH ODS Manganese fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,vitA,,,,,NIH ODS Vitamin A fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,vitD,,,,,NIH ODS Vitamin D fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,vitE,,,,,NIH ODS Vitamin E fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,vitK,,,,,NIH ODS Vitamin K fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,vitC,,,,,NIH ODS Vitamin C fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,thiamin,,,,,NIH ODS Thiamin fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,riboflavin,,,,,NIH ODS Riboflavin fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,niacin,,,,,NIH ODS Niacin fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,vitB6,,,,,NIH ODS Vitamin B6 fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,folate,,,,,NIH ODS Folate fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,vitB12,,,,,NIH ODS Vitamin B12 fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,pantothenic,,,,,NIH ODS Pantothenic Acid fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,choline,,,,,NIH ODS Choline fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,calcium,,,,,NIH ODS Calcium fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,phosphorus,,,,,NIH ODS Phosphorus fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,potassium,,,,,NIH ODS Potassium fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,magnesium,,,,,NIH ODS Magnesium fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,iron,,,,,NIH ODS Iron fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,zinc,,,,,NIH ODS Zinc fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,selenium,,,,,NIH ODS Selenium fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,copper,,,,,NIH ODS Copper fact sheet RDA/AI table,
-us,us-f-51-70,female,51,70,none,manganese,,,,,NIH ODS Manganese fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,vitA,,,,,NIH ODS Vitamin A fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,vitD,,,,,NIH ODS Vitamin D fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,vitE,,,,,NIH ODS Vitamin E fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,vitK,,,,,NIH ODS Vitamin K fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,vitC,,,,,NIH ODS Vitamin C fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,thiamin,,,,,NIH ODS Thiamin fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,riboflavin,,,,,NIH ODS Riboflavin fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,niacin,,,,,NIH ODS Niacin fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,vitB6,,,,,NIH ODS Vitamin B6 fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,folate,,,,,NIH ODS Folate fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,vitB12,,,,,NIH ODS Vitamin B12 fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,pantothenic,,,,,NIH ODS Pantothenic Acid fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,choline,,,,,NIH ODS Choline fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,calcium,,,,,NIH ODS Calcium fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,phosphorus,,,,,NIH ODS Phosphorus fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,potassium,,,,,NIH ODS Potassium fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,magnesium,,,,,NIH ODS Magnesium fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,iron,,,,,NIH ODS Iron fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,zinc,,,,,NIH ODS Zinc fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,selenium,,,,,NIH ODS Selenium fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,copper,,,,,NIH ODS Copper fact sheet RDA/AI table,
-us,us-f-71-,female,71,,none,manganese,,,,,NIH ODS Manganese fact sheet RDA/AI table,
+us,us-m-14-18,male,14,18,none,vitA,900,RDA,2800,no,"NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,vitD,15,RDA,100,yes,"NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,vitE,15,RDA,800,no,"NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,vitK,75,AI,,,"NIH ODS Vitamin K Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,vitC,75,RDA,1800,yes,"NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,thiamin,1.2,RDA,,,"NIH ODS Thiamin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,riboflavin,1.3,RDA,,,"NIH ODS Riboflavin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,niacin,16,RDA,30,no,"NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,vitB6,1.3,RDA,80,yes,"NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,folate,400,RDA,800,no,"NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,vitB12,2.4,RDA,,,"NIH ODS Vitamin B12 Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,pantothenic,5,AI,,,"NIH ODS Pantothenic Acid Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,choline,550,AI,3000,yes,"NIH ODS Choline Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,calcium,1300,RDA,3000,yes,"NIH ODS Calcium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,phosphorus,1250,RDA,4000,yes,"NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,potassium,3000,AI,,,"NIH ODS Potassium Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,magnesium,410,RDA,350,no,"NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,iron,11,RDA,45,yes,"NIH ODS Iron Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,zinc,11,RDA,34,yes,"NIH ODS Zinc Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,selenium,55,RDA,400,yes,"NIH ODS Selenium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,copper,0.89,RDA,8,yes,"NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-14-18,male,14,18,none,manganese,2.2,AI,9,yes,"NIH ODS Manganese Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,vitA,900,RDA,3000,no,"NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,vitD,15,RDA,100,yes,"NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,vitE,15,RDA,1000,no,"NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,vitK,120,AI,,,"NIH ODS Vitamin K Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,vitC,90,RDA,2000,yes,"NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,thiamin,1.2,RDA,,,"NIH ODS Thiamin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,riboflavin,1.3,RDA,,,"NIH ODS Riboflavin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,niacin,16,RDA,35,no,"NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,vitB6,1.3,RDA,100,yes,"NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,folate,400,RDA,1000,no,"NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,vitB12,2.4,RDA,,,"NIH ODS Vitamin B12 Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,pantothenic,5,AI,,,"NIH ODS Pantothenic Acid Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,choline,550,AI,3500,yes,"NIH ODS Choline Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,calcium,1000,RDA,2500,yes,"NIH ODS Calcium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,phosphorus,700,RDA,4000,yes,"NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,potassium,3400,AI,,,"NIH ODS Potassium Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,magnesium,400,RDA,350,no,"NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,iron,8,RDA,45,yes,"NIH ODS Iron Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,zinc,11,RDA,40,yes,"NIH ODS Zinc Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,selenium,55,RDA,400,yes,"NIH ODS Selenium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,copper,0.9,RDA,10,yes,"NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-19-30,male,19,30,none,manganese,2.3,AI,11,yes,"NIH ODS Manganese Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,vitA,900,RDA,3000,no,"NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,vitD,15,RDA,100,yes,"NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,vitE,15,RDA,1000,no,"NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,vitK,120,AI,,,"NIH ODS Vitamin K Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,vitC,90,RDA,2000,yes,"NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,thiamin,1.2,RDA,,,"NIH ODS Thiamin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,riboflavin,1.3,RDA,,,"NIH ODS Riboflavin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,niacin,16,RDA,35,no,"NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,vitB6,1.3,RDA,100,yes,"NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,folate,400,RDA,1000,no,"NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,vitB12,2.4,RDA,,,"NIH ODS Vitamin B12 Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,pantothenic,5,AI,,,"NIH ODS Pantothenic Acid Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,choline,550,AI,3500,yes,"NIH ODS Choline Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,calcium,1000,RDA,2500,yes,"NIH ODS Calcium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,phosphorus,700,RDA,4000,yes,"NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,potassium,3400,AI,,,"NIH ODS Potassium Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,magnesium,420,RDA,350,no,"NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,iron,8,RDA,45,yes,"NIH ODS Iron Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,zinc,11,RDA,40,yes,"NIH ODS Zinc Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,selenium,55,RDA,400,yes,"NIH ODS Selenium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,copper,0.9,RDA,10,yes,"NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-31-50,male,31,50,none,manganese,2.3,AI,11,yes,"NIH ODS Manganese Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,vitA,900,RDA,3000,no,"NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,vitD,15,RDA,100,yes,"NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,vitE,15,RDA,1000,no,"NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,vitK,120,AI,,,"NIH ODS Vitamin K Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,vitC,90,RDA,2000,yes,"NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,thiamin,1.2,RDA,,,"NIH ODS Thiamin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,riboflavin,1.3,RDA,,,"NIH ODS Riboflavin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,niacin,16,RDA,35,no,"NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,vitB6,1.7,RDA,100,yes,"NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,folate,400,RDA,1000,no,"NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,vitB12,2.4,RDA,,,"NIH ODS Vitamin B12 Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,pantothenic,5,AI,,,"NIH ODS Pantothenic Acid Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,choline,550,AI,3500,yes,"NIH ODS Choline Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,calcium,1000,RDA,2000,yes,"NIH ODS Calcium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,phosphorus,700,RDA,4000,yes,"NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,potassium,3400,AI,,,"NIH ODS Potassium Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,magnesium,420,RDA,350,no,"NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,iron,8,RDA,45,yes,"NIH ODS Iron Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,zinc,11,RDA,40,yes,"NIH ODS Zinc Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,selenium,55,RDA,400,yes,"NIH ODS Selenium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,copper,0.9,RDA,10,yes,"NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-51-70,male,51,70,none,manganese,2.3,AI,11,yes,"NIH ODS Manganese Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,vitA,900,RDA,3000,no,"NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,vitD,20,RDA,100,yes,"NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,vitE,15,RDA,1000,no,"NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,vitK,120,AI,,,"NIH ODS Vitamin K Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,vitC,90,RDA,2000,yes,"NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,thiamin,1.2,RDA,,,"NIH ODS Thiamin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,riboflavin,1.3,RDA,,,"NIH ODS Riboflavin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,niacin,16,RDA,35,no,"NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,vitB6,1.7,RDA,100,yes,"NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,folate,400,RDA,1000,no,"NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,vitB12,2.4,RDA,,,"NIH ODS Vitamin B12 Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,pantothenic,5,AI,,,"NIH ODS Pantothenic Acid Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,choline,550,AI,3500,yes,"NIH ODS Choline Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,calcium,1200,RDA,2000,yes,"NIH ODS Calcium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,phosphorus,700,RDA,3000,yes,"NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,potassium,3400,AI,,,"NIH ODS Potassium Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,magnesium,420,RDA,350,no,"NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,iron,8,RDA,45,yes,"NIH ODS Iron Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,zinc,11,RDA,40,yes,"NIH ODS Zinc Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,selenium,55,RDA,400,yes,"NIH ODS Selenium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,copper,0.9,RDA,10,yes,"NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-m-71-,male,71,,none,manganese,2.3,AI,11,yes,"NIH ODS Manganese Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,vitA,700,RDA,2800,no,"NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,vitD,15,RDA,100,yes,"NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,vitE,15,RDA,800,no,"NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,vitK,75,AI,,,"NIH ODS Vitamin K Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,vitC,65,RDA,1800,yes,"NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,thiamin,1.0,RDA,,,"NIH ODS Thiamin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,riboflavin,1.0,RDA,,,"NIH ODS Riboflavin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,niacin,14,RDA,30,no,"NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,vitB6,1.2,RDA,80,yes,"NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,folate,400,RDA,800,no,"NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,vitB12,2.4,RDA,,,"NIH ODS Vitamin B12 Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,pantothenic,5,AI,,,"NIH ODS Pantothenic Acid Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,choline,400,AI,3000,yes,"NIH ODS Choline Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,calcium,1300,RDA,3000,yes,"NIH ODS Calcium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,phosphorus,1250,RDA,4000,yes,"NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,potassium,2300,AI,,,"NIH ODS Potassium Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,magnesium,360,RDA,350,no,"NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,iron,15,RDA,45,yes,"NIH ODS Iron Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,zinc,9,RDA,34,yes,"NIH ODS Zinc Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,selenium,55,RDA,400,yes,"NIH ODS Selenium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,copper,0.89,RDA,8,yes,"NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-14-18,female,14,18,none,manganese,1.6,AI,9,yes,"NIH ODS Manganese Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,vitA,700,RDA,3000,no,"NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,vitD,15,RDA,100,yes,"NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,vitE,15,RDA,1000,no,"NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,vitK,90,AI,,,"NIH ODS Vitamin K Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,vitC,75,RDA,2000,yes,"NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,thiamin,1.1,RDA,,,"NIH ODS Thiamin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,riboflavin,1.1,RDA,,,"NIH ODS Riboflavin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,niacin,14,RDA,35,no,"NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,vitB6,1.3,RDA,100,yes,"NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,folate,400,RDA,1000,no,"NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,vitB12,2.4,RDA,,,"NIH ODS Vitamin B12 Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,pantothenic,5,AI,,,"NIH ODS Pantothenic Acid Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,choline,425,AI,3500,yes,"NIH ODS Choline Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,calcium,1000,RDA,2500,yes,"NIH ODS Calcium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,phosphorus,700,RDA,4000,yes,"NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,potassium,2600,AI,,,"NIH ODS Potassium Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,magnesium,310,RDA,350,no,"NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,iron,18,RDA,45,yes,"NIH ODS Iron Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,zinc,8,RDA,40,yes,"NIH ODS Zinc Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,selenium,55,RDA,400,yes,"NIH ODS Selenium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,copper,0.9,RDA,10,yes,"NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-19-30,female,19,30,none,manganese,1.8,AI,11,yes,"NIH ODS Manganese Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,vitA,700,RDA,3000,no,"NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,vitD,15,RDA,100,yes,"NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,vitE,15,RDA,1000,no,"NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,vitK,90,AI,,,"NIH ODS Vitamin K Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,vitC,75,RDA,2000,yes,"NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,thiamin,1.1,RDA,,,"NIH ODS Thiamin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,riboflavin,1.1,RDA,,,"NIH ODS Riboflavin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,niacin,14,RDA,35,no,"NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,vitB6,1.3,RDA,100,yes,"NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,folate,400,RDA,1000,no,"NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,vitB12,2.4,RDA,,,"NIH ODS Vitamin B12 Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,pantothenic,5,AI,,,"NIH ODS Pantothenic Acid Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,choline,425,AI,3500,yes,"NIH ODS Choline Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,calcium,1000,RDA,2500,yes,"NIH ODS Calcium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,phosphorus,700,RDA,4000,yes,"NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,potassium,2600,AI,,,"NIH ODS Potassium Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,magnesium,320,RDA,350,no,"NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,iron,18,RDA,45,yes,"NIH ODS Iron Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,zinc,8,RDA,40,yes,"NIH ODS Zinc Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,selenium,55,RDA,400,yes,"NIH ODS Selenium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,copper,0.9,RDA,10,yes,"NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-31-50,female,31,50,none,manganese,1.8,AI,11,yes,"NIH ODS Manganese Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,vitA,700,RDA,3000,no,"NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,vitD,15,RDA,100,yes,"NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,vitE,15,RDA,1000,no,"NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,vitK,90,AI,,,"NIH ODS Vitamin K Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,vitC,75,RDA,2000,yes,"NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,thiamin,1.1,RDA,,,"NIH ODS Thiamin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,riboflavin,1.1,RDA,,,"NIH ODS Riboflavin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,niacin,14,RDA,35,no,"NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,vitB6,1.5,RDA,100,yes,"NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,folate,400,RDA,1000,no,"NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,vitB12,2.4,RDA,,,"NIH ODS Vitamin B12 Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,pantothenic,5,AI,,,"NIH ODS Pantothenic Acid Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,choline,425,AI,3500,yes,"NIH ODS Choline Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,calcium,1200,RDA,2000,yes,"NIH ODS Calcium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,phosphorus,700,RDA,4000,yes,"NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,potassium,2600,AI,,,"NIH ODS Potassium Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,magnesium,320,RDA,350,no,"NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,iron,8,RDA,45,yes,"NIH ODS Iron Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,zinc,8,RDA,40,yes,"NIH ODS Zinc Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,selenium,55,RDA,400,yes,"NIH ODS Selenium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,copper,0.9,RDA,10,yes,"NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-51-70,female,51,70,none,manganese,1.8,AI,11,yes,"NIH ODS Manganese Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,vitA,700,RDA,3000,no,"NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,vitD,20,RDA,100,yes,"NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,vitE,15,RDA,1000,no,"NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,vitK,90,AI,,,"NIH ODS Vitamin K Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,vitC,75,RDA,2000,yes,"NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,thiamin,1.1,RDA,,,"NIH ODS Thiamin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,riboflavin,1.1,RDA,,,"NIH ODS Riboflavin Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,niacin,14,RDA,35,no,"NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,vitB6,1.5,RDA,100,yes,"NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,folate,400,RDA,1000,no,"NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,vitB12,2.4,RDA,,,"NIH ODS Vitamin B12 Health Professional fact sheet, RDA table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,pantothenic,5,AI,,,"NIH ODS Pantothenic Acid Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,choline,425,AI,3500,yes,"NIH ODS Choline Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,calcium,1200,RDA,2000,yes,"NIH ODS Calcium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,phosphorus,700,RDA,3000,yes,"NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,potassium,2600,AI,,,"NIH ODS Potassium Health Professional fact sheet, AI table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,magnesium,320,RDA,350,no,"NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,iron,8,RDA,45,yes,"NIH ODS Iron Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,zinc,8,RDA,40,yes,"NIH ODS Zinc Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,selenium,55,RDA,400,yes,"NIH ODS Selenium Health Professional fact sheet, RDA table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,copper,0.9,RDA,10,yes,"NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"
+us,us-f-71-,female,71,,none,manganese,1.8,AI,11,yes,"NIH ODS Manganese Health Professional fact sheet, AI table, UL table","supervisor 2026-11-18: copied from ODS fact sheet tables (WebFetch), re-checked row by row against saved page text"

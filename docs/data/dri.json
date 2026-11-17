@@ -1,0 +1,3720 @@
+{
+  "buildDate": "2026-11-18",
+  "generator": "tools/build_dri.py",
+  "standards": {
+    "cn2023": {
+      "label": "中国居民膳食营养素参考摄入量（2023版）",
+      "source": "中国营养学会（CNS）《中国居民膳食营养素参考摄入量（2023版）》，cnsoc.org/drpostand",
+      "note": "本版仅覆盖成人（18 岁及以上）；孕期与哺乳期列为后续版本。",
+      "groups": [
+        {
+          "id": "cn-m-18-29",
+          "sex": "male",
+          "ageMin": 18,
+          "ageMax": 29,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 770,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image); UL excludes provitamin A carotenoids (table footnote)"
+            },
+            "vitD": {
+              "target": 10,
+              "type": "RNI",
+              "ul": 50,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "vitE": {
+              "target": 14,
+              "type": "AI",
+              "ul": 700,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitK": {
+              "target": 80,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitC": {
+              "target": 100,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "thiamin": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "riboflavin": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "niacin": {
+              "target": 15,
+              "type": "RNI",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image); UL 35 mg is for niacin (nicotinamide 310/300/290 mg), supplements/fortified forms"
+            },
+            "vitB6": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": 60,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RNI",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image); UL applies to synthetic folic acid only (table footnote)"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "choline": {
+              "target": 450,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "calcium": {
+              "target": 800,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "phosphorus": {
+              "target": 720,
+              "type": "RNI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "potassium": {
+              "target": 2000,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "magnesium": {
+              "target": 330,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "iron": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 42,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "zinc": {
+              "target": 12.5,
+              "type": "RNI",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "selenium": {
+              "target": 60,
+              "type": "RNI",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "copper": {
+              "target": 0.8,
+              "type": "RNI",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            },
+            "manganese": {
+              "target": 4.5,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 9 (cnsoc.org/drpostand image)"
+            }
+          }
+        },
+        {
+          "id": "cn-m-30-49",
+          "sex": "male",
+          "ageMin": 30,
+          "ageMax": 49,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 770,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image); UL excludes provitamin A carotenoids (table footnote)"
+            },
+            "vitD": {
+              "target": 10,
+              "type": "RNI",
+              "ul": 50,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "vitE": {
+              "target": 14,
+              "type": "AI",
+              "ul": 700,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitK": {
+              "target": 80,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitC": {
+              "target": 100,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "thiamin": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "riboflavin": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "niacin": {
+              "target": 15,
+              "type": "RNI",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image); UL 35 mg is for niacin (nicotinamide 310/300/290 mg), supplements/fortified forms"
+            },
+            "vitB6": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": 60,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RNI",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image); UL applies to synthetic folic acid only (table footnote)"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "choline": {
+              "target": 450,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "calcium": {
+              "target": 800,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "phosphorus": {
+              "target": 710,
+              "type": "RNI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "potassium": {
+              "target": 2000,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "magnesium": {
+              "target": 320,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "iron": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 42,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "zinc": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "selenium": {
+              "target": 60,
+              "type": "RNI",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "copper": {
+              "target": 0.8,
+              "type": "RNI",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            },
+            "manganese": {
+              "target": 4.5,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 11 (cnsoc.org/drpostand image)"
+            }
+          }
+        },
+        {
+          "id": "cn-m-50-64",
+          "sex": "male",
+          "ageMin": 50,
+          "ageMax": 64,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 750,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image); UL excludes provitamin A carotenoids (table footnote)"
+            },
+            "vitD": {
+              "target": 10,
+              "type": "RNI",
+              "ul": 50,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "vitE": {
+              "target": 14,
+              "type": "AI",
+              "ul": 700,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitK": {
+              "target": 80,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitC": {
+              "target": 100,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "thiamin": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "riboflavin": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "niacin": {
+              "target": 15,
+              "type": "RNI",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image); UL 35 mg is for niacin (nicotinamide 310/300/290 mg), supplements/fortified forms"
+            },
+            "vitB6": {
+              "target": 1.6,
+              "type": "RNI",
+              "ul": 55,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RNI",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image); UL applies to synthetic folic acid only (table footnote)"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "choline": {
+              "target": 450,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "calcium": {
+              "target": 800,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "phosphorus": {
+              "target": 710,
+              "type": "RNI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "potassium": {
+              "target": 2000,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "magnesium": {
+              "target": 320,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "iron": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 42,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "zinc": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "selenium": {
+              "target": 60,
+              "type": "RNI",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "copper": {
+              "target": 0.8,
+              "type": "RNI",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            },
+            "manganese": {
+              "target": 4.5,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 13 (cnsoc.org/drpostand image)"
+            }
+          }
+        },
+        {
+          "id": "cn-m-65-74",
+          "sex": "male",
+          "ageMin": 65,
+          "ageMax": 74,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 730,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image); UL excludes provitamin A carotenoids (table footnote)"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RNI",
+              "ul": 50,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "vitE": {
+              "target": 14,
+              "type": "AI",
+              "ul": 700,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitK": {
+              "target": 80,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitC": {
+              "target": 100,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "thiamin": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "riboflavin": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "niacin": {
+              "target": 15,
+              "type": "RNI",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image); UL 35 mg is for niacin (nicotinamide 310/300/290 mg), supplements/fortified forms"
+            },
+            "vitB6": {
+              "target": 1.6,
+              "type": "RNI",
+              "ul": 55,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RNI",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image); UL applies to synthetic folic acid only (table footnote)"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "choline": {
+              "target": 450,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "calcium": {
+              "target": 800,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "phosphorus": {
+              "target": 680,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "potassium": {
+              "target": 2000,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "magnesium": {
+              "target": 310,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "iron": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 42,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "zinc": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "selenium": {
+              "target": 60,
+              "type": "RNI",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "copper": {
+              "target": 0.8,
+              "type": "RNI",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            },
+            "manganese": {
+              "target": 4.5,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 20 (cnsoc.org/drpostand image)"
+            }
+          }
+        },
+        {
+          "id": "cn-m-75-",
+          "sex": "male",
+          "ageMin": 75,
+          "ageMax": null,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 710,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image); UL excludes provitamin A carotenoids (table footnote)"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RNI",
+              "ul": 50,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "vitE": {
+              "target": 14,
+              "type": "AI",
+              "ul": 700,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitK": {
+              "target": 80,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitC": {
+              "target": 100,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "thiamin": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "riboflavin": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "niacin": {
+              "target": 15,
+              "type": "RNI",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image); UL 35 mg is for niacin (nicotinamide 310/300/290 mg), supplements/fortified forms"
+            },
+            "vitB6": {
+              "target": 1.6,
+              "type": "RNI",
+              "ul": 55,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RNI",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image); UL applies to synthetic folic acid only (table footnote)"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "choline": {
+              "target": 450,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "calcium": {
+              "target": 800,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "phosphorus": {
+              "target": 680,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "potassium": {
+              "target": 2000,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "magnesium": {
+              "target": 300,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "iron": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 42,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "zinc": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "selenium": {
+              "target": 60,
+              "type": "RNI",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "copper": {
+              "target": 0.7,
+              "type": "RNI",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            },
+            "manganese": {
+              "target": 4.5,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 22 (cnsoc.org/drpostand image)"
+            }
+          }
+        },
+        {
+          "id": "cn-f-18-29",
+          "sex": "female",
+          "ageMin": 18,
+          "ageMax": 29,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 660,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image); UL excludes provitamin A carotenoids (table footnote)"
+            },
+            "vitD": {
+              "target": 10,
+              "type": "RNI",
+              "ul": 50,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "vitE": {
+              "target": 14,
+              "type": "AI",
+              "ul": 700,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitK": {
+              "target": 80,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitC": {
+              "target": 100,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "thiamin": {
+              "target": 1.2,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "riboflavin": {
+              "target": 1.2,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "niacin": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image); UL 35 mg is for niacin (nicotinamide 310/300/290 mg), supplements/fortified forms"
+            },
+            "vitB6": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": 60,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RNI",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image); UL applies to synthetic folic acid only (table footnote)"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "choline": {
+              "target": 380,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "calcium": {
+              "target": 800,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "phosphorus": {
+              "target": 720,
+              "type": "RNI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "potassium": {
+              "target": 2000,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "magnesium": {
+              "target": 330,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "iron": {
+              "target": 18,
+              "type": "RNI",
+              "ul": 42,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "zinc": {
+              "target": 8.5,
+              "type": "RNI",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "selenium": {
+              "target": 60,
+              "type": "RNI",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "copper": {
+              "target": 0.8,
+              "type": "RNI",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            },
+            "manganese": {
+              "target": 4,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 10 (cnsoc.org/drpostand image)"
+            }
+          }
+        },
+        {
+          "id": "cn-f-30-49",
+          "sex": "female",
+          "ageMin": 30,
+          "ageMax": 49,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 660,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image); UL excludes provitamin A carotenoids (table footnote)"
+            },
+            "vitD": {
+              "target": 10,
+              "type": "RNI",
+              "ul": 50,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "vitE": {
+              "target": 14,
+              "type": "AI",
+              "ul": 700,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitK": {
+              "target": 80,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitC": {
+              "target": 100,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "thiamin": {
+              "target": 1.2,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "riboflavin": {
+              "target": 1.2,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "niacin": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image); UL 35 mg is for niacin (nicotinamide 310/300/290 mg), supplements/fortified forms"
+            },
+            "vitB6": {
+              "target": 1.4,
+              "type": "RNI",
+              "ul": 60,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RNI",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image); UL applies to synthetic folic acid only (table footnote)"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "choline": {
+              "target": 380,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "calcium": {
+              "target": 800,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "phosphorus": {
+              "target": 710,
+              "type": "RNI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "potassium": {
+              "target": 2000,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "magnesium": {
+              "target": 320,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "iron": {
+              "target": 18,
+              "type": "RNI",
+              "ul": 42,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "zinc": {
+              "target": 8.5,
+              "type": "RNI",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "selenium": {
+              "target": 60,
+              "type": "RNI",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "copper": {
+              "target": 0.8,
+              "type": "RNI",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            },
+            "manganese": {
+              "target": 4,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 12 (cnsoc.org/drpostand image)"
+            }
+          }
+        },
+        {
+          "id": "cn-f-50-64",
+          "sex": "female",
+          "ageMin": 50,
+          "ageMax": 64,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 660,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image); UL excludes provitamin A carotenoids (table footnote)"
+            },
+            "vitD": {
+              "target": 10,
+              "type": "RNI",
+              "ul": 50,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "vitE": {
+              "target": 14,
+              "type": "AI",
+              "ul": 700,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitK": {
+              "target": 80,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitC": {
+              "target": 100,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "thiamin": {
+              "target": 1.2,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "riboflavin": {
+              "target": 1.2,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "niacin": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image); UL 35 mg is for niacin (nicotinamide 310/300/290 mg), supplements/fortified forms"
+            },
+            "vitB6": {
+              "target": 1.6,
+              "type": "RNI",
+              "ul": 55,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RNI",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image); UL applies to synthetic folic acid only (table footnote)"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "choline": {
+              "target": 380,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "calcium": {
+              "target": 800,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "phosphorus": {
+              "target": 710,
+              "type": "RNI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "potassium": {
+              "target": 2000,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "magnesium": {
+              "target": 320,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "iron": {
+              "target": 10,
+              "type": "RNI",
+              "ul": 42,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image); 10 = no menses (footnote e), 18 if menstruating (footnote f)"
+            },
+            "zinc": {
+              "target": 8.5,
+              "type": "RNI",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "selenium": {
+              "target": 60,
+              "type": "RNI",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "copper": {
+              "target": 0.8,
+              "type": "RNI",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            },
+            "manganese": {
+              "target": 4,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 14 (cnsoc.org/drpostand image)"
+            }
+          }
+        },
+        {
+          "id": "cn-f-65-74",
+          "sex": "female",
+          "ageMin": 65,
+          "ageMax": 74,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 640,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image); UL excludes provitamin A carotenoids (table footnote)"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RNI",
+              "ul": 50,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "vitE": {
+              "target": 14,
+              "type": "AI",
+              "ul": 700,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitK": {
+              "target": 80,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitC": {
+              "target": 100,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "thiamin": {
+              "target": 1.2,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "riboflavin": {
+              "target": 1.2,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "niacin": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image); UL 35 mg is for niacin (nicotinamide 310/300/290 mg), supplements/fortified forms"
+            },
+            "vitB6": {
+              "target": 1.6,
+              "type": "RNI",
+              "ul": 55,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RNI",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image); UL applies to synthetic folic acid only (table footnote)"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "choline": {
+              "target": 380,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "calcium": {
+              "target": 800,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "phosphorus": {
+              "target": 680,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "potassium": {
+              "target": 2000,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "magnesium": {
+              "target": 310,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "iron": {
+              "target": 10,
+              "type": "RNI",
+              "ul": 42,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "zinc": {
+              "target": 8.5,
+              "type": "RNI",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "selenium": {
+              "target": 60,
+              "type": "RNI",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "copper": {
+              "target": 0.8,
+              "type": "RNI",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            },
+            "manganese": {
+              "target": 4,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 21 (cnsoc.org/drpostand image)"
+            }
+          }
+        },
+        {
+          "id": "cn-f-75-",
+          "sex": "female",
+          "ageMin": 75,
+          "ageMax": null,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 600,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image); UL excludes provitamin A carotenoids (table footnote)"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RNI",
+              "ul": 50,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "vitE": {
+              "target": 14,
+              "type": "AI",
+              "ul": 700,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitK": {
+              "target": 80,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "vitC": {
+              "target": 100,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "thiamin": {
+              "target": 1.2,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "riboflavin": {
+              "target": 1.2,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "niacin": {
+              "target": 12,
+              "type": "RNI",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image); UL 35 mg is for niacin (nicotinamide 310/300/290 mg), supplements/fortified forms"
+            },
+            "vitB6": {
+              "target": 1.6,
+              "type": "RNI",
+              "ul": 55,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RNI",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image); UL applies to synthetic folic acid only (table footnote)"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "choline": {
+              "target": 380,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image); AI (EAR not set)"
+            },
+            "calcium": {
+              "target": 800,
+              "type": "RNI",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "phosphorus": {
+              "target": 680,
+              "type": "RNI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "potassium": {
+              "target": 2000,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "magnesium": {
+              "target": 300,
+              "type": "RNI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "iron": {
+              "target": 10,
+              "type": "RNI",
+              "ul": 42,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "zinc": {
+              "target": 8.5,
+              "type": "RNI",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "selenium": {
+              "target": 60,
+              "type": "RNI",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "copper": {
+              "target": 0.7,
+              "type": "RNI",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            },
+            "manganese": {
+              "target": 4,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "CNS DRIs 2023 Table 23 (cnsoc.org/drpostand image)"
+            }
+          }
+        }
+      ]
+    },
+    "us": {
+      "label": "美国膳食参考摄入量（NASEM DRI）",
+      "source": "美国国家科学院（NASEM）膳食参考摄入量，经美国国立卫生研究院膳食补充剂办公室（NIH ODS）汇总",
+      "note": "本版仅覆盖成人；18 岁按 14-18 岁组计算，孕期与哺乳期列为后续版本。",
+      "groups": [
+        {
+          "id": "us-m-14-18",
+          "sex": "male",
+          "ageMin": 14,
+          "ageMax": 18,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 900,
+              "type": "RDA",
+              "ul": 2800,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table"
+            },
+            "vitE": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 800,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol"
+            },
+            "vitK": {
+              "target": 75,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin K Health Professional fact sheet, AI table"
+            },
+            "vitC": {
+              "target": 75,
+              "type": "RDA",
+              "ul": 1800,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table"
+            },
+            "thiamin": {
+              "target": 1.2,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Thiamin Health Professional fact sheet, RDA table"
+            },
+            "riboflavin": {
+              "target": 1.3,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Riboflavin Health Professional fact sheet, RDA table"
+            },
+            "niacin": {
+              "target": 16,
+              "type": "RDA",
+              "ul": 30,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only"
+            },
+            "vitB6": {
+              "target": 1.3,
+              "type": "RDA",
+              "ul": 80,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RDA",
+              "ul": 800,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B12 Health Professional fact sheet, RDA table"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Pantothenic Acid Health Professional fact sheet, AI table"
+            },
+            "choline": {
+              "target": 550,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Choline Health Professional fact sheet, AI table, UL table"
+            },
+            "calcium": {
+              "target": 1300,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Calcium Health Professional fact sheet, RDA table, UL table"
+            },
+            "phosphorus": {
+              "target": 1250,
+              "type": "RDA",
+              "ul": 4000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table"
+            },
+            "potassium": {
+              "target": 3000,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Potassium Health Professional fact sheet, AI table"
+            },
+            "magnesium": {
+              "target": 410,
+              "type": "RDA",
+              "ul": 350,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only"
+            },
+            "iron": {
+              "target": 11,
+              "type": "RDA",
+              "ul": 45,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Iron Health Professional fact sheet, RDA table, UL table"
+            },
+            "zinc": {
+              "target": 11,
+              "type": "RDA",
+              "ul": 34,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Zinc Health Professional fact sheet, RDA table, UL table"
+            },
+            "selenium": {
+              "target": 55,
+              "type": "RDA",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Selenium Health Professional fact sheet, RDA table, UL table"
+            },
+            "copper": {
+              "target": 0.89,
+              "type": "RDA",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)"
+            },
+            "manganese": {
+              "target": 2.2,
+              "type": "AI",
+              "ul": 9,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Manganese Health Professional fact sheet, AI table, UL table"
+            }
+          }
+        },
+        {
+          "id": "us-m-19-30",
+          "sex": "male",
+          "ageMin": 19,
+          "ageMax": 30,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 900,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table"
+            },
+            "vitE": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol"
+            },
+            "vitK": {
+              "target": 120,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin K Health Professional fact sheet, AI table"
+            },
+            "vitC": {
+              "target": 90,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table"
+            },
+            "thiamin": {
+              "target": 1.2,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Thiamin Health Professional fact sheet, RDA table"
+            },
+            "riboflavin": {
+              "target": 1.3,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Riboflavin Health Professional fact sheet, RDA table"
+            },
+            "niacin": {
+              "target": 16,
+              "type": "RDA",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only"
+            },
+            "vitB6": {
+              "target": 1.3,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B12 Health Professional fact sheet, RDA table"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Pantothenic Acid Health Professional fact sheet, AI table"
+            },
+            "choline": {
+              "target": 550,
+              "type": "AI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Choline Health Professional fact sheet, AI table, UL table"
+            },
+            "calcium": {
+              "target": 1000,
+              "type": "RDA",
+              "ul": 2500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Calcium Health Professional fact sheet, RDA table, UL table"
+            },
+            "phosphorus": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 4000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table"
+            },
+            "potassium": {
+              "target": 3400,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Potassium Health Professional fact sheet, AI table"
+            },
+            "magnesium": {
+              "target": 400,
+              "type": "RDA",
+              "ul": 350,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only"
+            },
+            "iron": {
+              "target": 8,
+              "type": "RDA",
+              "ul": 45,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Iron Health Professional fact sheet, RDA table, UL table"
+            },
+            "zinc": {
+              "target": 11,
+              "type": "RDA",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Zinc Health Professional fact sheet, RDA table, UL table"
+            },
+            "selenium": {
+              "target": 55,
+              "type": "RDA",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Selenium Health Professional fact sheet, RDA table, UL table"
+            },
+            "copper": {
+              "target": 0.9,
+              "type": "RDA",
+              "ul": 10,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)"
+            },
+            "manganese": {
+              "target": 2.3,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Manganese Health Professional fact sheet, AI table, UL table"
+            }
+          }
+        },
+        {
+          "id": "us-m-31-50",
+          "sex": "male",
+          "ageMin": 31,
+          "ageMax": 50,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 900,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table"
+            },
+            "vitE": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol"
+            },
+            "vitK": {
+              "target": 120,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin K Health Professional fact sheet, AI table"
+            },
+            "vitC": {
+              "target": 90,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table"
+            },
+            "thiamin": {
+              "target": 1.2,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Thiamin Health Professional fact sheet, RDA table"
+            },
+            "riboflavin": {
+              "target": 1.3,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Riboflavin Health Professional fact sheet, RDA table"
+            },
+            "niacin": {
+              "target": 16,
+              "type": "RDA",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only"
+            },
+            "vitB6": {
+              "target": 1.3,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B12 Health Professional fact sheet, RDA table"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Pantothenic Acid Health Professional fact sheet, AI table"
+            },
+            "choline": {
+              "target": 550,
+              "type": "AI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Choline Health Professional fact sheet, AI table, UL table"
+            },
+            "calcium": {
+              "target": 1000,
+              "type": "RDA",
+              "ul": 2500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Calcium Health Professional fact sheet, RDA table, UL table"
+            },
+            "phosphorus": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 4000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table"
+            },
+            "potassium": {
+              "target": 3400,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Potassium Health Professional fact sheet, AI table"
+            },
+            "magnesium": {
+              "target": 420,
+              "type": "RDA",
+              "ul": 350,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only"
+            },
+            "iron": {
+              "target": 8,
+              "type": "RDA",
+              "ul": 45,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Iron Health Professional fact sheet, RDA table, UL table"
+            },
+            "zinc": {
+              "target": 11,
+              "type": "RDA",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Zinc Health Professional fact sheet, RDA table, UL table"
+            },
+            "selenium": {
+              "target": 55,
+              "type": "RDA",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Selenium Health Professional fact sheet, RDA table, UL table"
+            },
+            "copper": {
+              "target": 0.9,
+              "type": "RDA",
+              "ul": 10,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)"
+            },
+            "manganese": {
+              "target": 2.3,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Manganese Health Professional fact sheet, AI table, UL table"
+            }
+          }
+        },
+        {
+          "id": "us-m-51-70",
+          "sex": "male",
+          "ageMin": 51,
+          "ageMax": 70,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 900,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table"
+            },
+            "vitE": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol"
+            },
+            "vitK": {
+              "target": 120,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin K Health Professional fact sheet, AI table"
+            },
+            "vitC": {
+              "target": 90,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table"
+            },
+            "thiamin": {
+              "target": 1.2,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Thiamin Health Professional fact sheet, RDA table"
+            },
+            "riboflavin": {
+              "target": 1.3,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Riboflavin Health Professional fact sheet, RDA table"
+            },
+            "niacin": {
+              "target": 16,
+              "type": "RDA",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only"
+            },
+            "vitB6": {
+              "target": 1.7,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B12 Health Professional fact sheet, RDA table"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Pantothenic Acid Health Professional fact sheet, AI table"
+            },
+            "choline": {
+              "target": 550,
+              "type": "AI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Choline Health Professional fact sheet, AI table, UL table"
+            },
+            "calcium": {
+              "target": 1000,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Calcium Health Professional fact sheet, RDA table, UL table"
+            },
+            "phosphorus": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 4000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table"
+            },
+            "potassium": {
+              "target": 3400,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Potassium Health Professional fact sheet, AI table"
+            },
+            "magnesium": {
+              "target": 420,
+              "type": "RDA",
+              "ul": 350,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only"
+            },
+            "iron": {
+              "target": 8,
+              "type": "RDA",
+              "ul": 45,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Iron Health Professional fact sheet, RDA table, UL table"
+            },
+            "zinc": {
+              "target": 11,
+              "type": "RDA",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Zinc Health Professional fact sheet, RDA table, UL table"
+            },
+            "selenium": {
+              "target": 55,
+              "type": "RDA",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Selenium Health Professional fact sheet, RDA table, UL table"
+            },
+            "copper": {
+              "target": 0.9,
+              "type": "RDA",
+              "ul": 10,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)"
+            },
+            "manganese": {
+              "target": 2.3,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Manganese Health Professional fact sheet, AI table, UL table"
+            }
+          }
+        },
+        {
+          "id": "us-m-71-",
+          "sex": "male",
+          "ageMin": 71,
+          "ageMax": null,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 900,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only"
+            },
+            "vitD": {
+              "target": 20,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table"
+            },
+            "vitE": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol"
+            },
+            "vitK": {
+              "target": 120,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin K Health Professional fact sheet, AI table"
+            },
+            "vitC": {
+              "target": 90,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table"
+            },
+            "thiamin": {
+              "target": 1.2,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Thiamin Health Professional fact sheet, RDA table"
+            },
+            "riboflavin": {
+              "target": 1.3,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Riboflavin Health Professional fact sheet, RDA table"
+            },
+            "niacin": {
+              "target": 16,
+              "type": "RDA",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only"
+            },
+            "vitB6": {
+              "target": 1.7,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B12 Health Professional fact sheet, RDA table"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Pantothenic Acid Health Professional fact sheet, AI table"
+            },
+            "choline": {
+              "target": 550,
+              "type": "AI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Choline Health Professional fact sheet, AI table, UL table"
+            },
+            "calcium": {
+              "target": 1200,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Calcium Health Professional fact sheet, RDA table, UL table"
+            },
+            "phosphorus": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table"
+            },
+            "potassium": {
+              "target": 3400,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Potassium Health Professional fact sheet, AI table"
+            },
+            "magnesium": {
+              "target": 420,
+              "type": "RDA",
+              "ul": 350,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only"
+            },
+            "iron": {
+              "target": 8,
+              "type": "RDA",
+              "ul": 45,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Iron Health Professional fact sheet, RDA table, UL table"
+            },
+            "zinc": {
+              "target": 11,
+              "type": "RDA",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Zinc Health Professional fact sheet, RDA table, UL table"
+            },
+            "selenium": {
+              "target": 55,
+              "type": "RDA",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Selenium Health Professional fact sheet, RDA table, UL table"
+            },
+            "copper": {
+              "target": 0.9,
+              "type": "RDA",
+              "ul": 10,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)"
+            },
+            "manganese": {
+              "target": 2.3,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Manganese Health Professional fact sheet, AI table, UL table"
+            }
+          }
+        },
+        {
+          "id": "us-f-14-18",
+          "sex": "female",
+          "ageMin": 14,
+          "ageMax": 18,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 2800,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table"
+            },
+            "vitE": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 800,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol"
+            },
+            "vitK": {
+              "target": 75,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin K Health Professional fact sheet, AI table"
+            },
+            "vitC": {
+              "target": 65,
+              "type": "RDA",
+              "ul": 1800,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table"
+            },
+            "thiamin": {
+              "target": 1,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Thiamin Health Professional fact sheet, RDA table"
+            },
+            "riboflavin": {
+              "target": 1,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Riboflavin Health Professional fact sheet, RDA table"
+            },
+            "niacin": {
+              "target": 14,
+              "type": "RDA",
+              "ul": 30,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only"
+            },
+            "vitB6": {
+              "target": 1.2,
+              "type": "RDA",
+              "ul": 80,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RDA",
+              "ul": 800,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B12 Health Professional fact sheet, RDA table"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Pantothenic Acid Health Professional fact sheet, AI table"
+            },
+            "choline": {
+              "target": 400,
+              "type": "AI",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Choline Health Professional fact sheet, AI table, UL table"
+            },
+            "calcium": {
+              "target": 1300,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Calcium Health Professional fact sheet, RDA table, UL table"
+            },
+            "phosphorus": {
+              "target": 1250,
+              "type": "RDA",
+              "ul": 4000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table"
+            },
+            "potassium": {
+              "target": 2300,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Potassium Health Professional fact sheet, AI table"
+            },
+            "magnesium": {
+              "target": 360,
+              "type": "RDA",
+              "ul": 350,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only"
+            },
+            "iron": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 45,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Iron Health Professional fact sheet, RDA table, UL table"
+            },
+            "zinc": {
+              "target": 9,
+              "type": "RDA",
+              "ul": 34,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Zinc Health Professional fact sheet, RDA table, UL table"
+            },
+            "selenium": {
+              "target": 55,
+              "type": "RDA",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Selenium Health Professional fact sheet, RDA table, UL table"
+            },
+            "copper": {
+              "target": 0.89,
+              "type": "RDA",
+              "ul": 8,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)"
+            },
+            "manganese": {
+              "target": 1.6,
+              "type": "AI",
+              "ul": 9,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Manganese Health Professional fact sheet, AI table, UL table"
+            }
+          }
+        },
+        {
+          "id": "us-f-19-30",
+          "sex": "female",
+          "ageMin": 19,
+          "ageMax": 30,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table"
+            },
+            "vitE": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol"
+            },
+            "vitK": {
+              "target": 90,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin K Health Professional fact sheet, AI table"
+            },
+            "vitC": {
+              "target": 75,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table"
+            },
+            "thiamin": {
+              "target": 1.1,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Thiamin Health Professional fact sheet, RDA table"
+            },
+            "riboflavin": {
+              "target": 1.1,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Riboflavin Health Professional fact sheet, RDA table"
+            },
+            "niacin": {
+              "target": 14,
+              "type": "RDA",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only"
+            },
+            "vitB6": {
+              "target": 1.3,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B12 Health Professional fact sheet, RDA table"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Pantothenic Acid Health Professional fact sheet, AI table"
+            },
+            "choline": {
+              "target": 425,
+              "type": "AI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Choline Health Professional fact sheet, AI table, UL table"
+            },
+            "calcium": {
+              "target": 1000,
+              "type": "RDA",
+              "ul": 2500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Calcium Health Professional fact sheet, RDA table, UL table"
+            },
+            "phosphorus": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 4000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table"
+            },
+            "potassium": {
+              "target": 2600,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Potassium Health Professional fact sheet, AI table"
+            },
+            "magnesium": {
+              "target": 310,
+              "type": "RDA",
+              "ul": 350,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only"
+            },
+            "iron": {
+              "target": 18,
+              "type": "RDA",
+              "ul": 45,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Iron Health Professional fact sheet, RDA table, UL table"
+            },
+            "zinc": {
+              "target": 8,
+              "type": "RDA",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Zinc Health Professional fact sheet, RDA table, UL table"
+            },
+            "selenium": {
+              "target": 55,
+              "type": "RDA",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Selenium Health Professional fact sheet, RDA table, UL table"
+            },
+            "copper": {
+              "target": 0.9,
+              "type": "RDA",
+              "ul": 10,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)"
+            },
+            "manganese": {
+              "target": 1.8,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Manganese Health Professional fact sheet, AI table, UL table"
+            }
+          }
+        },
+        {
+          "id": "us-f-31-50",
+          "sex": "female",
+          "ageMin": 31,
+          "ageMax": 50,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table"
+            },
+            "vitE": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol"
+            },
+            "vitK": {
+              "target": 90,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin K Health Professional fact sheet, AI table"
+            },
+            "vitC": {
+              "target": 75,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table"
+            },
+            "thiamin": {
+              "target": 1.1,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Thiamin Health Professional fact sheet, RDA table"
+            },
+            "riboflavin": {
+              "target": 1.1,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Riboflavin Health Professional fact sheet, RDA table"
+            },
+            "niacin": {
+              "target": 14,
+              "type": "RDA",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only"
+            },
+            "vitB6": {
+              "target": 1.3,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B12 Health Professional fact sheet, RDA table"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Pantothenic Acid Health Professional fact sheet, AI table"
+            },
+            "choline": {
+              "target": 425,
+              "type": "AI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Choline Health Professional fact sheet, AI table, UL table"
+            },
+            "calcium": {
+              "target": 1000,
+              "type": "RDA",
+              "ul": 2500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Calcium Health Professional fact sheet, RDA table, UL table"
+            },
+            "phosphorus": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 4000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table"
+            },
+            "potassium": {
+              "target": 2600,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Potassium Health Professional fact sheet, AI table"
+            },
+            "magnesium": {
+              "target": 320,
+              "type": "RDA",
+              "ul": 350,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only"
+            },
+            "iron": {
+              "target": 18,
+              "type": "RDA",
+              "ul": 45,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Iron Health Professional fact sheet, RDA table, UL table"
+            },
+            "zinc": {
+              "target": 8,
+              "type": "RDA",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Zinc Health Professional fact sheet, RDA table, UL table"
+            },
+            "selenium": {
+              "target": 55,
+              "type": "RDA",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Selenium Health Professional fact sheet, RDA table, UL table"
+            },
+            "copper": {
+              "target": 0.9,
+              "type": "RDA",
+              "ul": 10,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)"
+            },
+            "manganese": {
+              "target": 1.8,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Manganese Health Professional fact sheet, AI table, UL table"
+            }
+          }
+        },
+        {
+          "id": "us-f-51-70",
+          "sex": "female",
+          "ageMin": 51,
+          "ageMax": 70,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only"
+            },
+            "vitD": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table"
+            },
+            "vitE": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol"
+            },
+            "vitK": {
+              "target": 90,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin K Health Professional fact sheet, AI table"
+            },
+            "vitC": {
+              "target": 75,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table"
+            },
+            "thiamin": {
+              "target": 1.1,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Thiamin Health Professional fact sheet, RDA table"
+            },
+            "riboflavin": {
+              "target": 1.1,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Riboflavin Health Professional fact sheet, RDA table"
+            },
+            "niacin": {
+              "target": 14,
+              "type": "RDA",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only"
+            },
+            "vitB6": {
+              "target": 1.5,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B12 Health Professional fact sheet, RDA table"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Pantothenic Acid Health Professional fact sheet, AI table"
+            },
+            "choline": {
+              "target": 425,
+              "type": "AI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Choline Health Professional fact sheet, AI table, UL table"
+            },
+            "calcium": {
+              "target": 1200,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Calcium Health Professional fact sheet, RDA table, UL table"
+            },
+            "phosphorus": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 4000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table"
+            },
+            "potassium": {
+              "target": 2600,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Potassium Health Professional fact sheet, AI table"
+            },
+            "magnesium": {
+              "target": 320,
+              "type": "RDA",
+              "ul": 350,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only"
+            },
+            "iron": {
+              "target": 8,
+              "type": "RDA",
+              "ul": 45,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Iron Health Professional fact sheet, RDA table, UL table"
+            },
+            "zinc": {
+              "target": 8,
+              "type": "RDA",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Zinc Health Professional fact sheet, RDA table, UL table"
+            },
+            "selenium": {
+              "target": 55,
+              "type": "RDA",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Selenium Health Professional fact sheet, RDA table, UL table"
+            },
+            "copper": {
+              "target": 0.9,
+              "type": "RDA",
+              "ul": 10,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)"
+            },
+            "manganese": {
+              "target": 1.8,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Manganese Health Professional fact sheet, AI table, UL table"
+            }
+          }
+        },
+        {
+          "id": "us-f-71-",
+          "sex": "female",
+          "ageMin": 71,
+          "ageMax": null,
+          "lifeStage": "none",
+          "values": {
+            "vitA": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin A and Carotenoids Health Professional fact sheet, RDA table, UL table; UL applies to preformed vitamin A only"
+            },
+            "vitD": {
+              "target": 20,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin D Health Professional fact sheet, RDA table, UL table"
+            },
+            "vitE": {
+              "target": 15,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Vitamin E Health Professional fact sheet, RDA table, UL table; UL applies to supplemental alpha-tocopherol"
+            },
+            "vitK": {
+              "target": 90,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin K Health Professional fact sheet, AI table"
+            },
+            "vitC": {
+              "target": 75,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin C Health Professional fact sheet, RDA table, UL table"
+            },
+            "thiamin": {
+              "target": 1.1,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Thiamin Health Professional fact sheet, RDA table"
+            },
+            "riboflavin": {
+              "target": 1.1,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Riboflavin Health Professional fact sheet, RDA table"
+            },
+            "niacin": {
+              "target": 14,
+              "type": "RDA",
+              "ul": 35,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Niacin Health Professional fact sheet, RDA table, UL table; UL applies to supplemental niacin only"
+            },
+            "vitB6": {
+              "target": 1.5,
+              "type": "RDA",
+              "ul": 100,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B6 Health Professional fact sheet, RDA table, UL table"
+            },
+            "folate": {
+              "target": 400,
+              "type": "RDA",
+              "ul": 1000,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Folate Health Professional fact sheet, RDA table, UL table; UL applies to folic acid from supplements/fortified foods only"
+            },
+            "vitB12": {
+              "target": 2.4,
+              "type": "RDA",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Vitamin B12 Health Professional fact sheet, RDA table"
+            },
+            "pantothenic": {
+              "target": 5,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Pantothenic Acid Health Professional fact sheet, AI table"
+            },
+            "choline": {
+              "target": 425,
+              "type": "AI",
+              "ul": 3500,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Choline Health Professional fact sheet, AI table, UL table"
+            },
+            "calcium": {
+              "target": 1200,
+              "type": "RDA",
+              "ul": 2000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Calcium Health Professional fact sheet, RDA table, UL table"
+            },
+            "phosphorus": {
+              "target": 700,
+              "type": "RDA",
+              "ul": 3000,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Phosphorus Health Professional fact sheet, RDA table, UL table"
+            },
+            "potassium": {
+              "target": 2600,
+              "type": "AI",
+              "ul": null,
+              "ulAppliesToFood": null,
+              "ulNote": null,
+              "ref": "NIH ODS Potassium Health Professional fact sheet, AI table"
+            },
+            "magnesium": {
+              "target": 320,
+              "type": "RDA",
+              "ul": 350,
+              "ulAppliesToFood": false,
+              "ulNote": "上限仅适用于补充剂或合成形式，不用于食物摄入",
+              "ref": "NIH ODS Magnesium Health Professional fact sheet, RDA table, UL table; UL applies to supplemental magnesium only"
+            },
+            "iron": {
+              "target": 8,
+              "type": "RDA",
+              "ul": 45,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Iron Health Professional fact sheet, RDA table, UL table"
+            },
+            "zinc": {
+              "target": 8,
+              "type": "RDA",
+              "ul": 40,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Zinc Health Professional fact sheet, RDA table, UL table"
+            },
+            "selenium": {
+              "target": 55,
+              "type": "RDA",
+              "ul": 400,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Selenium Health Professional fact sheet, RDA table, UL table"
+            },
+            "copper": {
+              "target": 0.9,
+              "type": "RDA",
+              "ul": 10,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Copper Health Professional fact sheet, RDA table, UL table; fact sheet lists mcg; converted to mg (/1000)"
+            },
+            "manganese": {
+              "target": 1.8,
+              "type": "AI",
+              "ul": 11,
+              "ulAppliesToFood": true,
+              "ulNote": null,
+              "ref": "NIH ODS Manganese Health Professional fact sheet, AI table, UL table"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
