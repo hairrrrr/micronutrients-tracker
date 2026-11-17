@@ -140,7 +140,7 @@ fdc_id,name_zh,name_en,category_zh,aliases_zh
 168583,山葵根（生）,Wasabi root raw,根茎类,芥末根
 170457,番茄（生）,Tomatoes red ripe raw year round average,茄果瓜类,西红柿
 170050,番茄（熟）,Tomatoes red ripe cooked,茄果瓜类,熟番茄
-170054,番茄酱汁（罐装，无添加盐）,Tomato products canned sauce,茄果瓜类,番茄酱|番茄沙司
+170054,番茄酱汁（罐装）,Tomato products canned sauce,茄果瓜类,番茄酱|番茄沙司
 170460,番茄泥（罐装，无盐）,Tomato products canned puree without salt added,茄果瓜类,番茄糊
 168567,番茄干（晒干）,Tomatoes sun-dried,茄果瓜类,番茄干
 168409,黄瓜（带皮，生）,Cucumber with peel raw,茄果瓜类,青瓜
@@ -203,3 +203,81 @@ fdc_id,name_zh,name_en,category_zh,aliases_zh
 170377,蚕豆（嫩，生）,Broadbeans immature seeds raw,荚豆类,胡豆|罗汉豆
 169998,甜玉米（生）,Corn sweet yellow raw,荚豆类,玉米棒
 169999,甜玉米（煮，不加盐）,Corn sweet yellow cooked boiled drained without salt,荚豆类,熟玉米
+171688,苹果（带皮，生）,Apples raw with skin,水果类,苹果|鲜苹果
+171689,苹果（去皮，生）,Apples raw without skin,水果类,苹果
+171691,苹果干（未烹制）,Apples dried sulfured uncooked,水果干,苹果干
+171697,杏（生）,Apricots raw,水果类,鲜杏|杏子
+173941,杏干（未烹制）,Apricots dried sulfured uncooked,水果干,杏干|干杏
+171705,牛油果（生）,Avocados raw all commercial varieties,水果类,鳄梨|油梨
+173944,香蕉（生）,Bananas raw,水果类,香蕉
+173946,黑莓（生）,Blackberries raw,水果类,黑莓
+171710,黑莓（冷冻，无糖）,Blackberries frozen unsweetened,水果类,冷冻黑莓
+171711,蓝莓（生）,Blueberries raw,水果类,蓝莓
+173950,蓝莓（冷冻，无糖）,Blueberries frozen unsweetened,水果类,冷冻蓝莓
+171719,甜樱桃（生）,Cherries sweet raw,水果类,樱桃|车厘子
+173954,酸樱桃（红，生）,Cherries sour red raw,水果类,酸樱桃
+171718,酸樱桃（红，冷冻，无糖）,Cherries sour red frozen unsweetened,水果类,冷冻酸樱桃
+173963,黑加仑（生）,Currants european black raw,水果类,黑醋栗
+173964,醋栗（红白，生）,Currants red and white raw,水果类,红醋栗|白醋栗
+173021,无花果（生）,Figs raw,水果类,无花果
+174665,无花果干（未烹制）,Figs dried uncooked,水果干,无花果干
+173030,鹅莓（生）,Gooseberries raw,水果类,欧洲醋栗
+174682,美洲葡萄（易剥皮，生）,Grapes american type slip skin raw,水果类,美洲葡萄
+174683,葡萄（欧洲种，生）,Grapes red or green European type raw,水果类,葡萄|提子
+173033,西柚（生）,Grapefruit raw pink and red and white,水果类,葡萄柚
+173039,西柚汁（白，生）,Grapefruit juice white raw,果汁,白西柚汁
+167774,西柚汁（粉红，生）,Grapefruit juice pink raw,果汁,粉红西柚汁
+173044,番石榴（生）,Guavas common raw,水果类,芭乐
+174687,波罗蜜（生）,Jackfruit raw,水果类,菠萝蜜
+168192,榴莲（生或冷冻）,Durian raw or frozen,水果类,榴莲
+168153,猕猴桃（绿，生）,Kiwifruit green raw,水果类,奇异果
+168154,金橘（生）,Kumquats raw,水果类,金桔
+167746,柠檬（去皮，生）,Lemons raw without peel,水果类,柠檬
+167747,柠檬汁（生）,Lemon juice raw,果汁,柠檬汁
+168155,青柠（生）,Limes raw,水果类,莱姆|青柠檬
+168156,青柠汁（生）,Lime juice raw,果汁,莱姆汁
+169086,荔枝（生）,Litchis raw,水果类,荔枝
+169087,荔枝干,Litchis dried,水果干,干荔枝
+169089,龙眼（生）,Longans raw,水果类,桂圆
+169907,龙眼干,Longans dried,水果干,桂圆干
+169910,芒果（生）,Mangos raw,水果类,芒果
+169092,甜瓜（网纹甜瓜，生）,Melons cantaloupe raw,水果类,哈密瓜|罗马甜瓜
+169911,蜜瓜（白兰瓜，生）,Melons honeydew raw,水果类,白兰瓜|蜜瓜
+169913,桑葚（生）,Mulberries raw,水果类,桑椹
+169914,油桃（生）,Nectarines raw,水果类,油桃
+169097,橙（生）,Oranges raw all commercial varieties,水果类,橙子|甜橙
+169917,脐橙（生）,Oranges raw navels,水果类,脐橙
+169918,橙（佛罗里达，生）,Oranges raw Florida,水果类,甜橙
+169098,橙汁（生）,Orange juice raw,果汁,鲜橙汁
+169105,橘子（生）,Tangerines mandarin oranges raw,水果类,桔子|柑橘
+169925,橘汁（生）,Tangerine juice raw,果汁,橘子汁
+169926,木瓜（生）,Papayas raw,水果类,番木瓜
+169928,黄桃（生）,Peaches yellow raw,水果类,桃|桃子
+169934,桃干（未烹制）,Peaches dried sulfured uncooked,水果干,干桃
+169118,梨（生）,Pears raw,水果类,梨子
+168177,亚洲梨（生）,Pears asian raw,水果类,雪梨|沙梨
+169121,梨干（未烹制）,Pears dried sulfured uncooked,水果干,干梨
+169941,柿子（日本种，生）,Persimmons japanese raw,水果类,柿子
+169942,柿饼（日本种，干）,Persimmons japanese dried,水果干,柿饼
+169124,菠萝（生）,Pineapple raw all varieties,水果类,凤梨
+169949,李子（生）,Plums raw,水果类,梅子|布林
+168162,西梅干（未烹制）,Plums dried prunes uncooked,水果干,梅干|西梅
+169134,石榴（生）,Pomegranates raw,水果类,石榴
+167754,柚子（生）,Pummelo raw,水果类,文旦|沙田柚
+168165,葡萄干（黑，无籽）,Raisins dark seedless,水果干,黑葡萄干
+168164,葡萄干（金黄，无籽）,Raisins golden seedless,水果干,金黄葡萄干
+167755,覆盆子（生）,Raspberries raw,水果类,树莓
+168209,覆盆子（红，冷冻，无糖）,Raspberries frozen red unsweetened,水果类,冷冻树莓
+167762,草莓（生）,Strawberries raw,水果类,草莓
+168173,草莓（冷冻，无糖）,Strawberries frozen unsweetened,水果类,冷冻草莓
+167763,罗望子（生）,Tamarinds raw,水果类,酸角
+167765,西瓜（生）,Watermelon raw,水果类,西瓜
+168175,番荔枝（生）,Sugar-apples sweetsop raw,水果类,释迦
+171715,杨桃（生）,Carambola starfruit raw,水果类,五敛子
+173032,枸杞（干）,Goji berries dried,水果干,宁夏枸杞|杞子
+168151,枣（生）,Jujube raw,水果类,鲜枣|枣子
+168152,红枣（干）,Jujube Chinese fresh dried,水果干,大枣|干枣
+169908,枇杷（生）,Loquats raw,水果类,芦橘
+171695,苹果酱（罐装，无糖）,Applesauce canned unsweetened,水果制品,苹果泥
+169130,大蕉（黄，生）,Plantains yellow raw,水果类,熟蕉
+168216,大蕉（青，煮）,Plantains green boiled,水果类,煮大蕉
