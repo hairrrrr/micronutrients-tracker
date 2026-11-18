@@ -127,3 +127,20 @@ AC: validator exit 0, check_values 50/50, npm test and Playwright pass, no cooke
   Commit: `feat(ui): list only nutrients the food contains in the detail view`
 
 AC: npm test and Playwright pass.
+
+## P24 - Fish and seafood raw only (user decision after v1.3)
+Scope: categories 鱼类, 虾蟹类, 贝类. Seaweed (海藻类), vegetables and tubers are unchanged (dried agar and spirulina stay).
+- Remove these 28 cooked, canned, salted or dried seafood rows from `data-src/foods_curated.csv`, `data-src/measures.csv` and `data-src/commonness.csv`:
+  167742 扇贝（蒸）, 171956 大西洋鳕鱼（熟）, 171971 虾（混合种，熟）, 171975 蛤蜊（熟）, 171976 蛤蜊（罐装）, 171980 东部牡蛎（熟）, 171981 东部牡蛎（罐装）, 171986 金枪鱼（水浸罐装）, 171990 太平洋鳕鱼（熟）, 172006 黄鳍金枪鱼（熟）, 172007 首长黄道蟹（熟）, 172009 多棘龙虾（熟）, 172010 墨鱼（熟）, 173693 红鲑（罐装）, 174185 鲤鱼（熟）, 174190 大西洋鳕鱼（盐腌风干）, 174194 鳗鱼（熟）, 174202 阿拉斯加帝王蟹（熟）, 174205 蓝蟹（熟）, 174207 小龙虾（熟）, 174209 北方龙虾（熟）, 174217 蓝贻贝（熟）, 174249 章鱼（熟）, 174250 太平洋牡蛎（熟）, 175139 沙丁鱼（油浸罐装）, 175158 白金枪鱼（水浸罐装）, 175168 大西洋鲑鱼（养殖，熟）, 175180 虾（熟）.
+- Raw equivalents already in the list for all of them except Pacific cod; add that one raw SR Legacy row (supervisor-checked):
+  - foods_curated.csv: `174191,太平洋鳕鱼（生）,Fish cod Pacific raw,鱼类,鳕鱼|太平洋鳕`
+  - commonness.csv: `fdc:174191,太平洋鳕鱼（生）,3,鳕鱼常见于超市冻品，但多为进口、价格偏高` (hms API scorer, reviewed by the supervisor)
+  - measures from tools/suggest_measures.py (USDA portions first, palm-sized estimate like other fish, exactly one default).
+- No raw SR Legacy row exists for sardine (only canned) and white/albacore tuna (only canned); they are dropped without substitute (raw bluefin, yellowfin and skipjack tuna remain).
+- Validator: reject any food in 鱼类/虾蟹类/贝类 whose name_zh contains 熟/蒸/煮/烤/煎/炸/罐装/腌/干/熏 or whose USDA description contains cooked/canned/dried/salted/smoked/fried/baked/broiled/steamed/moist heat/dry heat; every such food must contain 生 in name_zh.
+- Tests: unit data test (seafood raw-only, the 28 ids gone, 174191 present); update unit/e2e tests that referenced removed seafood ids; P19/P20/P22 checks still pass.
+- Rebuild foods.json (615 -> 588 foods); nutrient values of other foods must not change.
+
+  Commit: `refactor(data): keep raw fish and seafood only`
+
+AC: validator exit 0, check_values 50/50, npm test and Playwright pass.
