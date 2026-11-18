@@ -4,6 +4,11 @@
 // everywhere: it contributes 0 to a total and the food is simply not listed in
 // that nutrient's group (order.js). DRI values are never computed here, only
 // compared against whatever the caller passes in.
+//
+// Phase P20: a bone-in food (`refusePct`) is weighed with the bone, so its
+// weighed grams are converted to edible grams here before the per-100 g
+// multiplication. A food without `refusePct` is multiplied by its grams
+// unchanged.
 
 /** Card text when the target is not reached yet (PLAN.md 1.6). */
 export const TEXT_REMAINING = "还差";
@@ -43,14 +48,45 @@ export function selectionGrams(selection) {
 }
 
 /**
+ * USDA refuse percentage of a food (P20), 0 for an ordinary food.
+ *
+ * Duplicated from measures.js on purpose: calc.js imports nothing, so
+ * `node --test` can load it without a module graph. The rule is the same: a
+ * missing or unusable refusePct means "no refuse".
+ *
+ * @param {{refusePct?: number}|null|undefined} food
+ * @returns {number} 0..99
+ */
+export function refusePctOf(food) {
+  const value = Number(food?.refusePct);
+  if (!Number.isFinite(value) || value <= 0 || value >= 100) return 0;
+  return value;
+}
+
+/**
+ * Edible grams of one weighed selection (P20): grams * (1 - refusePct/100).
+ *
+ * @param {{refusePct?: number}|null|undefined} food
+ * @param {{grams?: number}|null|undefined} selection
+ * @returns {number} edible grams, 0 for an empty selection
+ */
+export function edibleGramsOf(food, selection) {
+  const grams = selectionGrams(selection);
+  if (grams <= 0) return 0;
+  return grams * (1 - refusePctOf(food) / 100);
+}
+
+/**
  * Total intake per nutrient over all selections.
  *
- * `per100g[n] * grams / 100` summed; a null / missing / non-numeric value
- * counts as 0. Unknown nutrients in a food are ignored, so the result only
+ * `per100g[n] * edibleGrams / 100` summed; a null / missing / non-numeric value
+ * counts as 0. For a bone-in food (P20) the weighed grams are converted to
+ * edible grams first, so 100 g of spare ribs at 30% refuse adds the nutrient
+ * value of 70 g. Unknown nutrients in a food are ignored, so the result only
  * contains nutrients that at least one selected food has a value for.
  *
  * @param {Record<string, {grams?: number}>} selections keyed by food id
- * @param {Record<string, {per100g?: Record<string, number|null>}>} foodsById
+ * @param {Record<string, {per100g?: Record<string, number|null>, refusePct?: number}>} foodsById
  * @returns {Record<string, number>} nutrient id -> intake in the nutrient's unit
  */
 export function intakeTotals(selections, foodsById) {
@@ -62,7 +98,7 @@ export function intakeTotals(selections, foodsById) {
   for (const [foodId, selection] of Object.entries(selections)) {
     const food = foodsById[foodId];
     if (!food || !food.per100g || typeof food.per100g !== "object") continue;
-    const grams = selectionGrams(selection);
+    const grams = edibleGramsOf(food, selection);
     if (grams <= 0) continue;
 
     for (const [nutrientId, per100g] of Object.entries(food.per100g)) {
@@ -252,6 +288,8 @@ export default {
   TEXT_MET,
   TEXT_NO_TARGET,
   selectionGrams,
+  refusePctOf,
+  edibleGramsOf,
   intakeTotals,
   status,
   formatNumber,

@@ -95,10 +95,10 @@ test("untracked nutrients list iodine, biotin, sodium and the rest", () => {
   assert.ok(html.includes("生物素"));
 });
 
-test("about markup states estimates, privacy and the not-medical-advice note", () => {
+test("about markup states household-measure estimates, privacy and the disclaimer", () => {
   const html = aboutHtml(ctx());
-  assert.match(html, /估算/);
   assert.match(html, /家庭计量/);
+  assert.match(html, /估算值/);
   assert.match(html, /localStorage/);
   assert.match(html, /不会上传/);
   assert.match(html, /不构成医疗建议/);
@@ -134,7 +134,19 @@ test("about markup explains commonness-first ordering and the AI estimate", () =
   // The note is its own labelled section, after the sources.
   assert.match(html, /id="about-order"/);
   assert.ok(html.indexOf('about-sources') < html.indexOf('about-order'));
-  assert.ok(html.indexOf('about-order') < html.indexOf('about-estimates'));
+  assert.ok(html.indexOf('about-order') < html.indexOf('about-measures'));
+});
+
+// P20: the About section no longer mentions dish estimates, and it explains
+// that bone-in foods are weighed with the bone.
+test("about markup explains the bone-in handling and drops dish estimates", () => {
+  const html = aboutHtml(ctx());
+  assert.equal(html.includes("菜肴"), false, "no dish-estimate wording is left");
+  assert.equal(html.includes("about-estimates"), false, "the dish-estimate section is gone");
+  assert.match(html, /带骨重量/);
+  assert.match(html, /可食部/);
+  assert.match(html, /废弃率/);
+  assert.match(html, /原料/);
 });
 
 test("clear button is disabled with no selection and enabled after one", () => {

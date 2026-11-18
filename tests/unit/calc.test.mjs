@@ -9,6 +9,8 @@ import {
   TEXT_MET,
   TEXT_NO_TARGET,
   selectionGrams,
+  refusePctOf,
+  edibleGramsOf,
   intakeTotals,
   status,
   formatNumber,
@@ -213,4 +215,89 @@ test("nutrientSummary combines status and card text", () => {
   const missing = nutrientSummary(null, 500, "mg");
   assert.equal(missing.text, TEXT_NO_TARGET);
   assert.equal(missing.status.hasTarget, false);
+});
+
+// ---------------------------------------------------------------------------
+// P20: bone-in foods are weighed with the bone, the nutrients use edible grams
+// ---------------------------------------------------------------------------
+
+// A bone-in cut: SR Legacy values per 100 g EDIBLE portion, refuse 30 % bone.
+const BONE_FOODS = {
+  "fdc:ribs": {
+    id: "fdc:ribs",
+    nameZh: "猪排骨（生）",
+    refusePct: 30,
+    per100g: { vitA: 10, iron: 1 },
+  },
+  "fdc:chicken": {
+    id: "fdc:chicken",
+    nameZh: "鸡肉（带皮，生）",
+    refusePct: 32,
+    per100g: { vitA: 20, iron: 2 },
+  },
+  "fdc:rice": {
+    id: "fdc:rice",
+    nameZh: "白米饭（熟）",
+    per100g: { vitA: 5, iron: 0.5 },
+  },
+};
+
+test("refusePctOf reads a usable refuse percentage and ignores the rest", () => {
+  assert.equal(refusePctOf({ refusePct: 30 }), 30);
+  assert.equal(refusePctOf({ refusePct: "17" }), 17);
+  assert.equal(refusePctOf({ refusePct: 0 }), 0);
+  assert.equal(refusePctOf({ refusePct: 100 }), 0);
+  assert.equal(refusePctOf({ refusePct: -5 }), 0);
+  assert.equal(refusePctOf({ refusePct: "bone" }), 0);
+  assert.equal(refusePctOf({}), 0);
+  assert.equal(refusePctOf(null), 0);
+});
+
+test("edibleGramsOf converts with-bone grams to edible grams", () => {
+  // 100 g of spare ribs at 30 % refuse -> 70 g edible.
+  assert.equal(edibleGramsOf(BONE_FOODS["fdc:ribs"], { grams: 100 }), 70);
+  assert.equal(edibleGramsOf(BONE_FOODS["fdc:ribs"], { grams: 250 }), 175);
+  // A food without refuse is unchanged.
+  assert.equal(edibleGramsOf(BONE_FOODS["fdc:rice"], { grams: 100 }), 100);
+  // An empty selection is 0, whatever the food.
+  assert.equal(edibleGramsOf(BONE_FOODS["fdc:ribs"], { grams: 0 }), 0);
+  assert.equal(edibleGramsOf(BONE_FOODS["fdc:ribs"], null), 0);
+});
+
+test("100 g of spare ribs with 30 % refuse adds the nutrients of 70 g", () => {
+  // 10 ug RAE per 100 g edible * 0.7 = 7 ug RAE, not 10.
+  const totals = intakeTotals({ "fdc:ribs": { grams: 100 } }, BONE_FOODS);
+  assert.equal(totals.vitA, 7);
+  assert.equal(totals.iron, 0.7);
+});
+
+test("totals mix bone-in and ordinary foods on the edible weight", () => {
+  // 200 g spare ribs -> 140 g edible -> 14 ug RAE; 100 g rice -> 5 ug RAE.
+  const totals = intakeTotals(
+    { "fdc:ribs": { grams: 200 }, "fdc:rice": { grams: 100 } },
+    BONE_FOODS,
+  );
+  assert.equal(Number(totals.vitA.toFixed(6)), 19);
+  assert.equal(Number(totals.iron.toFixed(6)), 1.9);
+});
+
+test("non-bone foods are unchanged from the per-100 g rule", () => {
+  // Same grams, with and without a refusePct key of 0.
+  const plain = intakeTotals({ "fdc:rice": { grams: 250 } }, BONE_FOODS);
+  const zero = intakeTotals(
+    { "fdc:rice": { grams: 250 } },
+    { "fdc:rice": { ...BONE_FOODS["fdc:rice"], refusePct: 0 } },
+  );
+  assert.deepEqual(plain, zero);
+  assert.equal(plain.vitA, 12.5); // 5 * 2.5
+  assert.equal(plain.iron, 1.25);
+});
+
+test("a bone-in food with a stored measure selection also uses edible grams", () => {
+  // The selection's `grams` is the with-bone weight (measures.js resolves the
+  // household unit before saving), so the same conversion applies.
+  const selection = { measureId: "palm", count: 1, grams: 145 };
+  assert.equal(Number(edibleGramsOf(BONE_FOODS["fdc:chicken"], selection).toFixed(4)), 98.6);
+  const totals = intakeTotals({ "fdc:chicken": selection }, BONE_FOODS);
+  assert.equal(Number(totals.vitA.toFixed(4)), 19.72); // 20 * 0.986
 });

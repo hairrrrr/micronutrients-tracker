@@ -8,9 +8,9 @@ Inputs (see PLAN.md 1.3):
     data-src/nutrients.csv      nutrient metadata (id -> USDA nutrient ids)
     data-src/foods_curated.csv  which foods to include + Chinese names
     data-src/measures.csv       optional household measures (phase P5)
-    data-src/composites.csv     optional composite dish estimates (phase P6)
     data-src/commonness.csv     commonness tier 1-5 per food (phase P18b)
     data-src/small_portion_foods.csv  foods eaten in small amounts (phase P19b)
+    data-src/bone_in_foods.csv  foods weighed with the bone (phase P20)
     data-raw/<dataset>/*.csv    USDA FoodData Central SR Legacy 2018-04
 
 Outputs:
@@ -29,7 +29,10 @@ Rules (PLAN.md 1.3):
     * every food carries `amountBasisG` (P19b): 10 for the condiments, spices,
       cooking oils and dried goods of data-src/small_portion_foods.csv, 100 for
       everything else. Only the integer basis is merged, never the CSV rule
-      text, and an id of the CSV that is not a food fails the build.
+      text, and an id of the CSV that is not a food fails the build;
+    * a bone-in food (P20) carries `refusePct` (a number) and a short Chinese
+      `refuseNote`; the nutrients stay per 100 g edible portion and the UI
+      multiplies the edible grams only. No other CSV text is copied.
 
 Usage:
     python3 tools/build_foods.py
@@ -85,14 +88,6 @@ DEFAULT_MEASURE = {
 NUTRIENT_COLUMNS = ["id", "name_zh", "name_en", "unit", "usda_nutrient_id", "color", "kind", "note"]
 FOODS_COLUMNS = ["fdc_id", "name_zh", "name_en", "category_zh", "aliases_zh"]
 MEASURE_COLUMNS = ["food_key", "measure_id", "label_zh", "grams", "basis", "is_default"]
-COMPOSITE_COLUMNS = [
-    "composite_id",
-    "name_zh",
-    "name_en",
-    "ingredient_fdc_id",
-    "grams_per_100g",
-    "note",
-]
 COMMONNESS_COLUMNS = ["food_id", "name_zh", "commonness", "reason_zh"]
 COMMONNESS_MIN = 1
 COMMONNESS_MAX = 5
@@ -100,6 +95,9 @@ COMMONNESS_MAX = 5
 SMALL_PORTION_COLUMNS = ["food_id", "name_zh", "basis_g", "rule"]
 SMALL_PORTION_BASIS_G = 10
 DEFAULT_AMOUNT_BASIS_G = 100
+# Phase P20: foods whose nutrient values are per 100 g edible portion but that
+# people weigh with the bone.
+BONE_IN_COLUMNS = ["food_id", "name_zh", "refuse_pct", "refuse_desc", "source"]
 
 
 def read_csv(path, expected_columns):
@@ -271,98 +269,47 @@ def load_measures():
     return measures
 
 
-def load_composites(nutrient_meta, foods_by_id, measures):
-    """Composite dish rows from data-src/composites.csv (P6), grouped by id.
+def load_bone_in():
+    """food_id -> refuse percent from data-src/bone_in_foods.csv (P20).
 
-    Every dish is an estimate over its ingredient foods (never another
-    composite): per 100 g = sum(ingredient per100g * grams/100). A nutrient is
-    null only when no ingredient has a value for it; missing values of single
-    ingredients count as 0 and are listed in flags.partialNullNutrients.
+    The SR Legacy nutrient values of these foods are per 100 g of edible
+    portion, while people weigh and buy the cut with the bone. Only the number
+    is merged into foods.json; the CSV description and source columns are
+    review material. A percentage outside 0..100 fails the build.
     """
-    rows = read_csv(DATA_SRC / "composites.csv", COMPOSITE_COLUMNS)
-    if not rows:
-        return [], 0
-    grouped = {}
-    order = []
-    for row in rows:
-        composite_id = row["composite_id"]
-        if composite_id not in grouped:
-            grouped[composite_id] = {
-                "name_zh": row["name_zh"],
-                "name_en": row["name_en"],
-                "note": row["note"],
-                "ingredients": [],
-            }
-            order.append(composite_id)
-        grouped[composite_id]["ingredients"].append(
-            {"fdc_id": int(row["ingredient_fdc_id"]), "grams": float(row["grams_per_100g"])}
-        )
+    path = DATA_SRC / "bone_in_foods.csv"
+    rows = read_csv(path, BONE_IN_COLUMNS)
+    refuse = {}
+    for line_no, row in enumerate(rows, start=2):
+        food_id = row["food_id"]
+        if not food_id:
+            raise SystemExit(f"bone_in_foods.csv line {line_no}: empty food_id")
+        if food_id in refuse:
+            raise SystemExit(f"bone_in_foods.csv line {line_no}: duplicate food_id {food_id}")
+        try:
+            pct = float(row["refuse_pct"])
+        except ValueError:
+            raise SystemExit(
+                f"bone_in_foods.csv line {line_no} ({food_id}): refuse_pct "
+                f"{row['refuse_pct']!r} is not a number"
+            )
+        if not 0 < pct < 100:
+            raise SystemExit(
+                f"bone_in_foods.csv line {line_no} ({food_id}): refuse_pct {pct:g} "
+                "must be between 0 and 100"
+            )
+        refuse[food_id] = pct
+    return refuse
 
-    composites = []
-    for composite_id in order:
-        entry = grouped[composite_id]
-        per100g = {}
-        totals = {nutrient["id"]: 0.0 for nutrient in nutrient_meta}
-        known = {nutrient["id"]: False for nutrient in nutrient_meta}
-        # Nutrient ids where at least one ingredient has no value while another
-        # one does: the missing part counts as 0 and the dish is marked, so the
-        # UI can say the value is a lower bound.
-        missing = set()
-        for ingredient in entry["ingredients"]:
-            food = foods_by_id.get(ingredient["fdc_id"])
-            if food is None:
-                raise SystemExit(
-                    f"composites.csv {composite_id}: ingredient {ingredient['fdc_id']} "
-                    "is not in foods_curated.csv"
-                )
-            share = ingredient["grams"] / 100.0
-            for nutrient_id, value in food["per100g"].items():
-                if value is None:
-                    missing.add(nutrient_id)
-                    continue
-                totals[nutrient_id] += value * share
-                known[nutrient_id] = True
-        partial = {
-            nutrient_id for nutrient_id in missing if known[nutrient_id]
-        }
-        for nutrient in nutrient_meta:
-            nutrient_id = nutrient["id"]
-            per100g[nutrient_id] = round_sig(totals[nutrient_id]) if known[nutrient_id] else None
-        partial_nutrients = [
-            nutrient["id"] for nutrient in nutrient_meta if nutrient["id"] in partial
-        ]
-        basis = "; ".join(
-            f"fdc:{ingredient['fdc_id']} {ingredient['grams']:g} g"
-            for ingredient in entry["ingredients"]
-        )
-        composites.append(
-            {
-                "id": f"composite:{composite_id}",
-                "fdcId": None,
-                "nameZh": entry["name_zh"],
-                "nameEn": entry["name_en"],
-                "usdaDescription": None,
-                "category": "菜肴估算",
-                "aliases": [],
-                "estimate": True,
-                "basis": f"recipe estimate, raw-weight ingredients per 100 g finished dish: {basis}"
-                + (f"; {entry['note']}" if entry["note"] else "")
-                + (
-                    "; ingredients without a value for "
-                    + ", ".join(partial_nutrients)
-                    + " were counted as 0"
-                    if partial_nutrients
-                    else ""
-                ),
-                "per100g": per100g,
-                "flags": {
-                    "niacinNoTryptophan": False,
-                    "partialNullNutrients": partial_nutrients,
-                },
-                "measures": measures.get(composite_id, [dict(DEFAULT_MEASURE)]),
-            }
-        )
-    return composites, len(composites)
+
+def refuse_note(pct):
+    """Short Chinese note for a bone-in food, generated from the percentage.
+
+    Only the number is used, never a text column of the CSV: the note says that
+    a weighed amount is with-bone and how much of it is edible.
+    """
+    edible = round(100 - pct, 1)
+    return f"按带骨重量计，可食部约 {edible:g}%（USDA 废弃率 {pct:g}%：骨）"
 
 
 def build():
@@ -411,21 +358,14 @@ def build():
                 "usdaDescription": usda_food["description"],
                 "category": row["category_zh"],
                 "aliases": aliases,
-                "estimate": False,
-                "basis": None,
                 "per100g": per100g,
                 "flags": flags,
                 "measures": food_measures,
             }
         )
 
-    foods_by_id = {food["fdcId"]: food for food in foods}
-    composites, composite_count = load_composites(nutrient_meta, foods_by_id, measures)
-    foods.extend(composites)
-
-    # Phase P18b: every food needs its integer commonness tier (1-5). The id
-    # match covers SR Legacy foods (`fdc:<id>`) and composites
-    # (`composite:<id>`) alike; a food without a tier fails the build.
+    # Phase P18b: every food needs its integer commonness tier (1-5). A food
+    # without a tier fails the build.
     commonness = load_commonness()
     missing_tiers = []
     for food in foods:
@@ -466,15 +406,27 @@ def build():
             SMALL_PORTION_BASIS_G if food["id"] in small_portions else DEFAULT_AMOUNT_BASIS_G
         )
 
-    foods.sort(
-        key=lambda food: (
-            food["fdcId"] is None,
-            food["fdcId"] if food["fdcId"] is not None else 0,
-            food["id"],
+    # Phase P20: bone-in foods carry the USDA refuse percentage and a short
+    # generated note. Their per100g values stay untouched (they are already per
+    # 100 g edible portion); the UI converts with-bone grams to edible grams.
+    bone_in = load_bone_in()
+    unknown_bone_in = sorted(set(bone_in) - {food["id"] for food in foods})
+    if unknown_bone_in:
+        preview = ", ".join(unknown_bone_in[:10])
+        raise SystemExit(
+            f"data-src/bone_in_foods.csv lists {len(unknown_bone_in)} "
+            f"unknown food id(s): {preview}"
         )
-    )
+    for food in foods:
+        pct = bone_in.get(food["id"])
+        if pct is None:
+            continue
+        food["refusePct"] = pct
+        food["refuseNote"] = refuse_note(pct)
 
-    return nutrient_meta, foods, composite_count, missing_measures
+    foods.sort(key=lambda food: food["fdcId"])
+
+    return nutrient_meta, foods, missing_measures
 
 
 def write_json(path, payload, compact=False):
@@ -487,22 +439,23 @@ def write_json(path, payload, compact=False):
 
 
 def main():
-    nutrient_meta, foods, composite_count, missing_measures = build()
+    nutrient_meta, foods, missing_measures = build()
 
     foods_payload = {"source": SOURCE, "foods": foods}
     nutrients_payload = {"source": SOURCE, "nutrients": nutrient_meta}
+    bone_in_count = sum(1 for food in foods if "refusePct" in food)
     meta_payload = {
         "source": SOURCE,
         "buildDate": date.today().isoformat(),
         "generator": "tools/build_foods.py",
         "counts": {
             "foods": len(foods),
-            "srLegacyFoods": len(foods) - composite_count,
-            "composites": composite_count,
+            "srLegacyFoods": len(foods),
+            "boneInFoods": bone_in_count,
             "nutrients": len(nutrient_meta),
         },
         "measures": {
-            "curatedFoods": len(foods) - composite_count - missing_measures,
+            "curatedFoods": len(foods) - missing_measures,
             "defaultGramsOnly": missing_measures,
         },
         "notes": [
@@ -512,16 +465,12 @@ def main():
             "Values are rounded to at most 4 significant digits, never otherwise changed.",
             "Niacin is in mg NE = niacin + tryptophan*1000/60; when tryptophan is missing "
             "only niacin is used and flags.niacinNoTryptophan is true.",
-            "Composite dishes are labeled estimates: per 100 g is the sum of the "
-            "ingredient per-100 g values times grams/100, on a raw-weight basis "
-            "without cooking retention factors.",
-            "When an ingredient has no value for a nutrient but another ingredient does, "
-            "the missing part counts as 0 and flags.partialNullNutrients lists that "
-            "nutrient, so the value is a lower bound.",
             "commonness tiers 1-5: AI model estimate (DeepSeek via hms), supervisor-reviewed",
             "amountBasisG is the comparison basis: 10 g for condiments, spices, cooking "
             "oils and dried goods eaten in small amounts, 100 g for every other food; "
             "per100g values themselves are always per 100 g",
+            "Bone-in foods (refusePct) are measured with the bone: the edible weight is "
+            "grams * (1 - refusePct/100) and the per100g values are for the edible part",
         ],
     }
 
@@ -532,12 +481,12 @@ def main():
     null_total = sum(
         1 for food in foods for value in food["per100g"].values() if value is None
     )
-    print(f"wrote docs/data/foods.json: {len(foods)} foods "
-          f"({len(foods) - composite_count} SR Legacy, {composite_count} composites)")
+    print(f"wrote docs/data/foods.json: {len(foods)} foods")
     print(f"wrote docs/data/nutrients.json: {len(nutrient_meta)} nutrients")
     print(f"wrote docs/data/meta.json: build date {meta_payload['buildDate']}")
     small = sum(1 for food in foods if food["amountBasisG"] == SMALL_PORTION_BASIS_G)
     print(f"amountBasisG 10 g: {small} foods, 100 g: {len(foods) - small} foods")
+    print(f"bone-in foods with refusePct: {bone_in_count}")
     print(f"null nutrient values kept: {null_total}")
     return 0
 

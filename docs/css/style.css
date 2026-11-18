@@ -676,9 +676,9 @@ select.input {
  *
  * 2 columns at the 390 px design width, 4 from 760 px. Each card = Chinese
  * name, small English name, amount of the active nutrient per 100 g with its
- * unit, and a 估算 badge for a composite dish. Cards are <button>s with
- * `aria-pressed`; the selected state (next sub-step) reuses the single "met"
- * green so a selected food reads the same everywhere in the app.
+ * unit, a 常见 badge for everyday foods, and a 带骨重量 note on a bone-in cut
+ * (P20). Cards are <button>s with `aria-pressed`; the selected state reuses the
+ * single "met" green so a selected food reads the same everywhere in the app.
  * ------------------------------------------------------------------------ */
 .panel--foods {
   padding: 14px var(--pad) var(--pad);
@@ -828,9 +828,8 @@ select.input {
   opacity: 0.7;
 }
 
-/* Commonness badge (P18b: tiers 4-5). Deliberately lighter than the 估算 mark:
- * hollow, no border, so a card with both a 估算 and a 常见 badge still reads as
- * one name plus two small labels. */
+/* Commonness badge (P18b: tiers 4-5). Deliberately light: a hollow, borderless
+ * pill, so a card reads as one name plus one small label. */
 .food-card__badge--common {
   border-color: transparent;
   background: rgba(31, 35, 40, 0.08);
@@ -884,6 +883,24 @@ select.input {
 .food-tile.is-selected .food-card__basis {
   color: inherit;
   opacity: 0.8;
+}
+
+/* Bone-in note (P20): "带骨重量 · 可食部约 70%". Stays on its own line under the
+ * basis label so the per-100 g amount is never read as a whole-cut weight. */
+.food-card__bone {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.food-card.is-selected .food-card__bone,
+.food-tile.is-selected .food-card__bone {
+  color: inherit;
+  opacity: 0.85;
 }
 
 /* ---------------------------------------------------------------------------
@@ -1141,6 +1158,21 @@ select.input {
   color: var(--text-muted);
   font-size: 0.6875rem;
   line-height: 1.4;
+}
+
+/* Bone-in editor rows (P20): the edible part of the weighed amount and the
+ * reminder that the nutrients use it, not the with-bone weight. */
+.food-editor__bone {
+  flex: 1 1 100%;
+  margin: 0;
+  color: var(--food-text, var(--text));
+  font-size: 0.75rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.food-editor__note--bone {
+  font-weight: 500;
 }
 
 /* Below 420 px the household-measure label ("一掌心大小（100 g）") is wider

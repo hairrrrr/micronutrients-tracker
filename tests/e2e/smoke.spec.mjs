@@ -7,8 +7,10 @@
 // served from a sub-path, (P16) a selected food that lacks the nutrient not
 // appearing in that tab, (P17) the expand/cancel/confirm flow, the
 // confirmation order of the pinned group, the single change of the measure
-// select and no overflow with an open tile, and (P18b) the commonness-first
-// ranking of the vitamin A and calcium tabs plus the 常见 badge of tiers 4-5.
+// select and no overflow with an open tile, (P18b) the commonness-first
+// ranking of the vitamin A and calcium tabs plus the 常见 badge of tiers 4-5,
+// and (P20) no dish names in any tab plus the with-bone note and edible grams
+// of 猪排骨（生）.
 // Every flow goes through the real UI; only the reset touches localStorage.
 //
 // The reference numbers used here are the fixed DRI fixtures of the unit
@@ -812,6 +814,83 @@ test.describe("smoke", () => {
     // 800 - 21.72 = 778.28, shown as "还差 778 mg".
     expect(target - remaining).toBeGreaterThan(21);
     expect(target - remaining).toBeLessThan(22.5);
+
+    expect(errors).toEqual([]);
+  });
+
+  // -------------------------------------------------------------------------
+  // P20: ingredients only, and bone-in foods are weighed with the bone
+  // -------------------------------------------------------------------------
+
+  test("17. no dish names appear in any tab (P20)", async ({ page }) => {
+    const errors = watchErrors(page);
+    await resetApp(page);
+
+    const dishNames = ["麻婆豆腐", "炒青菜", "番茄炒蛋", "红烧肉", "宫保鸡丁", "馒头", "饺子"];
+    // Every tab, not only vitamin A: a composite dish used to carry a value for
+    // most nutrients, so a leftover dish would show up in several tabs.
+    const nutrientIds = await page.locator(".tab").evaluateAll((tabs) =>
+      tabs.map((tab) => tab.dataset.nutrient));
+    expect(nutrientIds.length).toBe(22);
+    for (const nutrientId of nutrientIds) {
+      await page.locator(SEL.tab(nutrientId)).click();
+      await expect(page.locator(SEL.tab(nutrientId))).toHaveAttribute("aria-pressed", "true");
+      const text = await page.locator(SEL.foods).innerText();
+      for (const dish of dishNames) {
+        expect(text.includes(dish), `${nutrientId} still lists ${dish}`).toBe(false);
+      }
+      // A dish card would also carry the old recipe-estimate wording.
+      expect(text.includes("按食谱")).toBe(false);
+    }
+
+    // The dish estimates are not reachable by search either.
+    await page.locator(SEL.tab("vitA")).click();
+    for (const dish of ["麻婆豆腐", "番茄炒蛋"]) {
+      await page.locator(SEL.search).fill(dish);
+      await expect(page.locator(".status")).toContainText("没有匹配的食物");
+    }
+    await page.locator(SEL.search).fill("");
+
+    expect(errors).toEqual([]);
+  });
+
+  test("18. 猪排骨（生） shows the with-bone note and the edible grams (P20)", async ({ page }) => {
+    const errors = watchErrors(page);
+    await resetApp(page);
+
+    const RIB_ID = "fdc:167853";
+    // Spare ribs have 0 vitamin A, so the calcium tab is where they are listed
+    // (P16: only foods that contain the nutrient appear in its tab).
+    await page.locator(SEL.tab("calcium")).click();
+    await page.locator(SEL.search).fill("猪排骨");
+    const card = page.locator(SEL.foodCard(RIB_ID));
+    await expect(card).toBeVisible();
+    // The card says 带骨重量 and the edible share of a 100 g weighed portion
+    // (30 % USDA refuse -> 70 % edible).
+    await expect(card.locator(".food-card__bone")).toContainText("带骨重量");
+    await expect(card.locator(".food-card__bone")).toContainText("可食部约 70%");
+    // The per-100 g amount still belongs to the edible portion.
+    await expect(card.locator(".food-card__basis")).toHaveText("每 100 g");
+
+    // The editor repeats it and converts the draft weight to edible grams.
+    await openTile(page, RIB_ID);
+    const editor = page.locator(SEL.editor(RIB_ID));
+    await expect(editor.locator("[data-weight]")).toContainText("带骨重量");
+    await expect(editor.locator("[data-bone]")).toContainText("可食部约");
+    await expect(editor.locator("[data-bone-note]")).toContainText("按可食部计算");
+
+    // 100 g weighed -> 70 g edible, named in the editor.
+    await setGrams(page, 100, RIB_ID, false);
+    await expect(editor.locator("[data-bone]")).toContainText("可食部约 70 g");
+    await confirmTile(page, RIB_ID);
+    await expect(page.locator(SEL.foodCard(RIB_ID))).toHaveAttribute("aria-pressed", "true");
+
+    // The About section explains the same rule.
+    await page.locator(".tab").first().click();
+    const about = await page.locator(SEL.about).innerText();
+    expect(about).toContain("带骨重量");
+    expect(about).toContain("可食部");
+    expect(about.includes("菜肴")).toBe(false);
 
     expect(errors).toEqual([]);
   });

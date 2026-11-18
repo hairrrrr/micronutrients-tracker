@@ -7,12 +7,27 @@
 //
 // and the UI additionally offers a free "grams" option, which is handled here
 // by `GRAMS_MEASURE_ID` instead of a real measure row.
+//
+// Bone-in foods (phase P20): a bone-in food carries `refusePct` because the
+// SR Legacy nutrient values are per 100 g of EDIBLE portion, while the
+// household measures and the gram input of such a food mean the weight WITH
+// the bone. The helpers here keep the two weights apart:
+//
+//   gramsForSelection()  -> with-bone grams of a selection
+//   edibleGrams()        -> grams * (1 - refusePct/100), what the nutrients use
+//   formatEdibleGrams()  -> "可食部约 70 g" for the card and the editor
+//
+// A food without `refusePct` has a factor of exactly 1, so nothing about the
+// ordinary foods changes.
 
 /** Pseudo measure id for the manual gram input (not a row in the data). */
 export const GRAMS_MEASURE_ID = "grams";
 
 /** Chinese label of the manual gram input. */
 export const GRAMS_LABEL_ZH = "克";
+
+/** Label of a with-bone weight (P20): grams and household measures include bone. */
+export const WITH_BONE_LABEL = "带骨重量";
 
 /** Count step of the stepper (PLAN.md 1.8 item 5). */
 export const COUNT_STEP = 0.5;
@@ -31,6 +46,72 @@ export function roundGrams(value) {
   if (!Number.isFinite(number) || number <= 0) return 0;
   const factor = 10 ** GRAMS_DECIMALS;
   return Math.round(number * factor) / factor;
+}
+
+/**
+ * USDA refuse percentage of a food (P20): 0 for every ordinary food.
+ *
+ * Bone-in foods carry `refusePct` because their nutrient values are per 100 g
+ * of edible portion while people weigh the cut with the bone. An unusable
+ * value (missing, negative, >= 100) means "no refuse" so old data and test
+ * fixtures behave as before.
+ *
+ * @param {{refusePct?: number}|null|undefined} food
+ * @returns {number} 0..99
+ */
+export function refusePctOf(food) {
+  const value = Number(food?.refusePct);
+  if (!Number.isFinite(value) || value <= 0 || value >= 100) return 0;
+  return value;
+}
+
+/**
+ * Share of a with-bone weight that is edible: 1 - refusePct/100 (P20).
+ *
+ * @param {{refusePct?: number}|null|undefined} food
+ * @returns {number} 0..1, exactly 1 for a food without refuse
+ */
+export function edibleFactor(food) {
+  return 1 - refusePctOf(food) / 100;
+}
+
+/**
+ * Edible grams of a weighed amount (P20).
+ *
+ * The household measures and the gram input of a bone-in food mean the weight
+ * WITH bone, so the nutrients are multiplied by `edibleGrams`, never by the
+ * weighed grams. Every other food is unaffected (factor 1).
+ *
+ * @param {{refusePct?: number}|null|undefined} food
+ * @param {number|null|undefined} grams weighed with-bone grams
+ * @returns {number} edible grams >= 0, rounded to 0.1 g
+ */
+export function edibleGrams(food, grams) {
+  return roundGrams(roundGrams(grams) * edibleFactor(food));
+}
+
+/**
+ * Whether a weighed amount of this food includes bone that is not eaten.
+ *
+ * @param {{refusePct?: number}|null|undefined} food
+ * @returns {boolean}
+ */
+export function isBoneIn(food) {
+  return refusePctOf(food) > 0;
+}
+
+/**
+ * Chinese text of the edible part of a weighed amount, e.g. "可食部约 70 g".
+ *
+ * @param {{refusePct?: number}|null|undefined} food
+ * @param {number|null|undefined} grams weighed with-bone grams
+ * @returns {string} empty string for a food without refuse
+ */
+export function formatEdibleGrams(food, grams) {
+  if (!isBoneIn(food)) return "";
+  const edible = edibleGrams(food, grams);
+  const text = Number.isInteger(edible) ? String(edible) : edible.toFixed(GRAMS_DECIMALS).replace(/\.?0+$/, "");
+  return `可食部约 ${text} g`;
 }
 
 /**
@@ -231,8 +312,14 @@ export function stepCount(count, steps = 1) {
 export default {
   GRAMS_MEASURE_ID,
   GRAMS_LABEL_ZH,
+  WITH_BONE_LABEL,
   COUNT_STEP,
   roundGrams,
+  refusePctOf,
+  edibleFactor,
+  edibleGrams,
+  isBoneIn,
+  formatEdibleGrams,
   clampCount,
   measuresOf,
   findMeasure,

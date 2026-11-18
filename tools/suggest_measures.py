@@ -18,6 +18,14 @@ Two steps, as in PLAN.md phase P5:
      a cup for milk, a slice for bread, a spoon for oils and pastes). These
      rows are labeled estimates with basis "estimate:<short English reason>".
 
+Bone-in foods (phase P20): the SR Legacy nutrient values of the foods of
+data-src/bone_in_foods.csv are per 100 g of EDIBLE portion, while people
+weigh and buy these cuts with the bone. Their household measures are
+therefore stored as with-bone weights: a USDA portion that describes edible
+meat is converted with grams_with_bone = edible_grams / (1 - refuse/100),
+and the basis text says so. An estimate row that is already a with-bone
+description keeps its grams.
+
 Every food gets exactly one default measure; the choice follows the food
 category (an egg defaults to "one egg", milk to "one cup", oils to "one
 spoon", cooked rice to "one bowl", ...).
@@ -47,7 +55,7 @@ from usda_lib import (
 DATA_SRC = REPO_ROOT / "data-src"
 MEASURES_CSV = DATA_SRC / "measures.csv"
 CURATED_CSV = DATA_SRC / "foods_curated.csv"
-COMPOSITES_CSV = DATA_SRC / "composites.csv"
+BONE_IN_CSV = DATA_SRC / "bone_in_foods.csv"
 
 MEASURE_COLUMNS = ["food_key", "measure_id", "label_zh", "grams", "basis", "is_default"]
 
@@ -409,7 +417,6 @@ FOOD_OVERRIDES = {
     169250: [("cup", "半杯", 60, "half a cup of sliced lotus root, about 60 g")],
     169087: [("spoon", "一勺", 10, "one tablespoon of dried litchis, about 10 g")],
     169907: [("spoon", "一勺", 8, "one tablespoon of dried longans, about 8 g")],
-    173647: [("cup", "一杯", 240, "one cup of drinking water, about 240 g")],
     173410: [("stick", "一长条", 113, "one US stick of butter, about 113 g")],
     173430: [("stick", "一长条", 113, "one US stick of butter, about 113 g")],
 }
@@ -449,22 +456,23 @@ def household_measures(food, measures, seen_labels):
 
     # Cooked rice, other cooked grains and noodles are eaten by the bowl; rice
     # also by the fist (a common way to describe a portion without a scale).
-    if category == "谷物与面食" and is_cooked(name):
+    # Porridge, congee and soup-like foods get the porridge bowl below instead,
+    # because "one bowl of cooked rice" would be the wrong weight for them.
+    is_porridge = (
+        any(word in name for word in ("粥", "羹", "糊"))
+        and "酱" not in name
+    )
+    if category == "谷物与面食" and is_cooked(name) and not is_porridge:
         add("bowl", "一碗", 200, "one Chinese bowl of cooked rice, about 200 g", "bowl")
         if "饭" in name:
             add("fist", "一拳", 150, "one fist of cooked rice, about 150 g", "fist")
     elif category == "面条与面食":
         add("bowl", "一碗", 200, "one Chinese bowl of cooked noodles, about 200 g", "bowl")
 
-    # Porridge, congee and soup-like dishes are eaten by the bowl as well.
-    # No current SR Legacy food matches, but a later composite (P6) gets the
-    # same measure without a second rule. Pastes ("芝麻糊", "酱糊") are not
-    # soup, so a name with 酱/酱糊 is left alone.
-    if (
-        any(word in name for word in ("粥", "羹", "糊"))
-        and "酱" not in name
-        and "一碗" not in seen_labels
-    ):
+    # Porridge, congee and soup-like foods are eaten by the bowl as well.
+    # Pastes ("芝麻糊", "酱糊") are not soup, so a name with 酱/酱糊 is left
+    # alone.
+    if is_porridge and "一碗" not in seen_labels:
         add("bowl", "一碗", 300, "one Chinese bowl of porridge or soup, about 300 g", "bowl")
 
     if category in MEAT_CATEGORIES:
@@ -725,143 +733,80 @@ def cap_classifiers(measures):
     return sorted(kept, key=lambda measure: order[id(measure)])
 
 
-# Composite dish measures (phase P6). One default household measure per dish
-# and, where the dish is normally counted, a per-piece measure next to it.
-# Grams are rough typical portions, hence basis "estimate:<reason>".
-COMPOSITE_MEASURES = {
-    "mantou": [
-        ("piece", "一个", 100, "one steamed bun, about 100 g", True),
-        ("serving", "两个", 200, "two steamed buns, about 200 g", False),
-    ],
-    "zhurou-baicai-jiaozi": [
-        ("bowl", "一碗", 250, "one bowl of boiled dumplings, about 250 g", True),
-        ("piece", "一个", 20, "one dumpling, about 20 g", False),
-        ("ten", "十个", 200, "ten dumplings, about 200 g", False),
-    ],
-    "baizhou": [
-        ("bowl", "一碗", 300, "one bowl of congee, about 300 g", True),
-    ],
-    "fanqie-chaodan": [
-        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
-        ("spoon", "一勺", 20, "one spoonful, about 20 g", False),
-    ],
-    "danchaofan": [
-        ("bowl", "一碗", 300, "one bowl of fried rice, about 300 g", True),
-        ("plate", "一盘", 400, "one plate of fried rice, about 400 g", False),
-    ],
-    "zicai-danhuatang": [
-        ("bowl", "一碗", 300, "one bowl of soup, about 300 g", True),
-    ],
-    "qingjiao-rousi": [
-        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
-        ("spoon", "一勺", 20, "one spoonful, about 20 g", False),
-    ],
-    "mapo-doufu": [
-        ("plate", "一盘", 300, "one plate of mapo tofu, about 300 g", True),
-        ("spoon", "一勺", 25, "one spoonful, about 25 g", False),
-    ],
-    "jiachang-doufu": [
-        ("plate", "一盘", 300, "one home-style plate, about 300 g", True),
-    ],
-    "chao-qingcai": [
-        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
-    ],
-    "suanrong-xilanhua": [
-        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
-    ],
-    "ganbian-sijidou": [
-        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
-    ],
-    "culiu-tudousi": [
-        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
-    ],
-    "liangban-huanggua": [
-        ("plate", "一盘", 200, "one cold-dish plate, about 200 g", True),
-    ],
-    "xianggu-youcai": [
-        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
-    ],
-    "donggua-xiaren": [
-        ("plate", "一盘", 300, "one home-style plate, about 300 g", True),
-    ],
-    "hongshao-rou": [
-        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
-        ("piece", "一块", 20, "one piece of braised pork belly, about 20 g", False),
-    ],
-    "huiguo-rou": [
-        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
-    ],
-    "gongbao-jiding": [
-        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
-    ],
-    "qingzheng-luyu": [
-        ("plate", "一盘", 300, "one whole steamed fish, about 300 g edible", True),
-    ],
-    "disanxian": [
-        ("plate", "一盘", 300, "one home-style plate, about 300 g", True),
-    ],
-    "qincai-rousi": [
-        ("plate", "一盘", 250, "one home-style plate, about 250 g", True),
-    ],
-    "xiaocong-doufu": [
-        ("plate", "一盘", 200, "one cold-dish plate, about 200 g", True),
-    ],
-    "chao-mian": [
-        ("plate", "一盘", 300, "one plate of fried noodles, about 300 g", True),
-        ("bowl", "一碗", 250, "one bowl of fried noodles, about 250 g", False),
-    ],
-}
+BONE_IN_COLUMNS = ["food_id", "name_zh", "refuse_pct", "refuse_desc", "source"]
+# Suffix of a household measure label whose grams include the bone (P20).
+WITH_BONE_SUFFIX = "（带骨）"
 
 
-def load_composite_ids():
-    """Composite ids in composites.csv order (phase P6); [] when absent."""
-    if not COMPOSITES_CSV.is_file():
-        return []
-    ids = []
-    with COMPOSITES_CSV.open(newline="", encoding="utf-8-sig") as handle:
-        for row in csv.DictReader(handle):
-            composite_id = (row.get("composite_id") or "").strip()
-            if composite_id and composite_id not in ids:
-                ids.append(composite_id)
-    return ids
+def load_bone_in():
+    """food_id -> refuse percent from data-src/bone_in_foods.csv (P20).
+
+    The SR Legacy nutrient values of these foods are per 100 g of edible
+    portion, but people weigh and buy the cut with the bone, so the household
+    measures of these foods are stored as with-bone weights.
+    """
+    if not BONE_IN_CSV.is_file():
+        return {}
+    with BONE_IN_CSV.open(newline="", encoding="utf-8-sig") as handle:
+        reader = csv.DictReader(handle)
+        if list(reader.fieldnames or []) != BONE_IN_COLUMNS:
+            raise SystemExit(f"{BONE_IN_CSV.name}: unexpected columns {reader.fieldnames}")
+        refuse = {}
+        for row in reader:
+            food_id = (row["food_id"] or "").strip()
+            if not food_id:
+                continue
+            try:
+                pct = float((row["refuse_pct"] or "").strip())
+            except ValueError:
+                raise SystemExit(f"{BONE_IN_CSV.name}: {food_id} refuse_pct is not a number")
+            if not 0 < pct < 100:
+                raise SystemExit(f"{BONE_IN_CSV.name}: {food_id} refuse_pct {pct} is not 0..100")
+            refuse[food_id] = pct
+    return refuse
 
 
-def build_composite_measures(composite_ids):
-    """composite_id -> list of measures, one default each."""
-    result = {}
-    for composite_id in composite_ids:
-        rows = COMPOSITE_MEASURES.get(composite_id)
-        if not rows:
-            raise SystemExit(
-                f"composites.csv: no household measures for composite {composite_id!r}; "
-                "add it to COMPOSITE_MEASURES"
-            )
-        result[composite_id] = [
-            {
-                "id": slug,
-                "label": label,
-                "grams": grams,
-                "basis": f"estimate:{reason}",
-                "kind": slug,
-                "is_default": is_default,
-            }
-            for slug, label, grams, reason, is_default in rows
-        ]
-        defaults = [measure for measure in result[composite_id] if measure["is_default"]]
-        if len(defaults) != 1:
-            raise SystemExit(
-                f"composites.csv: composite {composite_id!r} needs exactly one default measure"
-            )
-    return result
+def with_bone_grams(edible_grams, refuse_pct):
+    """With-bone weight of an edible portion: edible / (1 - refuse/100)."""
+    factor = 1 - refuse_pct / 100.0
+    return round(edible_grams / factor, 1)
+
+
+def apply_bone_in(measures, refuse_pct):
+    """Convert edible-portion measures to with-bone weights (P20).
+
+    The label gets a （带骨） suffix and the basis text states the conversion,
+    so a reader can always recover the edible weight. The USDA portion id stays
+    in the basis (the validator converts back before comparing gram weights).
+    """
+    for measure in measures:
+        edible = measure["grams"]
+        with_bone = with_bone_grams(edible, refuse_pct)
+        conversion = (
+            f"with bone: {edible:g} g edible / (1 - {refuse_pct:g}% refuse) "
+            f"= {with_bone:g} g with bone"
+        )
+        basis = measure["basis"]
+        if basis.startswith("estimate:"):
+            reason = basis[len("estimate:"):].split(";")[0]
+            measure["basis"] = f"estimate:{reason}; {conversion}"
+        else:
+            measure["basis"] = f"{basis}; {conversion}"
+        measure["grams"] = with_bone
+        if not measure["label"].endswith(WITH_BONE_SUFFIX):
+            measure["label"] = measure["label"] + WITH_BONE_SUFFIX
+    return measures
 
 
 def build_measures(curated, portions):
     """food_key -> list of measures, one default each."""
     result = {}
+    bone_in = load_bone_in()
     for food in curated:
         fdc_id = food["fdc_id"]
         measures = []
         seen_labels = set()
+
 
         for row in portions.get(fdc_id, []):
             label, kind, generic = portion_label(row)
@@ -906,8 +851,16 @@ def build_measures(curated, portions):
         measures = trim_measures(measures, default_measure)
         for measure in measures:
             measure["is_default"] = measure is default_measure
+
+        # Phase P20: the nutrients of a bone-in food are per 100 g edible
+        # portion, so its household measures become with-bone weights. The
+        # conversion runs after the default choice, because the default is
+        # matched on the plain labels.
+        refuse_pct = bone_in.get(f"fdc:{fdc_id}")
+        if refuse_pct is not None:
+            apply_bone_in(measures, refuse_pct)
+
         result[str(fdc_id)] = measures
-    result.update(build_composite_measures(load_composite_ids()))
     return result
 
 

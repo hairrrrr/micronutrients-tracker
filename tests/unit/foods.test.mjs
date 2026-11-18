@@ -6,8 +6,8 @@
 // acceptance criteria depend on: the cards follow `order.js` (pinned first,
 // then commonness first and the highest per 100 g within a tier), 60 cards
 // initially with a "show more" button that adds 60, the amount text carries the
-// active nutrient's unit, an estimate badge only on composites, a 常见 badge
-// only for commonness tiers 4-5 (P18b), and every card is a button with
+// active nutrient's unit, a 常见 badge only for commonness tiers 4-5 (P18b),
+// a 带骨重量 note only on bone-in foods (P20), and every card is a button with
 // `aria-pressed`.
 
 import test from "node:test";
@@ -22,7 +22,7 @@ import {
   COMMON_BADGES,
   CONFIRM_LABEL,
   DESELECT_LABEL,
-  ESTIMATE_BADGE,
+  BONE_NOTE,
   amountText,
   basisLabel,
   buildFoodCards,
@@ -51,17 +51,16 @@ const NUTRIENTS = {
 };
 
 const FOODS = [
-  { id: "fdc:liver", nameZh: "猪肝", nameEn: "Pork liver, raw", commonness: 3, per100g: { vitA: 6502, iron: 23.3 }, estimate: false },
-  { id: "fdc:carrot", nameZh: "胡萝卜", nameEn: "Carrots, raw", commonness: 3, per100g: { vitA: 835, iron: 0.3 }, estimate: false },
-  { id: "fdc:spinach", nameZh: "菠菜", nameEn: "Spinach, raw", commonness: 3, per100g: { vitA: 469, iron: 2.7 }, estimate: false },
-  { id: "fdc:salt", nameZh: "食盐", nameEn: "Salt", commonness: 3, per100g: { vitA: null, iron: 0 }, estimate: false },
+  { id: "fdc:liver", nameZh: "猪肝", nameEn: "Pork liver, raw", commonness: 3, per100g: { vitA: 6502, iron: 23.3 } },
+  { id: "fdc:carrot", nameZh: "胡萝卜", nameEn: "Carrots, raw", commonness: 3, per100g: { vitA: 835, iron: 0.3 } },
+  { id: "fdc:spinach", nameZh: "菠菜", nameEn: "Spinach, raw", commonness: 3, per100g: { vitA: 469, iron: 2.7 } },
+  { id: "fdc:salt", nameZh: "食盐", nameEn: "Salt", commonness: 3, per100g: { vitA: null, iron: 0 } },
   {
-    id: "composite:fanqie",
-    nameZh: "番茄炒蛋",
-    nameEn: "Tomato and egg stir-fry",
+    id: "fdc:tofu",
+    nameZh: "北豆腐",
+    nameEn: "Firm tofu, raw",
     commonness: 3,
     per100g: { vitA: 66.95, iron: 0.6154 },
-    estimate: true,
   },
 ];
 
@@ -99,7 +98,7 @@ test("cards come in order.js order: per 100 g descending", () => {
     "fdc:liver",
     "fdc:carrot",
     "fdc:spinach",
-    "composite:fanqie",
+    "fdc:tofu",
   ]);
 });
 
@@ -129,12 +128,14 @@ test("per100gText says 无数据 only for a food without a value", () => {
   assert.equal(per100gText({ per100g: { vitA: 0 } }, "vitA", "ug RAE"), "0 ug RAE");
 });
 
-test("the estimate badge appears only on composite dishes", () => {
+test("no dish-estimate badge is rendered any more (P20)", () => {
   const cards = buildFoodCards(ctx());
-  const composite = cards.find((card) => card.id === "composite:fanqie");
-  assert.equal(composite.estimate, true);
-  assert.match(foodCardHtml(composite), new RegExp(ESTIMATE_BADGE));
-  assert.equal(foodCardHtml(cards[0]).includes("food-card__badge"), false);
+  for (const card of cards) {
+    assert.equal(card.estimate, undefined, `${card.id} carries no estimate flag`);
+    const html = foodCardHtml(card);
+    assert.equal(html.includes("估算"), false, `${card.id} has no 估算 badge`);
+    assert.equal(html.includes("food-card__badge\">"), false);
+  }
 });
 
 // P18b: a small 常见 badge only for commonness tiers 4-5, next to the amount.
@@ -143,7 +144,6 @@ test("the commonness badge appears only for tiers 4 and 5", () => {
     nameZh: "米饭",
     nameEn: "Cooked rice",
     amountText: "1.2 mg",
-    estimate: false,
     selected: false,
     pinned: false,
     title: "t",
@@ -203,7 +203,6 @@ test("food names are HTML-escaped", () => {
     nameZh: "<i>a</i>",
     nameEn: 'b"c',
     amountText: "1 mg",
-    estimate: false,
     selected: false,
     pinned: false,
     title: "t",
@@ -349,7 +348,6 @@ test("an unflagged food keeps the per-100 g amount and label", () => {
     basisLabel: basisLabel(tofu),
     commonness: 5,
     commonBadge: "★常见",
-    estimate: false,
     selected: false,
     pinned: false,
     title: "t",
@@ -394,7 +392,7 @@ test("the show more button appears only while foods are hidden", () => {
   assert.match(withMore, /data-more/);
   assert.match(withMore, /显示更多（\+60）/);
   assert.match(withMore, /已显示 4 种，还有 80 种/);
-  assert.match(withMore, /估算/);
+  assert.equal(withMore.includes("按食谱"), false, "dish estimates are gone");
 
   const complete = foodsHtml(cards, { ...ctx(), more: 0 });
   assert.equal(complete.includes("data-more"), false);
@@ -476,19 +474,18 @@ const SELECTION_FOODS = [
     nameEn: "Pork, fresh, variety meats and by-products, liver, raw",
     aliases: ["猪肝"],
     per100g: { vitA: 6502, iron: 23.3 },
-    estimate: false,
     measures: [
       { id: "palm", labelZh: "一掌心大小", grams: 100, basis: "estimate:one palm", default: true },
       { id: "slice", labelZh: "一块", grams: 44, basis: "usda_portion:1", default: false },
     ],
   },
   {
-    id: "composite:fanqie",
-    nameZh: "番茄炒蛋",
-    nameEn: "Tomato and egg stir-fry",
+    id: "fdc:tofu",
+    nameZh: "北豆腐",
+    nameEn: "Firm tofu, raw",
+    aliases: ["豆腐"],
     per100g: { vitA: 66.95, iron: 0.6154 },
-    estimate: true,
-    measures: [{ id: "plate", labelZh: "一盘", grams: 250, basis: "estimate:one plate", default: true }],
+    measures: [{ id: "piece", labelZh: "一块", grams: 250, basis: "estimate:one block", default: true }],
   },
 ];
 const SELECTION_JSON = { foods: SELECTION_FOODS };
@@ -705,23 +702,23 @@ test("selection state flows through state.js and changes the contributions", () 
 });
 
 test("a newly confirmed food is the last pinned card (confirmation order)", () => {
-  // Confirm the liver first, then the composite dish: the composite joins the
-  // bottom of the pinned group although the liver contributes far more.
+  // Confirm the liver first, then the tofu: the tofu joins the bottom of the
+  // pinned group although the liver contributes far more.
   let state = reduce(selCtx().state, "confirmFood", { food: SELECTION_FOODS[0] });
   state = reduce(state, "confirmFood", { food: SELECTION_FOODS[1] });
-  assert.deepEqual(state.order, ["fdc:liver", "composite:fanqie"]);
+  assert.deepEqual(state.order, ["fdc:liver", "fdc:tofu"]);
   const cards = buildFoodCards({ ...selCtx(), state });
-  assert.deepEqual(cards.map((card) => card.id), ["fdc:liver", "composite:fanqie"]);
+  assert.deepEqual(cards.map((card) => card.id), ["fdc:liver", "fdc:tofu"]);
   assert.equal(cards.every((card) => card.pinned), true);
 });
 
 test("the search box filters by Chinese name, alias and English name, pinned first", () => {
   const selections = { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } };
-  const byZh = buildFoodCards(selCtx({ selections }, { search: "炒蛋" }));
-  assert.deepEqual(byZh.map((card) => card.id), ["composite:fanqie"]);
+  const byZh = buildFoodCards(selCtx({ selections }, { search: "豆腐" }));
+  assert.deepEqual(byZh.map((card) => card.id), ["fdc:tofu"]);
 
-  const byEn = buildFoodCards(selCtx({}, { search: "stir-fry" }));
-  assert.deepEqual(byEn.map((card) => card.id), ["composite:fanqie"]);
+  const byEn = buildFoodCards(selCtx({}, { search: "firm tofu" }));
+  assert.deepEqual(byEn.map((card) => card.id), ["fdc:tofu"]);
 
   const byAlias = buildFoodCards(selCtx({ selections }, { search: "猪肝" }));
   assert.equal(byAlias[0].id, "fdc:liver");

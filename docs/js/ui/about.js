@@ -1,7 +1,8 @@
-// Footer/About section: data sources, the ordering/commonness note, estimates
-// and unit caveats, nutrients that are not tracked, the privacy note, the
-// disclaimer and the "clear all" button (PLAN.md 1.8 item 6, phase P12; the
-// commonness note since P18b, the per-10 g exception since P19b).
+// Footer/About section: data sources, the ordering/commonness note, the
+// household-measure and bone-in notes, unit caveats, nutrients that are not
+// tracked, the privacy note, the disclaimer and the "clear all" button
+// (PLAN.md 1.8 item 6, phase P12; the commonness note since P18b, the per-10 g
+// exception since P19b, the bone-in note since P20).
 //
 // Rendering only: this module never touches localStorage and never mutates
 // state. The clear button asks for confirmation and then reports
@@ -195,10 +196,13 @@ export function aboutHtml(ctx) {
       <p class="about__text">${esc(ORDER_NOTE.text)}</p>
     </section>
 
-    <section class="about__section" aria-labelledby="about-estimates">
-      <h3 class="about__subtitle" id="about-estimates">估算值说明</h3>
+    <section class="about__section" aria-labelledby="about-measures">
+      <h3 class="about__subtitle" id="about-measures">计量与估算值说明</h3>
       <p class="about__text">
-        家常菜肴（标有“估算”徽章）是按常见配方用原料数据折算出来的粗略值，不是实验室测得的成品数据；家庭计量（一碗、一把、一掌心等）同样只是近似重量。称重仍然是最准确的做法。
+        食物列表只收原料（生食材）的成分数值。家庭计量（一碗、一把、一掌心等）只是近似重量，属于估算值；称重仍然是最准确的做法。
+      </p>
+      <p class="about__text">
+        带骨的食物（例如猪排骨、鸡翅、鸡小腿）按带骨重量称量和记录，卡片与编辑器上标有“带骨重量”，并同时给出可食部重量（可食部 = 带骨重量 ×（1 − USDA 废弃率））；营养素数值本身就是按每 100 克可食部给出的，计算时只乘可食部重量。
       </p>
     </section>
 

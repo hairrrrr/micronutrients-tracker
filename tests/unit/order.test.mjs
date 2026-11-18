@@ -48,6 +48,9 @@ test("contribution is per100g * grams / 100", () => {
   assert.equal(contribution(byId(FOODS, "fdc:carrot"), "vitA", { grams: 200 }), 1670);
   assert.equal(contribution(byId(FOODS, "fdc:salt"), "vitA", { grams: 100 }), 0);
   assert.equal(contribution(byId(FOODS, "fdc:liver"), "vitA", { grams: 0 }), 0);
+  // P20: a bone-in food contributes from its edible grams.
+  const ribs = { id: "fdc:ribs", refusePct: 30, per100g: { vitA: 10 } };
+  assert.equal(contribution(ribs, "vitA", { grams: 100 }), 7);
 });
 
 test("without selections foods are sorted by per100g descending, no zeros", () => {

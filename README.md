@@ -115,4 +115,6 @@ under `docs/` (no CDN, no runtime dependency), as noted per item.
 ## Disclaimer
 
 This tool is for general information only and is not medical advice.
-Household measures are rough approximations, and composite dish values are labeled estimates.
+Household measures are rough approximations. Only raw ingredients are listed.
+Bone-in foods are weighed with the bone, and the nutrients are computed from the
+edible part (weight x (1 - refuse)).

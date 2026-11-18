@@ -11,6 +11,11 @@
 // contribution from grams x per100g / 100, so the basis only changes how the
 // card compares and describes the food, never the intake maths.
 //
+// Bone-in foods (P20): the household measures and the gram input of a food
+// with `refusePct` mean the weight WITH the bone. The card and the editor say
+// so ("带骨重量") and show the edible part ("可食部约 X g"), which is what the
+// nutrients use (calc.js converts before multiplying per100g).
+//
 // Rendering only: ordering, the limit, the search text and the selections all
 // come from the pure modules (`core/order.js`, `core/measures.js`,
 // `core/state.js` values passed in by `app.js`). This module never touches
@@ -46,7 +51,11 @@
 import { formatAmount } from "../core/calc.js";
 import {
   GRAMS_MEASURE_ID,
+  WITH_BONE_LABEL,
+  edibleGrams,
+  formatEdibleGrams,
   formatGrams,
+  isBoneIn,
   measureOptions,
   measuresOf,
   normalizeSelection,
@@ -67,8 +76,6 @@ export const ORDER_HINT = "按常见度排序";
 export const BASIS_100_LABEL = "每 100 g";
 /** Amount basis label of a small-portion food card (P19b, per 10 g). */
 export const BASIS_10_LABEL = "每 10 g";
-/** Badge text on a composite (recipe estimate) food card. */
-export const ESTIMATE_BADGE = "估算";
 /**
  * Small commonness badge for everyday foods (P18b): tier 5 = a staple almost
  * everywhere, tier 4 = very common. Tiers 1-3 get no badge.
@@ -82,6 +89,8 @@ export const COMMON_BADGE_TITLE = "常见度：日常饮食中经常出现（AI 
 export const SEARCH_PLACEHOLDER = "搜索食物（中文或英文名）";
 /** Note under the editor: household measures are rough. */
 export const MEASURE_NOTE = "家庭计量为估算值";
+/** Note of a bone-in food: the weighed amount includes the bone (P20). */
+export const BONE_NOTE = "带骨称重，营养素按可食部计算";
 /** Shown when a search matches nothing. */
 export const NO_MATCH_TEXT = "没有匹配的食物。";
 /** Confirm control of an expanded tile (the round check mark and the button). */
@@ -243,7 +252,36 @@ export function editorModel(food, selection) {
     gramsText: formatGrams(current.grams),
     manual,
     options,
+    // P20: a bone-in food is weighed with the bone; the editor says so and
+    // shows the edible part that the nutrients actually use.
+    boneIn: isBoneIn(food),
+    boneText: boneTextOf(food, current.grams),
+    boneNote: String(food?.refuseNote ?? ""),
   };
+}
+
+/**
+ * Chinese note of a bone-in weighed amount: "带骨重量 · 可食部约 70 g".
+ *
+ * @param {{refusePct?: number}} food
+ * @param {number} grams weighed with-bone grams
+ * @returns {string} empty for an ordinary food
+ */
+export function boneTextOf(food, grams) {
+  if (!isBoneIn(food)) return "";
+  return `${WITH_BONE_LABEL} · ${formatEdibleGrams(food, grams)}`;
+}
+
+/**
+ * Share of the edible part of a bone-in food, e.g. "可食部约 70%".
+ *
+ * @param {{refusePct?: number}} food
+ * @returns {string} empty for an ordinary food
+ */
+export function boneShareText(food) {
+  if (!isBoneIn(food)) return "";
+  const share = Math.round((100 - Number(food.refusePct)) * 10) / 10;
+  return `可食部约 ${shortNumber(share)}%`;
 }
 
 /**
@@ -283,8 +321,12 @@ export function buildFoodCards(ctx) {
     const basis = basisLabel(food);
     const amountBasisG = amountBasisGOf(food);
     const base = `${food.nameZh}：${basis} ${cardAmount}`;
-    const title = food.estimate === true
-      ? `${base}（按食谱估算）· 点击${selected ? "修改份量" : "选择"}`
+    // P20: a bone-in food is weighed with the bone, so the card says so and
+    // spells out how much of a 100 g weighed portion is edible.
+    const boneIn = isBoneIn(food);
+    const boneText = boneIn ? boneShareText(food) : "";
+    const title = boneIn
+      ? `${base}（${boneText}）· 点击${selected ? "修改份量" : "选择"}`
       : `${base} · 点击${selected ? "修改份量" : "选择"}`;
     const quantity = expanded ? (draft ?? selection ?? draftQuantity(food, null)) : null;
     const commonness = commonnessOf(food);
@@ -296,7 +338,9 @@ export function buildFoodCards(ctx) {
       amountBasisG,
       basisLabel: basis,
       smallPortion: amountBasisG === 10,
-      estimate: food.estimate === true,
+      boneIn,
+      boneText,
+      boneNote: String(food.refuseNote ?? ""),
       commonness,
       commonBadge: COMMON_BADGES[commonness] ?? "",
       selected,
@@ -309,20 +353,18 @@ export function buildFoodCards(ctx) {
 }
 
 /**
- * Markup of the head of a food card: name, estimate badge, English name and the
- * amount on the card's basis (per 100 g, or per 10 g for small-portion foods).
- * Shared by the compact card and the expanded tile.
+ * Markup of the head of a food card: name, commonness badge, English name and
+ * the amount on the card's basis (per 100 g, or per 10 g for small-portion
+ * foods). A bone-in food adds a short "带骨重量" note. Shared by the compact
+ * card and the expanded tile.
  *
  * @param {object} card card model from `buildFoodCards`
  * @returns {string} HTML
  */
 function cardBodyHtml(card) {
-  const badge = card.estimate
-    ? `<span class="food-card__badge">${ESTIMATE_BADGE}</span>`
-    : "";
-  // Commonness badge (P18b): only tiers 4-5, next to the estimate badge. The
-  // short text stays in the accessible name ("米饭 ★常见") and the title spells
-  // the tier out for hover and assistive tech.
+  // Commonness badge (P18b): only tiers 4-5. The short text stays in the
+  // accessible name ("米饭 ★常见") and the title spells the tier out for hover
+  // and assistive tech.
   const common = card.commonBadge
     ? `<span class="food-card__badge food-card__badge--common"
         title="${esc(COMMON_BADGE_TITLE)}">${esc(card.commonBadge)}</span>`
@@ -333,13 +375,19 @@ function cardBodyHtml(card) {
   const basis = card.basisLabel
     ? `<span class="food-card__basis">${esc(card.basisLabel)}</span>`
     : "";
+  // P20: a bone-in food is measured with the bone; the card says so and gives
+  // the edible share, so the per-100 g amount is not mistaken for a whole-cut
+  // weight.
+  const bone = card.boneIn
+    ? `<span class="food-card__bone" title="${esc(card.boneNote)}">${esc(WITH_BONE_LABEL)} · ${esc(card.boneText)}</span>`
+    : "";
   return `<span class="food-card__head">
       <span class="food-card__name">${esc(card.nameZh)}</span>
-      ${badge}${common}
+      ${common}
     </span>
     ${english}
     <span class="food-card__amount">${esc(card.amountText)}</span>
-    ${basis}`;
+    ${basis}${bone}`;
 }
 
 /** Inline custom properties of the single "met" green (selected card). */
@@ -415,6 +463,15 @@ export function editorHtml(card) {
     ? ""
     : esc(editor.gramsText);
 
+  // P20: a bone-in food's weight includes the bone, so the editor labels the
+  // weight "带骨重量" and spells out the edible part that the nutrients use.
+  const boneLabel = editor.boneIn ? `${WITH_BONE_LABEL} ` : "";
+  const bone = editor.boneIn
+    ? `<p class="food-editor__bone" data-bone>${esc(editor.boneText)}</p>
+    <p class="food-editor__note food-editor__note--bone" data-bone-note
+      title="${esc(editor.boneNote)}">${esc(BONE_NOTE)}</p>`
+    : "";
+
   return `<div class="food-editor" data-food-editor="${esc(card.id)}"
     style="--food-border:${MET_COLORS.border};--food-text:${MET_COLORS.text}">
     <label class="food-editor__label">
@@ -422,8 +479,9 @@ export function editorHtml(card) {
       <select class="food-editor__select" data-measure>${options}</select>
     </label>
     <div class="food-editor__fields" data-qty>${quantityHtml(editor)}</div>
-    <p class="food-editor__weight" data-weight${editor.manual ? " hidden" : ""}>${weight}</p>
+    <p class="food-editor__weight" data-weight${editor.manual ? " hidden" : ""}>${boneLabel}${weight}</p>
     <p class="food-editor__note" data-note${editor.manual ? " hidden" : ""}>${editor.manual ? "" : MEASURE_NOTE}</p>
+    ${bone}
   </div>`;
 }
 
@@ -525,8 +583,10 @@ export function foodsBodyHtml(cards, ctx) {
       </div>`
     : (cards.length > 0 ? `<p class="foods__count">共 ${cards.length} 种食物</p>` : "");
 
-  const note = cards.some((card) => card.estimate)
-    ? '<p class="foods__note">带「估算」标记的是按食谱估算的菜肴，并非直接测定的成分表数值。</p>'
+  // P20: dish estimates are gone; the only remaining note is the bone-in
+  // reminder, which is about how the weight is read, not about the data.
+  const note = cards.some((card) => card.boneIn)
+    ? `<p class="foods__note">标有“${WITH_BONE_LABEL}”的食物按带骨重量称量，营养素按可食部（去骨）计算。</p>`
     : "";
 
   return `${body}${foot}${note}`;
@@ -734,7 +794,9 @@ function refreshEditor(container, food) {
 
   const weight = editor.querySelector("[data-weight]");
   if (weight) {
-    weight.textContent = model.manual ? "" : model.gramsText;
+    // P20: a bone-in weight keeps its 带骨重量 label next to the grams.
+    const label = model.boneIn ? `${WITH_BONE_LABEL} ` : "";
+    weight.textContent = model.manual ? "" : `${label}${model.gramsText}`;
     weight.hidden = model.manual;
   }
   const note = editor.querySelector("[data-note]");
@@ -742,6 +804,9 @@ function refreshEditor(container, food) {
     note.textContent = model.manual ? "" : MEASURE_NOTE;
     note.hidden = model.manual;
   }
+  // P20: the edible part follows the draft weight without a re-render.
+  const bone = editor.querySelector("[data-bone]");
+  if (bone) bone.textContent = model.boneText;
 }
 
 /**
@@ -1012,9 +1077,9 @@ export default {
   ORDER_HINT,
   BASIS_100_LABEL,
   BASIS_10_LABEL,
-  ESTIMATE_BADGE,
   SEARCH_PLACEHOLDER,
   MEASURE_NOTE,
+  BONE_NOTE,
   NO_MATCH_TEXT,
   CONFIRM_LABEL,
   CANCEL_LABEL,
@@ -1025,6 +1090,8 @@ export default {
   per100gText,
   amountText,
   basisLabel,
+  boneTextOf,
+  boneShareText,
   draftQuantity,
   editorModel,
   buildFoodCards,

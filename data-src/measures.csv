@@ -523,117 +523,69 @@ food_key,measure_id,label_zh,grams,basis,is_default
 169130,usda84303,一杯,148,usda_portion:84303,1
 168216,usda82682,一杯,137,usda_portion:82682,1
 169483,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-169484,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174760,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-170208,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 171790,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171791,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 168664,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-168665,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 168668,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-168669,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 169433,usda84858,一块,202,usda_portion:84858,0
 169433,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 168724,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-168722,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 168726,usda83654,一块,608,usda_portion:83654,0
 168726,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-168727,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-168677,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-168613,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 170199,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-170200,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 169451,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-168626,usda83448,一片,68,usda_portion:83448,0
-168626,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 168625,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 169449,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 170196,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-168297,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 167812,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-167853,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-167854,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167853,palm,一掌心大小（带骨）,142.9,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 30% refuse) = 142.9 g with bone",1
 167902,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 167839,usda82069,一块,185,usda_portion:82069,0
 167839,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 168312,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 167843,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-167844,usda82077,一杯,135,usda_portion:82077,0
-167844,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 168226,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 167862,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-167863,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 168267,usda82783,一根,226,usda_portion:82783,0
 168267,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 168270,usda82789,一个,233,usda_portion:82789,0
 168270,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 168275,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 167867,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-168323,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-167859,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-168290,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+167859,palm,一掌心大小（带骨）,140.8,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 29% refuse) = 140.8 g with bone",1
 168266,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 168277,usda82801,一片,28,usda_portion:82801,0
 168277,usda82802,一包,442,usda_portion:82802,0
 168277,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-167712,usda81810,一片,8,usda_portion:81810,0
-167712,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-167871,usda82128,一杯,140,usda_portion:82128,0
-167871,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171477,usda88817,一杯,140,usda_portion:88817,0
-171477,usda88819,半块,86,usda_portion:88819,0
-171477,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 171077,usda87920,一块,272,usda_portion:87920,0
 171077,usda87921,一包,926,usda_portion:87921,0
 171077,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171474,usda88811,半块,145,usda_portion:88811,0
-171474,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171474,usda88811,半块（带骨）,181.2,usda_portion:88811; with bone: 145 g edible / (1 - 20% refuse) = 181.2 g with bone,0
+171474,palm,一掌心大小（带骨）,125,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 20% refuse) = 125 g with bone",1
 172385,usda90505,一块,193,usda_portion:90505,0
 172385,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-173625,usda92972,一块,137,usda_portion:92972,0
-173625,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-172373,usda90468,一只,133,usda_portion:90468,0
-172373,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-173612,usda92937,一只,96,usda_portion:92937,0
-173612,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-172390,usda90518,一块,107,usda_portion:90518,0
-172390,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-173630,usda92983,一块,85,usda_portion:92983,0
-173630,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171447,usda88746,半只,460,usda_portion:88746,0
-171447,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171450,usda88754,一杯,140,usda_portion:88754,0
-171450,usda88756,一只,299,usda_portion:88756,0
-171450,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171119,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171061,usda87880,一块,44,usda_portion:87880,0
-171061,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172373,usda90468,一只（带骨）,198.5,usda_portion:90468; with bone: 133 g edible / (1 - 33% refuse) = 198.5 g with bone,0
+172373,palm,一掌心大小（带骨）,149.3,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 33% refuse) = 149.3 g with bone",1
+172390,usda90518,一块（带骨）,172.6,usda_portion:90518; with bone: 107 g edible / (1 - 38% refuse) = 172.6 g with bone,0
+172390,palm,一掌心大小（带骨）,161.3,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 38% refuse) = 161.3 g with bone",1
+171447,usda88746,半只（带骨）,676.5,usda_portion:88746; with bone: 460 g edible / (1 - 32% refuse) = 676.5 g with bone,0
+171447,palm,一掌心大小（带骨）,147.1,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 32% refuse) = 147.1 g with bone",1
 171060,usda87878,一块,44,usda_portion:87878,0
 171060,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171457,usda88772,一杯,145,usda_portion:88772,0
-171457,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 171116,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171479,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171081,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171496,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171081,palm,一掌心大小（带骨）,140.8,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 29% refuse) = 140.8 g with bone",1
 171098,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171506,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171487,usda88840,一块,53,usda_portion:88840,0
-171487,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-172408,usda90566,半只,634,usda_portion:90566,0
-172408,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-172409,usda90567,一杯,140,usda_portion:90567,0
-172409,usda90569,半只,382,usda_portion:90569,0
-172409,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172408,usda90566,半只（带骨）,880.6,usda_portion:90566; with bone: 634 g edible / (1 - 28% refuse) = 880.6 g with bone,0
+172408,palm,一掌心大小（带骨）,138.9,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 28% refuse) = 138.9 g with bone",1
 174467,usda94396,一块,44,usda_portion:94396,0
 174467,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174470,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174470,palm,一掌心大小（带骨）,123.5,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 19% refuse) = 123.5 g with bone",1
 172415,usda90583,一块,94,usda_portion:90583,0
 172415,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-172418,usda90590,一只,109,usda_portion:90590,0
-172418,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174472,usda94411,半只,400,usda_portion:94411,0
-174472,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+172418,usda90590,一只（带骨）,121.1,usda_portion:90590; with bone: 109 g edible / (1 - 10% refuse) = 121.1 g with bone,0
+172418,palm,一掌心大小（带骨）,111.1,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 10% refuse) = 111.1 g with bone",1
+174472,usda94411,半只（带骨）,465.1,usda_portion:94411; with bone: 400 g edible / (1 - 14% refuse) = 465.1 g with bone,0
+174472,palm,一掌心大小（带骨）,116.3,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 14% refuse) = 116.3 g with bone",1
 171287,usda88374,一个,50,usda_portion:88374,1
 171287,usda88377,一杯,243,usda_portion:88377,0
 171287,usda88378,一个（中）,44,usda_portion:88378,0
@@ -650,12 +602,10 @@ food_key,measure_id,label_zh,grams,basis,is_default
 172184,usda90046,一杯,243,usda_portion:90046,0
 172189,usda90055,一个,70,usda_portion:90055,1
 172191,usda90057,一个,9,usda_portion:90057,1
-174311,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174312,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-172496,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174311,palm,一掌心大小（带骨）,126.6,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 21% refuse) = 126.6 g with bone",1
+172496,palm,一掌心大小（带骨）,126.6,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 21% refuse) = 126.6 g with bone",1
 174370,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 172531,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-172532,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 175290,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 173855,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 173851,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
@@ -1173,37 +1123,16 @@ food_key,measure_id,label_zh,grams,basis,is_default
 171325,usda88439,一小勺,3.1,usda_portion:88439,1
 171325,usda88440,一勺,9.7,usda_portion:88440,0
 171328,usda88445,一小勺,1,usda_portion:88445,1
-173647,cup,一杯,240,"estimate:one cup of drinking water, about 240 g",1
-mantou,piece,一个,100,"estimate:one steamed bun, about 100 g",1
-mantou,serving,两个,200,"estimate:two steamed buns, about 200 g",0
-zhurou-baicai-jiaozi,bowl,一碗,250,"estimate:one bowl of boiled dumplings, about 250 g",1
-zhurou-baicai-jiaozi,piece,一个,20,"estimate:one dumpling, about 20 g",0
-zhurou-baicai-jiaozi,ten,十个,200,"estimate:ten dumplings, about 200 g",0
-baizhou,bowl,一碗,300,"estimate:one bowl of congee, about 300 g",1
-fanqie-chaodan,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
-fanqie-chaodan,spoon,一勺,20,"estimate:one spoonful, about 20 g",0
-danchaofan,bowl,一碗,300,"estimate:one bowl of fried rice, about 300 g",1
-danchaofan,plate,一盘,400,"estimate:one plate of fried rice, about 400 g",0
-zicai-danhuatang,bowl,一碗,300,"estimate:one bowl of soup, about 300 g",1
-qingjiao-rousi,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
-qingjiao-rousi,spoon,一勺,20,"estimate:one spoonful, about 20 g",0
-mapo-doufu,plate,一盘,300,"estimate:one plate of mapo tofu, about 300 g",1
-mapo-doufu,spoon,一勺,25,"estimate:one spoonful, about 25 g",0
-jiachang-doufu,plate,一盘,300,"estimate:one home-style plate, about 300 g",1
-chao-qingcai,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
-suanrong-xilanhua,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
-ganbian-sijidou,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
-culiu-tudousi,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
-liangban-huanggua,plate,一盘,200,"estimate:one cold-dish plate, about 200 g",1
-xianggu-youcai,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
-donggua-xiaren,plate,一盘,300,"estimate:one home-style plate, about 300 g",1
-hongshao-rou,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
-hongshao-rou,piece,一块,20,"estimate:one piece of braised pork belly, about 20 g",0
-huiguo-rou,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
-gongbao-jiding,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
-qingzheng-luyu,plate,一盘,300,"estimate:one whole steamed fish, about 300 g edible",1
-disanxian,plate,一盘,300,"estimate:one home-style plate, about 300 g",1
-qincai-rousi,plate,一盘,250,"estimate:one home-style plate, about 250 g",1
-xiaocong-doufu,plate,一盘,200,"estimate:one cold-dish plate, about 200 g",1
-chao-mian,plate,一盘,300,"estimate:one plate of fried noodles, about 300 g",1
-chao-mian,bowl,一碗,250,"estimate:one bowl of fried noodles, about 250 g",0
+167888,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168675,palm,一掌心大小（带骨）,120.5,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 17% refuse) = 120.5 g with bone",1
+169439,palm,一掌心大小（带骨）,137,"estimate:palm-sized portion of meat or fish, about 100 g; with bone: 100 g edible / (1 - 27% refuse) = 137 g with bone",1
+171456,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171505,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+171486,usda88838,一块,78,usda_portion:88838,0
+171486,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+168884,usda83934,一杯,169,usda_portion:83934,1
+173905,usda93456,一杯,234,usda_portion:93456,0
+173905,usda93457,一勺,14.6,usda_portion:93457,0
+173905,usda93458,四分之三杯,175,usda_portion:93458,0
+173905,bowl,一碗,300,"estimate:one Chinese bowl of porridge or soup, about 300 g",1
+170283,usda86366,一杯,184,usda_portion:86366,1

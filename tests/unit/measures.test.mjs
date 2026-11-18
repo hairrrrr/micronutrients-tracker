@@ -7,8 +7,14 @@ import assert from "node:assert/strict";
 
 import {
   GRAMS_MEASURE_ID,
+  WITH_BONE_LABEL,
   COUNT_STEP,
   roundGrams,
+  edibleFactor,
+  edibleGrams,
+  isBoneIn,
+  formatEdibleGrams,
+  refusePctOf,
   clampCount,
   measuresOf,
   findMeasure,
@@ -159,4 +165,52 @@ test("stepCount moves in 0.5 steps and never goes below 0", () => {
   assert.equal(stepCount(2.5, 2), 3.5);
   // Float noise never leaks into the count.
   assert.equal(stepCount(0.1 + 0.2, 1), 0.8);
+});
+
+// ---------------------------------------------------------------------------
+// P20: the with-bone helpers of measures.js
+// ---------------------------------------------------------------------------
+
+const RIBS = {
+  id: "fdc:167853",
+  refusePct: 30,
+  measures: [{ id: "palm", labelZh: "一掌心大小（带骨）", grams: 142.9, basis: "estimate:one palm", default: true }],
+};
+
+test("refusePctOf and edibleFactor describe the edible share", () => {
+  assert.equal(refusePctOf(RIBS), 30);
+  assert.equal(edibleFactor(RIBS), 0.7);
+  assert.equal(refusePctOf(EGG), 0);
+  assert.equal(edibleFactor(EGG), 1);
+  assert.equal(edibleFactor({ refusePct: 0 }), 1);
+  assert.equal(edibleFactor({ refusePct: 100 }), 1);
+});
+
+test("edibleGrams converts a with-bone weight and rounds to 0.1 g", () => {
+  assert.equal(edibleGrams(RIBS, 142.9), 100); // 142.9 * 0.7 = 100.03 -> 100
+  assert.equal(edibleGrams(RIBS, 100), 70);
+  assert.equal(edibleGrams(EGG, 50), 50);
+  assert.equal(edibleGrams(RIBS, 0), 0);
+  assert.equal(edibleGrams(RIBS, -20), 0);
+});
+
+test("isBoneIn is true only for a food with a usable refusePct", () => {
+  assert.equal(isBoneIn(RIBS), true);
+  assert.equal(isBoneIn(EGG), false);
+  assert.equal(isBoneIn({ refusePct: 0 }), false);
+  assert.equal(isBoneIn(null), false);
+});
+
+test("formatEdibleGrams writes the Chinese edible-part text", () => {
+  assert.equal(formatEdibleGrams(RIBS, 100), "可食部约 70 g");
+  assert.equal(formatEdibleGrams(RIBS, 142.9), "可食部约 100 g");
+  assert.equal(formatEdibleGrams(RIBS, 145), "可食部约 101.5 g");
+  assert.equal(formatEdibleGrams(EGG, 50), "");
+  assert.equal(WITH_BONE_LABEL, "带骨重量");
+});
+
+test("a bone-in measure keeps its basis and one default", () => {
+  assert.equal(gramsForSelection(RIBS, { measureId: "palm", count: 1 }), 142.9);
+  assert.equal(normalizeSelection(RIBS, undefined).grams, 142.9);
+  assert.equal(defaultMeasure(RIBS).default, true);
 });

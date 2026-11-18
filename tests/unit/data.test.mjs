@@ -85,7 +85,9 @@ test("every food has measures with exactly one default", () => {
     assert.equal(defaults.length, 1, `${food.id} has ${defaults.length} defaults`);
     for (const measure of food.measures) {
       assert.ok(measure.grams >= 1 && measure.grams <= 1000, `${food.id} ${measure.id}`);
-      assert.match(measure.basis, /^(usda_portion:\d+|estimate:.+)$/);
+      // P20: a bone-in measure appends its with-bone conversion to the basis,
+      // so only the first part is the source.
+      assert.match(measure.basis, /^(usda_portion:\d+|estimate:.+?)(; with bone: .+)?$/);
     }
   }
 });
@@ -287,4 +289,97 @@ test("the flagged foods include the reviewed garlic and dried goods", () => {
   // A fresh vegetable and a staple keep the per-100 g basis.
   assert.equal(food("fdc:170393").amountBasisG, 100);
   assert.equal(food("fdc:168878").amountBasisG, 100);
+});
+
+// ---------------------------------------------------------------------------
+// P20: no dish estimates, raw meat only, bone-in handling
+// ---------------------------------------------------------------------------
+
+const boneInPath = new URL("../../data-src/bone_in_foods.csv", import.meta.url);
+const curatedPath = new URL("../../data-src/foods_curated.csv", import.meta.url);
+
+test("no composite dish or estimate field survives anywhere (P20)", async () => {
+  assert.equal(data.foods.some((food) => food.id.startsWith("composite:")), false);
+  for (const food of data.foods) {
+    assert.equal(Object.hasOwn(food, "estimate"), false, `${food.id} still has estimate`);
+    assert.equal(Object.hasOwn(food, "basis"), false, `${food.id} still has basis`);
+  }
+  const curated = parseCsv(await readFile(curatedPath, "utf8"));
+  assert.equal(curated.some((row) => row.fdc_id.startsWith("composite:")), false);
+  // Tap water was only a dish ingredient, so it is gone too.
+  assert.equal(curated.some((row) => row.fdc_id === "173647"), false);
+  assert.equal(foodsById.has("fdc:173647"), false);
+});
+
+test("the meat categories hold raw entries only", async () => {
+  const curated = parseCsv(await readFile(curatedPath, "utf8"));
+  const meatCategories = new Set(["畜肉类", "禽肉类", "内脏类", "加工肉制品"]);
+  const zhCooked = ["熟", "烤", "炖", "煮", "炒", "煎"];
+  const enCooked = ["cooked", "roasted", "braised", "broiled", "simmered", "boiled"];
+  let meatRows = 0;
+  for (const row of curated) {
+    if (!meatCategories.has(row.category_zh)) continue;
+    meatRows += 1;
+    for (const word of zhCooked) {
+      assert.equal(row.name_zh.includes(word), false, `${row.fdc_id} ${row.name_zh} is cooked`);
+    }
+    const english = row.name_en.toLowerCase();
+    for (const word of enCooked) {
+      assert.equal(english.includes(word), false, `${row.fdc_id} ${row.name_en} is cooked`);
+    }
+  }
+  assert.ok(meatRows > 40, `only ${meatRows} meat rows`);
+  // The 33 cooked ids of the phase are gone, bacon unprepared (raw) stays.
+  for (const cookedId of ["169484", "170208", "171791", "168665", "173630", "174312", "172532"]) {
+    assert.equal(curated.some((row) => row.fdc_id === cookedId), false, `${cookedId} should be gone`);
+  }
+  assert.ok(foodsById.has("fdc:168277"), "bacon unprepared (raw) must stay");
+});
+
+test("the 11 new foods are present with their reviewed names", async () => {
+  const curated = parseCsv(await readFile(curatedPath, "utf8"));
+  const added = [
+    "167888", "168675", "169439", "171456", "171505", "171486",
+    "169726", "168897", "168884", "173905", "170283",
+  ];
+  for (const id of added) {
+    const row = curated.find((item) => item.fdc_id === id);
+    assert.ok(row, `foods_curated.csv has no ${id}`);
+    assert.ok(foodsById.has(`fdc:${id}`), `foods.json has no fdc:${id}`);
+    for (const measure of food(`fdc:${id}`).measures) {
+      assert.equal(measure.default === true, measure.default === true);
+    }
+    assert.equal(food(`fdc:${id}`).measures.filter((measure) => measure.default).length, 1);
+  }
+  // Oats (raw) got the renamed label and the three aliases.
+  const oats = food("fdc:169705");
+  assert.equal(oats.nameZh, "燕麦片（生）");
+  assert.deepEqual(oats.aliases, ["燕麦", "麦片", "燕麦米"]);
+  // A cooked grain gets a bowl; wild rice raw keeps its cup.
+  assert.ok(food("fdc:168897").measures.some((measure) => measure.labelZh === "一碗"));
+  assert.ok(food("fdc:173905").measures.some((measure) => measure.labelZh === "一碗"));
+  assert.ok(food("fdc:169726").measures.some((measure) => measure.labelZh === "一杯"));
+});
+
+test("every bone-in food carries refusePct and a generated note", async () => {
+  const csv = parseCsv(await readFile(boneInPath, "utf8"));
+  assert.equal(csv.length, 15, `bone_in_foods.csv has ${csv.length} rows, expected 15`);
+  const listed = new Set();
+  for (const row of csv) {
+    listed.add(row.food_id);
+    const pct = Number(row.refuse_pct);
+    assert.ok(pct > 0 && pct < 100, `${row.food_id}: refuse ${row.refuse_pct}`);
+    const entry = food(row.food_id);
+    assert.equal(entry.refusePct, pct, `${row.food_id}: refusePct differs from the CSV`);
+    assert.equal(typeof entry.refuseNote, "string");
+    assert.ok(entry.refuseNote.includes("可食部"), `${row.food_id}: note is not Chinese`);
+    assert.ok(entry.refuseNote.includes(`${pct}`), `${row.food_id}: note omits the refuse %`);
+  }
+  for (const entry of data.foods) {
+    if (listed.has(entry.id)) continue;
+    assert.equal(Object.hasOwn(entry, "refusePct"), false, `${entry.id} must not carry refusePct`);
+  }
+  // Spare ribs are the reviewer's example: 30 % bone.
+  assert.equal(food("fdc:167853").refusePct, 30);
+  assert.equal(food("fdc:172390").refusePct, 38);
 });

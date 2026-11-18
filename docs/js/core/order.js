@@ -2,8 +2,8 @@
 // confirmation order since P17; commonness first since P18b; per-10 g
 // comparison for small-portion foods since P19b).
 //
-// Pure ES module: no DOM access. It imports only `selectionGrams` from
-// calc.js, so node --test can load it directly. Ordering is:
+// Pure ES module: no DOM access. It imports only `edibleGramsOf` from calc.js,
+// so node --test can load it directly. Ordering is:
 //   1. pinned: selected foods with per100g[n] > 0, in confirmation order
 //      (oldest first) from `state.order` - the pinned group is a list of what
 //      the user confirmed, so a newly confirmed food joins the BOTTOM and
@@ -32,7 +32,7 @@
 // not pinned in the vitamin D tab. The selection itself is global and stays
 // untouched; it only does not show up in tabs of nutrients the food lacks.
 
-import { selectionGrams } from "./calc.js";
+import { edibleGramsOf } from "./calc.js";
 
 /** Default number of unpinned cards per nutrient (PLAN.md 1.7). */
 export const DEFAULT_LIMIT = 60;
@@ -145,10 +145,12 @@ export function selectionOrder(selections, order) {
 /**
  * Contribution of a selection in grams of the nutrient.
  *
- * Kept for the card models (an estimate of how much a portion adds); it no
- * longer decides the pinned order, which follows the confirmation order.
+ * Kept for the card models (how much a portion adds); it no longer decides the
+ * pinned order, which follows the confirmation order. A bone-in food (P20) is
+ * weighed with the bone, so its edible grams are what the per-100 g value
+ * multiplies - the same rule as `calc.js intakeTotals`.
  *
- * @param {{per100g?: Record<string, number|null>}} food
+ * @param {{per100g?: Record<string, number|null>, refusePct?: number}} food
  * @param {string} nutrientId
  * @param {{grams?: number}|undefined} selection
  * @returns {number} amount, 0 when there is no value
@@ -156,7 +158,7 @@ export function selectionOrder(selections, order) {
 export function contribution(food, nutrientId, selection) {
   const per100g = valueOf(food, nutrientId);
   if (per100g === null) return 0;
-  return (per100g * selectionGrams(selection)) / 100;
+  return (per100g * edibleGramsOf(food, selection)) / 100;
 }
 
 /**
@@ -202,7 +204,7 @@ export function partitionFoods(foods, nutrientId, selections, order) {
     pinned.push({
       ...food,
       selected: true,
-      contribution: (per100g * selectionGrams(picked[foodId])) / 100,
+      contribution: (per100g * edibleGramsOf(food, picked[foodId])) / 100,
     });
   }
 
