@@ -11,11 +11,11 @@
 //             `nutrientId -> number` map (see `detailRows`)
 //   nutrients the `nutrients` array of nutrients.json, or its whole payload
 //
-// Every nutrient of nutrients.json gets a row, even when the food has no value
-// for it: the detail view is a complete picture, not just the nutrients the
-// food happens to be rich in. `null` means "no data" and is never turned into
-// 0, so "this food contains none" (0) and "this nutrient was not measured"
-// (null) stay different rows with different labels.
+// Since P23 only the nutrients the food actually contains get a row: a value
+// of exactly 0 ("this food contains none") and a null / absent value ("not
+// measured") are left out, so the sheet lists the nutrients that contribute.
+// `null` is still never turned into 0 inside a row, and `sortDetailRows` keeps
+// the "zero" / "missing" groups for callers that pass such rows themselves.
 
 import { edibleGramsOf } from "./calc.js";
 import { nutrientList } from "./nutrients.js";
@@ -122,16 +122,22 @@ export function sortDetailRows(rows) {
 }
 
 /**
- * All nutrient rows of one food, ranked for the detail view (phase P21b).
+ * Nutrient rows of one food that the food actually contains, ranked for the
+ * detail view (phase P21b, narrowed in P23).
  *
- * One row per nutrient of `nutrients` (22 for the real data), whatever the
- * food's data coverage is:
+ * One row per nutrient of `nutrients` whose value is greater than 0 (22
+ * nutrients in the real metadata):
  *
  * - `per100g` / `pct100` describe 100 g of the food,
  * - `amount` / `pct` describe the chosen quantity `grams` (null without a
  *   positive quantity),
- * - `status` is "ok" (value > 0 and a target), "noTarget" (value > 0, no
- *   target for this profile), "zero" (exactly 0) or "missing" (null/absent).
+ * - `status` is "ok" (value > 0 and a target) or "noTarget" (value > 0, no
+ *   target for this profile).
+ *
+ * Nutrients the food has none of (value exactly 0) or no value for
+ * (null / absent) get no row at all, so the sheet lists only what the food
+ * brings. `sortDetailRows` still knows the "zero" and "missing" groups for
+ * callers that build rows themselves.
  *
  * Bone-in foods: `grams` is the weight WITH bone, the same convention as the
  * household measures and the gram input (P20), so the nutrients use
@@ -154,9 +160,9 @@ export function sortDetailRows(rows) {
  * @param {number|null|undefined} [grams]
  *   chosen quantity in grams (with bone for bone-in foods); a non-positive or
  *   non-numeric value gives no amount
- * @returns {Array<{id: string, name: string, unit: string, per100g: number|null,
+ * @returns {Array<{id: string, name: string, unit: string, per100g: number,
  *   pct100: number|null, amount: number|null, pct: number|null,
- *   status: "ok"|"noTarget"|"zero"|"missing"}>} rows in `sortDetailRows` order
+ *   status: "ok"|"noTarget"}>} rows in `sortDetailRows` order
  */
 export function detailRows(food, targets, nutrients, grams) {
   const edible = edibleGramsOf(food, { grams });
@@ -189,7 +195,10 @@ export function detailRows(food, targets, nutrients, grams) {
         pct,
         status: statusOf(per100g, target !== null),
       };
-    });
+    })
+    // P23: only what the food contains. 0 ("contains none") and null
+    // ("not measured") add nothing to the picture the sheet draws.
+    .filter((row) => row.per100g !== null && row.per100g > 0);
 
   return sortDetailRows(rows);
 }

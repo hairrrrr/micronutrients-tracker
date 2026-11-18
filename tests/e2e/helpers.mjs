@@ -278,6 +278,40 @@ export async function commonnessOfFood(foodId) {
 }
 
 /**
+ * Number of nutrients in docs/data/nutrients.json that one food contains, i.e.
+ * its per100g value is a number > 0 (P23: those are the detail rows).
+ *
+ * @param {string} foodId
+ * @returns {Promise<number>}
+ */
+export async function containedNutrientCount(foodId) {
+  const foods = JSON.parse(await readFile(new URL("../../docs/data/foods.json", import.meta.url), "utf8"));
+  const nutrients = JSON.parse(await readFile(new URL("../../docs/data/nutrients.json", import.meta.url), "utf8"));
+  const food = foods.foods.find((entry) => entry.id === foodId);
+  if (!food) throw new Error(`foods.json has no food ${foodId}`);
+  return nutrients.nutrients.filter((nutrient) => {
+    const value = food.per100g?.[nutrient.id];
+    return typeof value === "number" && value > 0;
+  }).length;
+}
+
+/**
+ * Per-100 g value one food has for one nutrient, or null when absent / not a
+ * number (read from docs/data/foods.json).
+ *
+ * @param {string} foodId
+ * @param {string} nutrientId
+ * @returns {Promise<number|null>}
+ */
+export async function per100gOfFood(foodId, nutrientId) {
+  const foods = JSON.parse(await readFile(new URL("../../docs/data/foods.json", import.meta.url), "utf8"));
+  const food = foods.foods.find((entry) => entry.id === foodId);
+  if (!food) throw new Error(`foods.json has no food ${foodId}`);
+  const value = food.per100g?.[nutrientId];
+  return typeof value === "number" ? value : null;
+}
+
+/**
  * Expected ranking of the detail sheet of one food (P21c), computed from
  * docs/data/foods.json and docs/data/dri.json: every nutrient whose food value
  * is > 0 and whose target for the profile is > 0, by per100g / target

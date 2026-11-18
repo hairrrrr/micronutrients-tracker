@@ -1,5 +1,7 @@
-// Food detail sheet (phase P21c): every nutrient of one food, ranked by the
-// share of the daily target it supplies per 100 g.
+// Food detail sheet (phase P21c, narrowed in P23): the nutrients one food
+// actually contains, ranked by the share of the daily target they supply per
+// 100 g. Nutrients with 0 or no value get no row (P23); a food without any
+// value shows 暂无营养素数据.
 //
 // The ranking and the numbers come from the pure core module
 // `docs/js/core/detail.js` (`detailRows`); this module only turns the rows into
@@ -27,12 +29,10 @@ import { amountBasisGOf } from "../core/order.js";
 export const DETAIL_LABEL = "查看详情";
 /** Close control of the sheet header. */
 export const DETAIL_CLOSE_LABEL = "关闭";
-/** One-line basis note under the heading. */
+/** One-line note under the heading. */
 export const DETAIL_NOTE = "所有营养素按占每日目标的百分比从高到低排序；目标随当前标准、性别和年龄变化";
-/** Percentage slot of a nutrient the food contains none of. */
-export const DETAIL_ZERO_TEXT = "不含";
-/** Percentage slot of a nutrient the food has no value for. */
-export const DETAIL_NO_DATA_TEXT = "无数据";
+/** Shown instead of the list when the food has no nutrient value at all. */
+export const DETAIL_EMPTY_TEXT = "暂无营养素数据";
 /** Percentage slot of a nutrient the current profile has no target for. */
 export const DETAIL_NO_TARGET_TEXT = "无参考值";
 /** Basis labels of the per-basis amount lines. */
@@ -71,19 +71,17 @@ function numberText(value) {
 }
 
 /**
- * Percentage slot of one row: the percentage, or the status word.
+ * Percentage slot of one row: the percentage, or 无参考值 when the current
+ * profile has no target for the nutrient. Since P23 the sheet only lists
+ * nutrients the food contains (value > 0), so there is no 不含 / 无数据 word
+ * any more.
  *
- * "zero" is 不含 (the food contains none), "missing" is 无数据 (not measured)
- * and "noTarget" is 无参考值 (the current profile has no target), so a "—" only
- * ever means "no percentage computable" in a slot that also carries a word.
- *
- * @param {"ok"|"noTarget"|"zero"|"missing"} status row status
+ * @param {string} status row status ("ok" or "noTarget"; other values just get
+ *   the formatted percentage)
  * @param {number|null} pct percentage (per 100 g or for the quantity)
  * @returns {string}
  */
 export function pctLabel(status, pct) {
-  if (status === "missing") return DETAIL_NO_DATA_TEXT;
-  if (status === "zero") return DETAIL_ZERO_TEXT;
   if (status === "noTarget") return DETAIL_NO_TARGET_TEXT;
   return formatPct(pct);
 }
@@ -103,23 +101,25 @@ export function barWidth(pct) {
 }
 
 /**
- * Amount text of one row on a basis, e.g. "469 ug RAE" or 无数据.
+ * Amount text of one row on a basis, e.g. "469 ug RAE".
+ *
+ * Every row of the sheet has a value > 0 per 100 g (P23), so there is no
+ * 无数据 text here any more.
  *
  * @param {{per100g: number|null, unit: string}} row
  * @param {number} basisG 100 or 10
  * @returns {string}
  */
 export function basisAmountText(row, basisG) {
-  if (row.per100g === null) return DETAIL_NO_DATA_TEXT;
-  return formatAmount((row.per100g * basisG) / 100, row.unit);
+  return formatAmount((Number(row.per100g) * basisG) / 100, row.unit);
 }
 
 /**
  * Markup of one nutrient row of the sheet.
  *
- * @param {{id: string, name: string, unit: string, per100g: number|null,
+ * @param {{id: string, name: string, unit: string, per100g: number,
  *   pct100: number|null, amount: number|null, pct: number|null,
- *   status: "ok"|"noTarget"|"zero"|"missing"}} row row from `detailRows`
+ *   status: "ok"|"noTarget"}} row row from `detailRows`
  * @param {{color?: string, basisG?: number, grams?: number|null,
  *   boneIn?: boolean}} [options]
  * @returns {string} HTML
@@ -161,7 +161,9 @@ export function detailRowHtml(row, options = {}) {
 }
 
 /**
- * Body markup of the sheet: the note and one row per nutrient of the food.
+ * Body markup of the sheet: the note and one row per nutrient the food
+ * contains. A food with no nutrient value at all shows one 暂无营养素数据 line
+ * instead of the empty list.
  *
  * @param {object} food one food record from foods.json
  * @param {object} targets the `dri.js targetsFor(...)` result (or a target map)
@@ -175,6 +177,11 @@ export function detailHtml(food, targets, nutrients, grams) {
   const weighed = Number(grams);
   const quantity = Number.isFinite(weighed) && weighed > 0 ? weighed : null;
   const boneIn = isBoneIn(food);
+  const note = `<p class="detail__note">${esc(DETAIL_NOTE)}</p>`;
+  if (rows.length === 0) {
+    return `${note}
+    <p class="detail__empty">${esc(DETAIL_EMPTY_TEXT)}</p>`;
+  }
   const items = rows.map((row) => detailRowHtml(row, {
     color: colorOf(nutrients, row.id),
     basisG,
@@ -182,7 +189,7 @@ export function detailHtml(food, targets, nutrients, grams) {
     boneIn,
     refusePct: food?.refusePct,
   })).join("");
-  return `<p class="detail__note">${esc(DETAIL_NOTE)}</p>
+  return `${note}
     <ul class="detail__list">${items}</ul>`;
 }
 
@@ -264,8 +271,7 @@ export default {
   DETAIL_LABEL,
   DETAIL_CLOSE_LABEL,
   DETAIL_NOTE,
-  DETAIL_ZERO_TEXT,
-  DETAIL_NO_DATA_TEXT,
+  DETAIL_EMPTY_TEXT,
   DETAIL_NO_TARGET_TEXT,
   DETAIL_PER_100G_LABEL,
   DETAIL_PER_10G_LABEL,

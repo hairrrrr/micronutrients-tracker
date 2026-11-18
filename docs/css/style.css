@@ -1616,11 +1616,18 @@ select.input {
   white-space: nowrap;
 }
 
-.detail-row[data-status="zero"] .detail-row__pct,
-.detail-row[data-status="missing"] .detail-row__pct,
 .detail-row[data-status="noTarget"] .detail-row__pct {
   color: var(--text-muted);
   font-weight: 500;
+}
+
+/* P23: a food without any nutrient value gets this one line, not a list. */
+.detail__empty {
+  margin: 0;
+  padding: 8px 0;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.45;
 }
 
 /* The thin track reuses the 4 px progress bar of the target cards; the fill

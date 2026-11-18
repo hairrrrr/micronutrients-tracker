@@ -33,11 +33,13 @@ import {
   cardTarget,
   commonnessOfFood,
   confirmTile,
+  containedNutrientCount,
   expectedDetailRanking,
   expectedRanking,
   expectedTopIds,
   measureOverflow,
   openTile,
+  per100gOfFood,
   resetApp,
   selectFood,
   setGrams,
@@ -919,14 +921,17 @@ test.describe("smoke", () => {
     await detailButton.click();
 
     // The dialog is visible (top layer), carries the food's Chinese name, the
-    // basis note and one row per nutrient of nutrients.json (22).
+    // basis note and one row per nutrient the food contains (P23: value > 0).
     const dialog = page.locator(SEL.detailDialog);
     await expect(dialog).toBeVisible();
     const titleText = await page.locator(`[data-food-tile="${foodId}"] .food-tile__title`).innerText();
     await expect(dialog.locator(".detail-dialog__title")).toHaveText(titleText);
     await expect(dialog.locator(".detail__note")).toContainText("所有营养素按占每日目标的百分比从高到低排序");
     const rows = page.locator(SEL.detailRows);
-    await expect(rows).toHaveCount(22);
+    const expectedCount = await containedNutrientCount(foodId);
+    expect(expectedCount).toBeGreaterThan(0);
+    expect(expectedCount).toBeLessThan(22);
+    await expect(rows).toHaveCount(expectedCount);
 
     // The first row is the nutrient with the highest per100g / target ratio of
     // that food for the default profile, computed from the data files.
@@ -975,6 +980,37 @@ test.describe("smoke", () => {
     await expect(dialog).toBeVisible();
     const narrow = await measureOverflow(page);
     expect(narrow.scrollWidth).toBeLessThanOrEqual(360);
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+
+    // P23: a food with no vitamin D (0 or no value) shows no vitD row and
+    // fewer rows than the 22 nutrients of nutrients.json. The food is computed
+    // from foods.json: the first vitamin A card without a vitamin D value.
+    await page.setViewportSize({ width: 390, height: 844 });
+    const vitACards = await expectedRanking("vitA").then((list) => list.slice(0, 60));
+    let noVitD = null;
+    for (const entry of vitACards) {
+      const value = await per100gOfFood(entry.id, "vitD");
+      if (!(typeof value === "number" && value > 0)) {
+        noVitD = entry;
+        break;
+      }
+    }
+    expect(noVitD).not.toBeNull();
+    const noVitDCount = await containedNutrientCount(noVitD.id);
+    expect(noVitDCount).toBeLessThan(22);
+
+    await page.locator(SEL.search).fill(noVitD.nameZh);
+    const noVitDCard = page.locator(SEL.foodCard(noVitD.id));
+    await expect(noVitDCard).toBeVisible();
+    // The first vitamin A card may be the tile that is still open above; only
+    // click a card that is not expanded yet (a click would collapse it).
+    if (await page.locator(SEL.tile(noVitD.id)).count() === 0) await noVitDCard.click();
+    await page.locator(SEL.detailButton(noVitD.id)).click();
+    await expect(dialog).toBeVisible();
+    await expect(dialog.locator(".detail-dialog__title")).toHaveText(noVitD.nameZh);
+    await expect(dialog.locator(".detail-row")).toHaveCount(noVitDCount);
+    await expect(dialog.locator('[data-nutrient="vitD"]')).toHaveCount(0);
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
 

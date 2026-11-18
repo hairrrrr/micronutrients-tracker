@@ -1,20 +1,19 @@
-// Detail sheet markup helpers (phase P21c).
+// Detail sheet markup helpers (phase P21c, P23: only contained nutrients).
 //
 // The ranking itself is covered by detail.test.mjs (core). Here only the UI
-// text and the row markup are checked: the status words, the bar width, the
-// per-100 g / per-10 g amounts, the chosen-quantity line and the 查看详情
-// button of the expanded tile.
+// text and the row markup are checked: the status word, the bar width, the
+// per-100 g / per-10 g amounts, the chosen-quantity line, the 暂无营养素数据
+// line and the 查看详情 button of the expanded tile.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
 import {
   DETAIL_CLOSE_LABEL,
+  DETAIL_EMPTY_TEXT,
   DETAIL_LABEL,
-  DETAIL_NO_DATA_TEXT,
   DETAIL_NO_TARGET_TEXT,
   DETAIL_NOTE,
   DETAIL_QUANTITY_LABEL,
-  DETAIL_ZERO_TEXT,
   barWidth,
   basisAmountText,
   detailHtml,
@@ -33,7 +32,8 @@ const NUTRIENTS = {
 
 const TARGETS = { values: { vitA: { target: 800 }, iron: { target: 20 } } };
 
-/** Liver-like fixture: 400 ug RAE (50 %), 0 iron, no choline value. */
+/** Liver-like fixture: 400 ug RAE (50 %), no choline target; iron 0 and
+ *  choline null get no row (P23). */
 const FOOD = {
   id: "fdc:test",
   nameZh: "测试食物",
@@ -50,12 +50,9 @@ const rowOf = (html, id) => {
 test("the status words replace a percentage", () => {
   assert.equal(pctLabel("ok", 12.34), "12%");
   assert.equal(pctLabel("ok", 3.456), "3.5%");
-  assert.equal(pctLabel("zero", null), DETAIL_ZERO_TEXT);
-  assert.equal(pctLabel("missing", null), DETAIL_NO_DATA_TEXT);
   assert.equal(pctLabel("noTarget", null), DETAIL_NO_TARGET_TEXT);
-  assert.equal(DETAIL_ZERO_TEXT, "不含");
-  assert.equal(DETAIL_NO_DATA_TEXT, "无数据");
   assert.equal(DETAIL_NO_TARGET_TEXT, "无参考值");
+  assert.equal(DETAIL_EMPTY_TEXT, "暂无营养素数据");
 });
 
 test("barWidth caps at 100 and never goes below 0", () => {
@@ -71,7 +68,6 @@ test("basisAmountText divides the per-100 g value by the basis", () => {
   const row = { per100g: 400, unit: "ug RAE" };
   assert.equal(basisAmountText(row, 100), "400 ug RAE");
   assert.equal(basisAmountText(row, 10), "40 ug RAE");
-  assert.equal(basisAmountText({ per100g: null, unit: "mg" }, 100), "无数据");
 });
 
 test("a row shows the per-100 g amount, the bar and the percentage", () => {
@@ -106,17 +102,34 @@ test("a quantity adds the chosen amount with its own percentage", () => {
   assert.match(html, /当前数量 70 g（带骨重量，可食部约 49 g）：280 ug RAE（35%）/);
 });
 
-test("the sheet shows the note and every row of the food", () => {
+test("the sheet shows the note and only the rows of nutrients the food contains", () => {
   const html = detailHtml(FOOD, TARGETS, NUTRIENTS, 100);
   assert.match(html, new RegExp(DETAIL_NOTE));
-  assert.equal((html.match(/class="detail-row"/g) ?? []).length, 3);
+  // vitA has 400 ug > 0; iron (0) and choline (null) get no row at all.
+  assert.equal((html.match(/class="detail-row"/g) ?? []).length, 1);
   assert.match(rowOf(html, "vitA"), /50%/);
-  assert.match(rowOf(html, "iron"), new RegExp(DETAIL_ZERO_TEXT));
-  assert.match(rowOf(html, "choline"), new RegExp(DETAIL_NO_DATA_TEXT));
-  // A nutrient without a target for this profile says so instead of a %.
-  assert.match(rowOf(html, "choline"), new RegExp(DETAIL_NO_TARGET_TEXT + "|" + DETAIL_NO_DATA_TEXT));
+  assert.equal(html.includes('data-nutrient="iron"'), false);
+  assert.equal(html.includes('data-nutrient="choline"'), false);
+  assert.equal(html.includes("不含"), false);
+  assert.equal(html.includes("无数据"), false);
   // The nutrient colour of nutrients.json reaches the bar.
   assert.match(rowOf(html, "vitA"), /background:#f3daba/);
+});
+
+test("a nutrient without a target shows 无参考值", () => {
+  const food = { id: "fdc:test", nameZh: "测试食物", per100g: { vitA: 400, choline: 12 } };
+  const html = detailHtml(food, TARGETS, NUTRIENTS, null);
+  assert.equal((html.match(/class="detail-row"/g) ?? []).length, 2);
+  assert.match(rowOf(html, "choline"), new RegExp(DETAIL_NO_TARGET_TEXT));
+});
+
+test("a food without any nutrient value shows one 暂无营养素数据 line", () => {
+  const empty = { id: "fdc:empty", nameZh: "空食物", per100g: { vitA: 0, iron: null } };
+  const html = detailHtml(empty, TARGETS, NUTRIENTS, 100);
+  assert.match(html, new RegExp(DETAIL_NOTE));
+  assert.equal((html.match(/class="detail-row"/g) ?? []).length, 0);
+  assert.equal(html.includes('class="detail__list"'), false);
+  assert.equal((html.match(new RegExp(DETAIL_EMPTY_TEXT, "g")) ?? []).length, 1);
 });
 
 test("the expanded tile has a 查看详情 button next to the name", () => {

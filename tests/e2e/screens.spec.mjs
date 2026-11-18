@@ -12,7 +12,7 @@
 // state is freshly cleared for every shot, so the images are reproducible.
 
 import { expect, test } from "@playwright/test";
-import { LIVER_ID, openTile, resetApp, selectFood, setGrams, watchErrors } from "./helpers.mjs";
+import { LIVER_ID, containedNutrientCount, openTile, resetApp, selectFood, setGrams, watchErrors } from "./helpers.mjs";
 
 /** Folder of the images, relative to the repo root (Playwright's cwd). */
 const SHOTS = "shots";
@@ -69,12 +69,13 @@ test("mobile 390 px screenshot with the detail sheet", async ({ page }) => {
   await resetApp(page);
 
   // The first card of the default vitamin A ranking, with its tile open and the
-  // detail sheet showing all 22 nutrient rows.
+  // detail sheet listing only the nutrients the food contains (P23).
   const firstId = await page.locator(".food-cell").first().getAttribute("data-food-cell");
   await openTile(page, firstId);
   await page.locator(`[data-food-tile="${firstId}"] [data-detail]`).click();
   await expect(page.locator("dialog#food-detail")).toBeVisible();
-  await expect(page.locator("dialog#food-detail .detail-row")).toHaveCount(22);
+  await expect(page.locator("dialog#food-detail .detail-row"))
+    .toHaveCount(await containedNutrientCount(firstId));
 
   await page.screenshot({ path: `${SHOTS}/mobile-390-detail.png` });
   expect(errors).toEqual([]);

@@ -1,5 +1,6 @@
-// Food detail rows (phase P21b): all 22 nutrients of one food, ranked by the
-// share of the daily target, with the amount for a chosen quantity.
+// Food detail rows (phase P21b, narrowed in P23): the nutrients one food
+// actually contains, ranked by the share of the daily target, with the amount
+// for a chosen quantity.
 //
 // Fixtures are tiny on purpose; the last test uses the real nutrients.json,
 // dri.json and foods.json so the module is checked against the shipped data.
@@ -42,7 +43,8 @@ const TARGETS = {
 
 const byId = (rows, id) => rows.find((row) => row.id === id);
 
-/** A plain food: 100 g gives 10 % vitamin A, 50 % vitamin C, 1 % calcium. */
+/** A plain food: 100 g gives 10 % vitamin A, 50 % vitamin C, 1 % calcium.
+ *  iron is 0, so it gets no row (P23); vitD is 3 with no target. */
 const FOOD = {
   id: "fdc:test",
   per100g: { vitA: 80, vitC: 50, calcium: 8, iron: 0, vitD: 3 },
@@ -55,10 +57,11 @@ const BONE_IN = {
   per100g: { vitA: 10, vitC: 10, calcium: 10, iron: 10, vitD: 10 },
 };
 
-test("one row per nutrient metadata entry, in metadata order for equal rows", () => {
+test("one row per nutrient with a value > 0, and the metadata fields", () => {
   const rows = detailRows(FOOD, TARGETS, NUTRIENTS, null);
-  assert.equal(rows.length, NUTRIENTS.length);
-  assert.deepEqual(new Set(rows.map((row) => row.id)), new Set(NUTRIENTS.map((n) => n.id)));
+  // vitA, vitC, calcium and vitD have a value > 0; iron is 0 -> no row.
+  assert.equal(rows.length, 4);
+  assert.deepEqual(new Set(rows.map((row) => row.id)), new Set(["vitA", "vitC", "calcium", "vitD"]));
   for (const row of rows) {
     const meta = NUTRIENTS.find((n) => n.id === row.id);
     assert.equal(row.name, meta.nameZh);
@@ -66,41 +69,40 @@ test("one row per nutrient metadata entry, in metadata order for equal rows", ()
   }
 });
 
-test("per100g, pct100 and the four status groups with their order", () => {
+test("per100g, pct100 and the two status groups with their order", () => {
   const rows = detailRows(FOOD, TARGETS, NUTRIENTS, null);
-  assert.deepEqual(rows.map((row) => row.id), ["vitC", "vitA", "calcium", "vitD", "iron"]);
-  assert.deepEqual(rows.map((row) => row.status), ["ok", "ok", "ok", "noTarget", "zero"]);
+  assert.deepEqual(rows.map((row) => row.id), ["vitC", "vitA", "calcium", "vitD"]);
+  assert.deepEqual(rows.map((row) => row.status), ["ok", "ok", "ok", "noTarget"]);
   assert.equal(byId(rows, "vitA").pct100, 10);
   assert.equal(byId(rows, "vitC").pct100, 50);
   assert.equal(byId(rows, "vitD").pct100, null);
   assert.equal(byId(rows, "vitD").per100g, 3);
-  assert.equal(byId(rows, "iron").per100g, 0);
-  assert.equal(byId(rows, "iron").pct100, 0);
+});
+
+test("zero, null and absent nutrients get no row at all", () => {
+  const rows = detailRows(FOOD, TARGETS, NUTRIENTS, null);
+  assert.equal(byId(rows, "iron"), undefined);
+  const nullFood = { per100g: { vitA: 0, vitC: null } };
+  const nullRows = detailRows(nullFood, TARGETS, NUTRIENTS, null);
+  assert.deepEqual(nullRows, []);
+  // A nutrient key that is missing entirely is left out too.
+  const partial = detailRows({ per100g: { vitA: 4, calcium: 2 } }, TARGETS, NUTRIENTS, null);
+  assert.deepEqual(partial.map((row) => row.id), ["vitA", "calcium"]);
+  assert.equal(partial.every((row) => row.per100g > 0), true);
 });
 
 test("status order constant matches the ranking", () => {
   assert.deepEqual(STATUS_ORDER, ["ok", "noTarget", "zero", "missing"]);
-  const food = { per100g: { vitA: 0, vitC: 5 } };
+  const food = { per100g: { vitA: 0, vitC: 5, calcium: 1, iron: 1, vitD: 1 } };
   const rows = detailRows(food, TARGETS, NUTRIENTS, null);
   const seen = rows.map((row) => row.status);
   const ranks = seen.map((status) => STATUS_ORDER.indexOf(status));
   assert.deepEqual(ranks, [...ranks].sort((a, b) => a - b));
-  assert.deepEqual(seen, ["ok", "zero", "missing", "missing", "missing"]);
+  assert.deepEqual(seen, ["ok", "ok", "ok", "noTarget"]);
+  // The 0 vitamin A of that food is not listed.
+  assert.equal(byId(rows, "vitA"), undefined);
 });
 
-test("0 and null are different statuses and different percentages", () => {
-  const food = { per100g: { vitA: 0, vitC: null } };
-  const rows = detailRows(food, TARGETS, NUTRIENTS, null);
-  assert.equal(byId(rows, "vitA").status, "zero");
-  assert.equal(byId(rows, "vitA").per100g, 0);
-  assert.equal(byId(rows, "vitA").pct100, 0);
-  assert.equal(byId(rows, "vitC").status, "missing");
-  assert.equal(byId(rows, "vitC").per100g, null);
-  assert.equal(byId(rows, "vitC").pct100, null);
-  assert.equal(byId(rows, "vitC").amount, null);
-  // A nutrient key that is missing entirely is "missing" too.
-  assert.equal(byId(rows, "calcium").status, "missing");
-});
 
 test("a nutrient without a target sorts after all targeted ones", () => {
   const food = { per100g: { vitA: 4, vitC: 1, calcium: 1, iron: 1, vitD: 999 } };
@@ -189,7 +191,7 @@ test("formatPct", () => {
   assert.equal(formatPct(123.4), "123%");
 });
 
-test("real data: 22 rows for a food, ranked with the real DRI targets", () => {
+test("real data: one row per nutrient with a value > 0, ranked with the real DRI targets", () => {
   const { nutrients } = readJson("docs/data/nutrients.json");
   const foods = readJson("docs/data/foods.json").foods;
   const dri = readJson("docs/data/dri.json");
@@ -199,10 +201,10 @@ test("real data: 22 rows for a food, ranked with the real DRI targets", () => {
   const rows = detailRows(food, targets, nutrients, 150);
 
   assert.equal(nutrients.length, 22);
-  assert.equal(rows.length, 22);
-  assert.deepEqual(new Set(rows.map((row) => row.id)), new Set(nutrients.map((n) => n.id)));
 
-  // Expected order recomputed independently from the raw data.
+  // Expected rows recomputed independently from the raw data: only the
+  // nutrients with a value > 0 (P23), targeted ones by pct100 desc, then the
+  // untargeted ones by per100g desc, ties keeping nutrients.json order.
   const expected = nutrients
     .map((nutrient, index) => {
       const value = food.per100g[nutrient.id];
@@ -215,21 +217,32 @@ test("real data: 22 rows for a food, ranked with the real DRI targets", () => {
         pct100: per100g !== null && target ? (per100g / target) * 100 : null,
       };
     })
-    .filter((row) => row.per100g !== null && row.per100g > 0 && row.pct100 !== null)
+    .filter((row) => row.per100g !== null && row.per100g > 0);
+  const expectedRanked = expected
+    .filter((row) => row.pct100 !== null)
     .sort((a, b) => (b.pct100 - a.pct100) || (a.index - b.index))
-    .map((row) => row.id);
+    .map((row) => row.id)
+    .concat(expected
+      .filter((row) => row.pct100 === null)
+      .sort((a, b) => (b.per100g - a.per100g) || (a.index - b.index))
+      .map((row) => row.id));
 
-  assert.deepEqual(rows.slice(0, expected.length).map((row) => row.id), expected);
-  assert.equal(rows.filter((row) => row.status === "ok").length, expected.length);
+  assert.equal(rows.length, expected.length);
+  assert.ok(rows.length > 0 && rows.length <= nutrients.length);
+  assert.deepEqual(rows.map((row) => row.id), expectedRanked);
+  assert.deepEqual(new Set(rows.map((row) => row.id)), new Set(expectedRanked));
 
-  // Amounts scale with the 150 g quantity on every row that has a value.
+  // Every listed nutrient has a positive value; 0 and null got no row.
   for (const row of rows) {
-    if (row.per100g === null) {
-      assert.equal(row.status, "missing");
-      assert.equal(row.amount, null);
-    } else {
-      assert.ok(Math.abs(row.amount - (row.per100g * 150) / 100) < 1e-9);
-    }
+    assert.ok(row.per100g > 0);
+    assert.notEqual(row.status, "zero");
+    assert.notEqual(row.status, "missing");
+    assert.ok(Math.abs(row.amount - (row.per100g * 150) / 100) < 1e-9);
+  }
+  const listed = new Set(rows.map((row) => row.id));
+  for (const nutrient of nutrients) {
+    const value = food.per100g[nutrient.id];
+    if (typeof value !== "number" || !(value > 0)) assert.equal(listed.has(nutrient.id), false);
   }
 });
 
