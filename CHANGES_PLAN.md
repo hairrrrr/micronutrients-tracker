@@ -67,3 +67,26 @@ AC:
 - Unit tests cover the ordering and the card labels.
 - e2e: in the calcium tab, garlic is no longer ahead of tofu or milk-tier foods with more calcium per 100 g than garlic's per-10 g value. Flagged cards show "每 10 g". The heading reads 常见食物.
 - npm test and Playwright pass.
+
+## P20 - Ingredients only, raw meat only, bone-in handling, more whole grains (user decisions after v1.1)
+- **P20a (supervisor data prep):**
+  - `data-src/bone_in_foods.csv`: 15 bone-in raw foods with the USDA SR28 FOOD_DES refuse % (source zip sr28asc.zip, sha256 8308fd1d…e70a), e.g. spare ribs 30% bone and chicken wing 38%. Drumstick uses 33%: the SR28 Refuse field reads 66, but its own description lists 33% twice, so it is flagged for review.
+  - `data-src/p20/add_curated.csv` (11 new raw SR Legacy foods, found with tools/search_usda.py):
+    - raw replacements for cooked-only cuts: pork composite 167888, beef rib 168675, beef short ribs 169439, chicken gizzard 171456, ground turkey 171505, turkey liver 171486
+    - whole grains: wild rice 169726/168897, rye grain 168884, cooked oatmeal 173905, hulled barley 170283
+  - `data-src/p20/add_commonness.csv`: tiers for these 11 foods from the hms API scorer, reviewed by the supervisor.
+  - Not in SR Legacy, so not added: black rice, rye flakes (rye grain added instead), a "mixed grain rice" blend (component grains are present instead), raw chicken feet (cooked 鸡爪 dropped) and a raw equivalent of lean roasted ham (火腿 dropped).
+- **P20 (hms):**
+  - remove all 24 dish estimates and tap water
+  - drop 33 cooked meat entries
+  - add the 11 foods
+  - add bone-in handling: household measures and grams are with-bone weights, edible grams = grams × (1 − refuse), shown on the card and in About
+
+  Commit: `refactor(data): drop dish estimates and cooked meats, add bone-in handling`
+
+AC:
+- validator: no composites, no cooked meat entries, bone-in foods valid
+- check_values 50/50
+- unit tests for the edible-gram conversion
+- e2e: no dish names, and the spare-rib card shows the with-bone note
+- all tests pass
