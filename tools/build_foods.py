@@ -11,6 +11,7 @@ Inputs (see PLAN.md 1.3):
     data-src/commonness.csv     commonness tier 1-5 per food (phase P18b)
     data-src/small_portion_foods.csv  foods eaten in small amounts (phase P19b)
     data-src/bone_in_foods.csv  foods weighed with the bone (phase P20)
+    data-src/custom_foods.csv  user-owned branded foods from package labels (P25a)
     data-raw/<dataset>/*.csv    USDA FoodData Central SR Legacy 2018-04
 
 Outputs:
@@ -98,6 +99,27 @@ DEFAULT_AMOUNT_BASIS_G = 100
 # Phase P20: foods whose nutrient values are per 100 g edible portion but that
 # people weigh with the bone.
 BONE_IN_COLUMNS = ["food_id", "name_zh", "refuse_pct", "refuse_desc", "source"]
+# Phase P25a: user-owned branded foods transcribed from package labels. Only
+# the food values are used; source_note_zh is review material that never
+# reaches docs/. Calcium is the label value, every other nutrient is estimated
+# from the SR Legacy base food (base_fdc_id) with the usual code path.
+CUSTOM_COLUMNS = [
+    "food_id",
+    "name_zh",
+    "name_en",
+    "category_zh",
+    "aliases_zh",
+    "base_fdc_id",
+    "label_basis",
+    "density_g_per_ml",
+    "calcium_mg_per_100g",
+    "null_nutrients",
+    "pin_top",
+    "source",
+    "source_note_zh",
+]
+CUSTOM_ID_PREFIX = "custom:"
+CUSTOM_SOURCE_TYPE = "package_label"
 
 
 def read_csv(path, expected_columns):
@@ -312,6 +334,101 @@ def refuse_note(pct):
     return f"按带骨重量计，可食部约 {edible:g}%（USDA 废弃率 {pct:g}%：骨）"
 
 
+def nutrient_values(nutrient_meta, amounts):
+    """(per100g, flags) for one SR Legacy food, from its USDA amounts."""
+    per100g = {}
+    flags = {"niacinNoTryptophan": False}
+    for nutrient in nutrient_meta:
+        value, nutrient_flags = nutrient_value(nutrient, amounts)
+        per100g[nutrient["id"]] = round_sig(value)
+        if nutrient_flags["niacinNoTryptophan"]:
+            flags["niacinNoTryptophan"] = True
+    return per100g, flags
+
+
+def load_custom_foods(nutrient_meta, usda_foods, amounts_by_food):
+    """User-owned branded foods from data-src/custom_foods.csv (phase P25a).
+
+    The values stay per 100 g of the product. Calcium is the transcribed label
+    value; every other micronutrient is computed from the SR Legacy base food
+    (base_fdc_id) with exactly the normal code path, then the ids listed in
+    null_nutrients are set back to null because the unfortified product has no
+    data for them (never zero). fdcId and usdaDescription are null: these foods
+    are not SR Legacy entries. Only the source type, the base id and the
+    estimated nutrient ids are published, never the Chinese label note.
+    """
+    path = DATA_SRC / "custom_foods.csv"
+    rows = read_csv(path, CUSTOM_COLUMNS)
+    nutrient_ids = [nutrient["id"] for nutrient in nutrient_meta]
+    custom = []
+    for line_no, row in enumerate(rows, start=2):
+        food_id = row["food_id"]
+        label = f"custom_foods.csv line {line_no} ({food_id or 'no food_id'})"
+        if not food_id.startswith(CUSTOM_ID_PREFIX) or len(food_id) <= len(CUSTOM_ID_PREFIX):
+            raise SystemExit(f"{label}: food_id must start with {CUSTOM_ID_PREFIX}")
+        if row["source"] != CUSTOM_SOURCE_TYPE:
+            raise SystemExit(f"{label}: source must be {CUSTOM_SOURCE_TYPE}, got {row['source']!r}")
+
+        raw_base = row["base_fdc_id"]
+        if not raw_base.isdigit():
+            raise SystemExit(f"{label}: base_fdc_id {raw_base!r} is not a number")
+        base_fdc_id = int(raw_base)
+        usda_food = usda_foods.get(base_fdc_id)
+        if usda_food is None:
+            raise SystemExit(f"{label}: base_fdc_id {base_fdc_id} is not in SR Legacy food.csv")
+        if usda_food["description"] is None:
+            raise SystemExit(f"{label}: base_fdc_id {base_fdc_id} has no description")
+
+        raw_calcium = row["calcium_mg_per_100g"]
+        try:
+            calcium = float(raw_calcium)
+        except ValueError:
+            raise SystemExit(f"{label}: calcium_mg_per_100g {raw_calcium!r} is not a number")
+        if not math.isfinite(calcium) or calcium <= 0:
+            raise SystemExit(f"{label}: calcium_mg_per_100g must be a positive number")
+
+        null_nutrients = [part for part in row["null_nutrients"].split("|") if part]
+        unknown_null = [part for part in null_nutrients if part not in nutrient_ids]
+        if unknown_null:
+            raise SystemExit(f"{label}: null_nutrients has unknown ids {unknown_null}")
+
+        pin_top = [part for part in row["pin_top"].split("|") if part]
+        unknown_pin = [part for part in pin_top if part not in nutrient_ids]
+        if unknown_pin:
+            raise SystemExit(f"{label}: pin_top has unknown ids {unknown_pin}")
+
+        per100g, flags = nutrient_values(nutrient_meta, amounts_by_food.get(base_fdc_id, {}))
+        per100g["calcium"] = round_sig(calcium)
+        for nutrient_id in null_nutrients:
+            per100g[nutrient_id] = None
+
+        estimated = [
+            nutrient_id
+            for nutrient_id in nutrient_ids
+            if nutrient_id != "calcium" and nutrient_id not in null_nutrients
+        ]
+        custom.append(
+            {
+                "id": food_id,
+                "fdcId": None,
+                "nameZh": row["name_zh"],
+                "nameEn": row["name_en"],
+                "usdaDescription": None,
+                "category": row["category_zh"],
+                "aliases": [alias for alias in row["aliases_zh"].split("|") if alias],
+                "per100g": per100g,
+                "flags": flags,
+                "source": {
+                    "type": CUSTOM_SOURCE_TYPE,
+                    "baseFdcId": base_fdc_id,
+                    "estimated": estimated,
+                },
+                "pinTop": pin_top,
+            }
+        )
+    return custom
+
+
 def build():
     dataset_dir()
     nutrient_meta = load_nutrient_metadata()
@@ -335,13 +452,7 @@ def build():
             raise SystemExit(f"foods_curated.csv: fdc_id {fdc_id} is not in SR Legacy food.csv")
         amounts = amounts_by_food.get(fdc_id, {})
 
-        per100g = {}
-        flags = {"niacinNoTryptophan": False}
-        for nutrient in nutrient_meta:
-            value, nutrient_flags = nutrient_value(nutrient, amounts)
-            per100g[nutrient["id"]] = round_sig(value)
-            if nutrient_flags["niacinNoTryptophan"]:
-                flags["niacinNoTryptophan"] = True
+        per100g, flags = nutrient_values(nutrient_meta, amounts)
 
         food_measures = measures.get(raw_id, [])
         if not food_measures:
@@ -363,6 +474,21 @@ def build():
                 "measures": food_measures,
             }
         )
+
+    # Phase P25a: user-owned branded foods from package labels. Their values
+    # are per 100 g like every other food: calcium is the label value, the
+    # other micronutrients come from the SR Legacy base food. They carry no
+    # fdcId, so they are appended after the SR Legacy foods (which stay sorted
+    # by fdcId) and keep the CSV order.
+    custom = load_custom_foods(nutrient_meta, usda_foods, amounts_by_food)
+    for food in custom:
+        food_measures = measures.get(food["id"], [])
+        if not food_measures:
+            raise SystemExit(
+                f"data-src/measures.csv has no measures for the custom food {food['id']}"
+            )
+        food["measures"] = food_measures
+        foods.append(food)
 
     # Phase P18b: every food needs its integer commonness tier (1-5). A food
     # without a tier fails the build.
@@ -424,7 +550,12 @@ def build():
         food["refusePct"] = pct
         food["refuseNote"] = refuse_note(pct)
 
-    foods.sort(key=lambda food: food["fdcId"])
+    # SR Legacy foods are sorted by fdcId for a stable order; the custom foods
+    # have no fdcId and keep the tail in CSV order.
+    sr_foods = [food for food in foods if food["id"].startswith("fdc:")]
+    custom_foods = [food for food in foods if not food["id"].startswith("fdc:")]
+    sr_foods.sort(key=lambda food: food["fdcId"])
+    foods = sr_foods + custom_foods
 
     return nutrient_meta, foods, missing_measures
 
@@ -444,13 +575,16 @@ def main():
     foods_payload = {"source": SOURCE, "foods": foods}
     nutrients_payload = {"source": SOURCE, "nutrients": nutrient_meta}
     bone_in_count = sum(1 for food in foods if "refusePct" in food)
+    sr_count = sum(1 for food in foods if food["fdcId"] is not None)
+    custom_count = len(foods) - sr_count
     meta_payload = {
         "source": SOURCE,
         "buildDate": date.today().isoformat(),
         "generator": "tools/build_foods.py",
         "counts": {
             "foods": len(foods),
-            "srLegacyFoods": len(foods),
+            "srLegacyFoods": sr_count,
+            "customFoods": custom_count,
             "boneInFoods": bone_in_count,
             "nutrients": len(nutrient_meta),
         },
@@ -471,6 +605,10 @@ def main():
             "per100g values themselves are always per 100 g",
             "Bone-in foods (refusePct) are measured with the bone: the edible weight is "
             "grams * (1 - refusePct/100) and the per100g values are for the edible part",
+            "Custom foods (source.type package_label) are per 100 g of the product: calcium "
+            "is the package label value, the other micronutrients are estimated from the "
+            "SR Legacy base food source.baseFdcId, and null means the label or product has "
+            "no data for that nutrient",
         ],
     }
 

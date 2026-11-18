@@ -58,6 +58,10 @@ CURATED_CSV = DATA_SRC / "foods_curated.csv"
 BONE_IN_CSV = DATA_SRC / "bone_in_foods.csv"
 
 MEASURE_COLUMNS = ["food_key", "measure_id", "label_zh", "grams", "basis", "is_default"]
+# Phase P25a: measures.csv also holds rows for user-owned branded foods, whose
+# food_key starts with this prefix. They are not in foods_curated.csv and are
+# carried over unchanged when this script rewrites the file.
+CUSTOM_PREFIX = "custom:"
 
 MIN_GRAMS = 1.0
 MAX_GRAMS = 1000.0
@@ -866,6 +870,8 @@ def build_measures(curated, portions):
 
 
 def write_measures(measures_by_food):
+    # Read the custom rows before truncating the file (phase P25a).
+    custom_rows = load_custom_measure_rows()
     with MEASURES_CSV.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.writer(handle, lineterminator="\n")
         writer.writerow(MEASURE_COLUMNS)
@@ -881,6 +887,28 @@ def write_measures(measures_by_food):
                         "1" if measure["is_default"] else "0",
                     ]
                 )
+        # Phase P25a: user-owned branded foods are not in foods_curated.csv, so
+        # the SR Legacy pass above cannot recreate their measure rows. Carry the
+        # existing `custom:` rows over verbatim instead of dropping them.
+        for row in custom_rows:
+            writer.writerow(row)
+
+
+def load_custom_measure_rows():
+    """Raw measures.csv rows whose food_key is a user-owned `custom:` food."""
+    if not MEASURES_CSV.is_file():
+        return []
+    rows = []
+    with MEASURES_CSV.open(newline="", encoding="utf-8-sig") as handle:
+        reader = csv.DictReader(handle)
+        if list(reader.fieldnames or []) != MEASURE_COLUMNS:
+            return []
+        for row in reader:
+            food_key = (row.get("food_key") or "").strip()
+            if not food_key.startswith(CUSTOM_PREFIX):
+                continue
+            rows.append([(value or "") for value in row.values()])
+    return rows
 
 
 def main(argv=None):

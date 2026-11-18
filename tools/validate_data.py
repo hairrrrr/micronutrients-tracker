@@ -158,6 +158,25 @@ COMMONNESS_MAX = 5
 # Files under docs/ that are scanned for leaked review text (P18b).
 DOCS_SCAN_SUFFIXES = {".json", ".js", ".mjs", ".html"}
 
+# data-src/custom_foods.csv columns (phase P25a).
+CUSTOM_COLUMNS = [
+    "food_id",
+    "name_zh",
+    "name_en",
+    "category_zh",
+    "aliases_zh",
+    "base_fdc_id",
+    "label_basis",
+    "density_g_per_ml",
+    "calcium_mg_per_100g",
+    "null_nutrients",
+    "pin_top",
+    "source",
+    "source_note_zh",
+]
+CUSTOM_PREFIX = "custom:"
+CUSTOM_SOURCE_TYPE = "package_label"
+
 # data-src/small_portion_foods.csv columns (phase P19b).
 SMALL_PORTION_COLUMNS = ["food_id", "name_zh", "basis_g", "rule"]
 SMALL_PORTION_BASIS_G = 10
@@ -696,6 +715,15 @@ def validate_measures_csv(checks):
                 "category_zh": (row.get("category_zh") or "").strip(),
                 "name_zh": (row.get("name_zh") or "").strip(),
             }
+    # Phase P25a: user-owned branded foods have measures too, keyed by their
+    # `custom:` id. They are not in foods_curated.csv, so add them here.
+    for row in read_csv(DATA_SRC / "custom_foods.csv")[1]:
+        food_id = (row.get("food_id") or "").strip()
+        if food_id.startswith(CUSTOM_PREFIX):
+            curated[food_id] = {
+                "category_zh": (row.get("category_zh") or "").strip(),
+                "name_zh": (row.get("name_zh") or "").strip(),
+            }
 
     measures = defaultdict(list)
     for line_no, row in enumerate(rows, start=2):
@@ -778,9 +806,21 @@ def validate_measures_csv(checks):
                 len(basis) > len("estimate:") + 5,
                 f"{label}: estimate basis needs a reason, got {basis!r}",
             )
+        elif basis.startswith("label:"):
+            # Phase P25a: a user-owned branded food's measure comes from the
+            # package label, e.g. "label:250 mL x 1.03 g/mL".
+            checks.check(
+                len(basis) > len("label:") + 5,
+                f"{label}: label basis needs a description, got {basis!r}",
+            )
+            checks.check(
+                food_key.startswith(CUSTOM_PREFIX),
+                f"{label}: a label basis is only allowed for a {CUSTOM_PREFIX} food",
+            )
         else:
             checks.fail(
-                f"{label}: basis must be usda_portion:<id> or estimate:<text>, got {basis!r}"
+                f"{label}: basis must be usda_portion:<id>, estimate:<text> "
+                f"or label:<text>, got {basis!r}"
             )
 
         measures[food_key].append(
@@ -1114,6 +1154,128 @@ def validate_bone_in_csv(checks, foods):
     return refuse
 
 
+def validate_custom_source(checks, label, food):
+    """The source object of a user-owned branded food (phase P25a)."""
+    source = food.get("source")
+    if not checks.check(isinstance(source, dict), f"{label}: source must be an object"):
+        return
+    checks.check(
+        source.get("type") == CUSTOM_SOURCE_TYPE,
+        f"{label}: source.type must be {CUSTOM_SOURCE_TYPE}, got {source.get('type')!r}",
+    )
+    base_fdc_id = source.get("baseFdcId")
+    checks.check(
+        isinstance(base_fdc_id, int) and not isinstance(base_fdc_id, bool),
+        f"{label}: source.baseFdcId must be an integer, got {base_fdc_id!r}",
+    )
+    estimated = source.get("estimated")
+    if checks.check(isinstance(estimated, list), f"{label}: source.estimated must be a list"):
+        checks.check(
+            all(isinstance(item, str) and item in EXPECTED_NUTRIENTS for item in estimated),
+            f"{label}: source.estimated must hold nutrient ids only",
+        )
+        checks.check(
+            "calcium" not in estimated,
+            f"{label}: calcium is the label value, it must not be listed as estimated",
+        )
+        per100g = food.get("per100g") or {}
+        for nutrient_id in estimated:
+            checks.check(
+                per100g.get(nutrient_id) is not None,
+                f"{label}: estimated nutrient {nutrient_id} must have a value",
+            )
+    pin_top = food.get("pinTop")
+    if checks.check(isinstance(pin_top, list), f"{label}: pinTop must be a list"):
+        checks.check(pin_top != [], f"{label}: pinTop must not be empty")
+        checks.check(
+            all(isinstance(item, str) and item in EXPECTED_NUTRIENTS for item in pin_top),
+            f"{label}: pinTop must hold nutrient ids only, got {pin_top!r}",
+        )
+    per100g = food.get("per100g") or {}
+    calcium = per100g.get("calcium")
+    checks.check(
+        isinstance(calcium, (int, float))
+        and not isinstance(calcium, bool)
+        and calcium > 0,
+        f"{label}: calcium must be the numeric label value, got {calcium!r}",
+    )
+
+
+def validate_custom_foods_csv(checks, usda_foods):
+    """Checks for data-src/custom_foods.csv (phase P25a).
+
+    Every row needs a `custom:` food_id, source=package_label, a base_fdc_id
+    that exists in SR Legacy, a numeric calcium value, null_nutrients and
+    pin_top from the nutrient list, and non-empty Chinese names. The Chinese
+    source_note_zh is review material and never reaches docs/.
+    """
+    path = DATA_SRC / "custom_foods.csv"
+    if not checks.check(path.is_file(), "missing data-src/custom_foods.csv"):
+        return {}
+    header, rows = read_csv(path)
+    checks.check(
+        header == CUSTOM_COLUMNS,
+        f"custom_foods.csv columns are {header}, expected {CUSTOM_COLUMNS}",
+    )
+    custom = {}
+    for line_no, row in enumerate(rows, start=2):
+        food_id = (row.get("food_id") or "").strip()
+        label = f"custom_foods.csv line {line_no} ({food_id or 'no food_id'})"
+        if not checks.check(
+            food_id.startswith(CUSTOM_PREFIX) and len(food_id) > len(CUSTOM_PREFIX),
+            f"{label}: food_id must start with {CUSTOM_PREFIX}",
+        ):
+            continue
+        if not checks.check(food_id not in custom, f"{label}: duplicate food_id"):
+            continue
+        custom[food_id] = row
+
+        checks.check(
+            has_cjk((row.get("name_zh") or "").strip()),
+            f"{label}: name_zh must be Chinese",
+        )
+        checks.check(
+            (row.get("name_en") or "").strip() != "", f"{label}: name_en must not be empty"
+        )
+        checks.check(
+            has_cjk((row.get("category_zh") or "").strip()),
+            f"{label}: category_zh must be Chinese",
+        )
+        checks.check(
+            (row.get("source") or "").strip() == CUSTOM_SOURCE_TYPE,
+            f"{label}: source must be {CUSTOM_SOURCE_TYPE}, "
+            f"got {row.get('source')!r}",
+        )
+        raw_base = (row.get("base_fdc_id") or "").strip()
+        if checks.check(raw_base.isdigit(), f"{label}: base_fdc_id must be a number"):
+            checks.check(
+                int(raw_base) in usda_foods,
+                f"{label}: base_fdc_id {raw_base} is not in SR Legacy food.csv",
+            )
+        raw_calcium = (row.get("calcium_mg_per_100g") or "").strip()
+        try:
+            calcium = float(raw_calcium)
+        except ValueError:
+            checks.fail(f"{label}: calcium_mg_per_100g {raw_calcium!r} is not a number")
+            calcium = None
+        if calcium is not None:
+            checks.check(
+                calcium > 0,
+                f"{label}: calcium_mg_per_100g must be positive, got {calcium!r}",
+            )
+        for column in ("null_nutrients", "pin_top"):
+            values = [part for part in (row.get(column) or "").split("|") if part]
+            checks.check(
+                all(value in EXPECTED_NUTRIENTS for value in values),
+                f"{label}: {column} must hold nutrient ids only, got {values}",
+            )
+        checks.check(
+            (row.get("source_note_zh") or "").strip() != "",
+            f"{label}: source_note_zh must not be empty (review material, never published)",
+        )
+    return custom
+
+
 def validate_food_measures(checks, label, measures):
     checks.check(len(measures) >= 1, f"{label}: needs at least one measure")
     defaults = [measure for measure in measures if measure.get("default") is True]
@@ -1129,8 +1291,11 @@ def validate_food_measures(checks, label, measures):
         )
         basis = measure.get("basis") or ""
         checks.check(
-            basis.startswith("usda_portion:") or basis.startswith("estimate:"),
-            f"{measure_label}: basis must be usda_portion:<id> or estimate:<text>, got {basis!r}",
+            basis.startswith("usda_portion:")
+            or basis.startswith("estimate:")
+            or basis.startswith("label:"),
+            f"{measure_label}: basis must be usda_portion:<id>, estimate:<text> "
+            f"or label:<text>, got {basis!r}",
         )
         checks.check(
             isinstance(measure.get("labelZh"), str) and has_cjk(measure["labelZh"]),
@@ -1151,6 +1316,7 @@ def validate_foods_json(checks, foods_data, curated_count, measures=None):
 
     expected_nutrients = list(EXPECTED_NUTRIENTS)
     sr_ids = set()
+    custom_ids = set()
     seen_food_ids = set()
     null_values = 0
 
@@ -1165,10 +1331,27 @@ def validate_foods_json(checks, foods_data, curated_count, measures=None):
             not food_id.startswith(COMPOSITE_PREFIX),
             f"{label}: composite foods are gone (phase P20)",
         )
-        checks.check(
-            food_id == f"fdc:{food.get('fdcId')}",
-            f"{label}: id must be 'fdc:<fdcId>'",
-        )
+        if food_id.startswith(CUSTOM_PREFIX):
+            # Phase P25a: a user-owned branded food has no SR Legacy row.
+            custom_ids.add(food_id)
+            checks.check(
+                food.get("fdcId") is None, f"{label}: a custom food must have fdcId null"
+            )
+            checks.check(
+                food.get("usdaDescription") is None,
+                f"{label}: a custom food must have usdaDescription null",
+            )
+            validate_custom_source(checks, label, food)
+        else:
+            checks.check(
+                food_id == f"fdc:{food.get('fdcId')}",
+                f"{label}: id must be 'fdc:<fdcId>'",
+            )
+            checks.check(
+                "source" not in food,
+                f"{label}: only a custom food may carry a source object",
+            )
+            sr_ids.add(food.get("fdcId"))
         # The dish-estimate fields are gone with the composites (P20).
         checks.check(
             "estimate" not in food, f"{label}: the estimate flag is gone (phase P20)"
@@ -1176,7 +1359,6 @@ def validate_foods_json(checks, foods_data, curated_count, measures=None):
         checks.check(
             "basis" not in food, f"{label}: the composite basis field is gone (phase P20)"
         )
-        sr_ids.add(food.get("fdcId"))
 
         for key in ("nameZh", "nameEn", "category"):
             checks.check(
@@ -1227,6 +1409,16 @@ def validate_foods_json(checks, foods_data, curated_count, measures=None):
         "foods.json must contain every curated fdc_id exactly once "
         f"(missing {len(curated_ids - sr_ids)}, unexpected {len(sr_ids - curated_ids)})",
     )
+    custom_csv_ids = {
+        (row.get("food_id") or "").strip()
+        for row in read_csv(DATA_SRC / "custom_foods.csv")[1]
+        if (row.get("food_id") or "").strip().startswith(CUSTOM_PREFIX)
+    }
+    checks.check(
+        custom_csv_ids == custom_ids,
+        "foods.json must contain every custom_foods.csv id exactly once "
+        f"(missing {len(custom_csv_ids - custom_ids)}, unexpected {len(custom_ids - custom_csv_ids)})",
+    )
     checks.check(null_values > 0, "foods.json has no null values: missing data must be preserved")
     return len(foods)
 
@@ -1234,9 +1426,13 @@ def validate_foods_json(checks, foods_data, curated_count, measures=None):
 def validate_measure_merge(checks, label, food, measures):
     """foods.json measures must be exactly the measures.csv rows of that food."""
     food_id = str(food.get("id") or "")
-    if not food_id.startswith("fdc:"):
+    if food_id.startswith("fdc:"):
+        food_key = food_id.split(":", 1)[1]
+    elif food_id.startswith(CUSTOM_PREFIX):
+        # Phase P25a: a custom food's measures are keyed by the custom id.
+        food_key = food_id
+    else:
         return
-    food_key = food_id.split(":", 1)[1]
     csv_measures = measures.get(food_key)
     checks.check(csv_measures is not None, f"{label}: no measures.csv rows for this food")
     if not csv_measures:
@@ -1443,6 +1639,15 @@ def validate_no_reason_leak(checks):
         for row in rows
         if (row.get("reason_zh") or "").strip()
     })
+    # Phase P25a: the Chinese label note of a custom food is review material
+    # too, so it must not reach docs/ either.
+    custom_path = DATA_SRC / "custom_foods.csv"
+    if custom_path.is_file():
+        reasons = sorted(set(reasons) | {
+            (row.get("source_note_zh") or "").strip()
+            for row in read_csv(custom_path)[1]
+            if (row.get("source_note_zh") or "").strip()
+        })
 
     docs_root = REPO_ROOT / "docs"
     scanned = 0
@@ -1529,6 +1734,7 @@ def main():
     seafood_count = validate_raw_seafood(checks, usda_foods)
     tiers = validate_commonness_csv(checks)
     flagged = validate_small_portion_csv(checks)
+    custom = validate_custom_foods_csv(checks, usda_foods)
     docs_scanned = validate_no_reason_leak(checks)
     validate_no_composites(checks)
     json_food_count, foods_json_size, bone_in = validate_generated_json(
@@ -1565,6 +1771,9 @@ def main():
     print("composites: none OK (dish estimates removed in P20)")
     print(f"commonness: {len(tiers)} tiers OK (1..5, no reason text under docs/)")
     print(f"small portions: {len(flagged)} flagged OK (amountBasisG 10, others 100)")
+    print(
+        f"custom foods: {len(custom)} OK (package_label, fdcId null, base food + label calcium)"
+    )
     print(f"bone-in foods: {len(bone_in)} OK (0 < refusePct < 100, note generated)")
     print(f"docs/ text scan: {docs_scanned} files OK")
     print(f"foods.json: {json_food_count} foods OK ({foods_json_size} bytes)")

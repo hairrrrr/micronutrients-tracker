@@ -9,13 +9,14 @@
   "buildDate": "2026-11-18",
   "generator": "tools/build_foods.py",
   "counts": {
-    "foods": 588,
+    "foods": 591,
     "srLegacyFoods": 588,
+    "customFoods": 3,
     "boneInFoods": 15,
     "nutrients": 22
   },
   "measures": {
-    "curatedFoods": 588,
+    "curatedFoods": 591,
     "defaultGramsOnly": 0
   },
   "notes": [
@@ -25,6 +26,7 @@
     "Niacin is in mg NE = niacin + tryptophan*1000/60; when tryptophan is missing only niacin is used and flags.niacinNoTryptophan is true.",
     "commonness tiers 1-5: AI model estimate (DeepSeek via hms), supervisor-reviewed",
     "amountBasisG is the comparison basis: 10 g for condiments, spices, cooking oils and dried goods eaten in small amounts, 100 g for every other food; per100g values themselves are always per 100 g",
-    "Bone-in foods (refusePct) are measured with the bone: the edible weight is grams * (1 - refusePct/100) and the per100g values are for the edible part"
+    "Bone-in foods (refusePct) are measured with the bone: the edible weight is grams * (1 - refusePct/100) and the per100g values are for the edible part",
+    "Custom foods (source.type package_label) are per 100 g of the product: calcium is the package label value, the other micronutrients are estimated from the SR Legacy base food source.baseFdcId, and null means the label or product has no data for that nutrient"
   ]
 }

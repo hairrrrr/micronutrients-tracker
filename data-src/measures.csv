@@ -1086,3 +1086,8 @@ food_key,measure_id,label_zh,grams,basis,is_default
 169303,usda84626,一片（叶）,16,usda_portion:84626,0
 169990,usda85833,一片（叶）,8,usda_portion:85833,0
 169990,stalk,一根,300,"estimate:one celtuce stem, about 300 g",1
+custom:devondale-skim-powder,cup,一杯（25 g 奶粉冲 250 mL）,25,label:serving 25 g powder in 250 mL water,1
+custom:mm-partly-skimmed-milk,cup,一杯（250 mL）,257.5,label:250 mL x 1.03 g/mL,1
+custom:mm-partly-skimmed-milk,box,一盒（250 mL）,257.5,label:250 mL x 1.03 g/mL,0
+custom:hema-zero-fat-milk,cup,一杯（250 mL）,257.5,label:250 mL x 1.03 g/mL,1
+custom:hema-zero-fat-milk,box,一盒（250 mL）,257.5,label:250 mL x 1.03 g/mL,0

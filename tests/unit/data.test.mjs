@@ -86,8 +86,12 @@ test("every food has measures with exactly one default", () => {
     for (const measure of food.measures) {
       assert.ok(measure.grams >= 1 && measure.grams <= 1000, `${food.id} ${measure.id}`);
       // P20: a bone-in measure appends its with-bone conversion to the basis,
-      // so only the first part is the source.
-      assert.match(measure.basis, /^(usda_portion:\d+|estimate:.+?)(; with bone: .+)?$/);
+      // so only the first part is the source. P25a: a custom food's measure is
+      // transcribed from its package label (`label:`).
+      assert.match(
+        measure.basis,
+        /^(usda_portion:\d+|estimate:.+?|label:.+?)(; with bone: .+)?$/,
+      );
     }
   }
 });
@@ -476,4 +480,91 @@ test("every bone-in food carries refusePct and a generated note", async () => {
   // Spare ribs are the reviewer's example: 30 % bone.
   assert.equal(food("fdc:167853").refusePct, 30);
   assert.equal(food("fdc:172390").refusePct, 38);
+});
+
+// ---------------------------------------------------------------------------
+// P25a: user-owned branded foods from package labels
+// ---------------------------------------------------------------------------
+
+const customFoodsPath = new URL("../../data-src/custom_foods.csv", import.meta.url);
+
+const CUSTOM_IDS = [
+  "custom:devondale-skim-powder",
+  "custom:mm-partly-skimmed-milk",
+  "custom:hema-zero-fat-milk",
+];
+
+test("the 3 user-owned branded milks are present with the label calcium", () => {
+  const expected = new Map([
+    ["custom:devondale-skim-powder", 1152],
+    ["custom:mm-partly-skimmed-milk", 126.2],
+    ["custom:hema-zero-fat-milk", 116.5],
+  ]);
+  for (const [id, calcium] of expected) {
+    const entry = food(id);
+    assert.equal(entry.per100g.calcium, calcium, `${id}: calcium differs from the label`);
+    assert.equal(entry.fdcId, null, `${id}: fdcId must be null`);
+    assert.equal(entry.usdaDescription, null, `${id}: usdaDescription must be null`);
+    assert.equal(entry.category, "奶类");
+    assert.equal(entry.commonness, 4);
+    assert.equal(entry.amountBasisG, 100);
+    assert.deepEqual(entry.pinTop, ["calcium"]);
+  }
+  // 588 SR Legacy foods + 3 custom = 591.
+  assert.equal(data.foods.length, 591, `foods.json has ${data.foods.length} foods`);
+  const sr = data.foods.filter((entry) => entry.fdcId !== null);
+  assert.equal(sr.length, 588, `${sr.length} SR Legacy foods`);
+});
+
+test("a custom food copies the base USDA values and nulls the unfortified vitamins", () => {
+  const powder = food("custom:devondale-skim-powder");
+  // USDA SR Legacy 170877 (nonfat dry milk, no added vitamins).
+  assert.equal(powder.source.type, "package_label");
+  assert.equal(powder.source.baseFdcId, 170877);
+  assert.equal(powder.per100g.phosphorus, 968);
+  assert.equal(powder.per100g.potassium, 1794);
+  for (const nutrientId of ["vitA", "vitD", "vitE"]) {
+    assert.equal(powder.per100g[nutrientId], null, `powder ${nutrientId} must be null`);
+    assert.equal(powder.source.estimated.includes(nutrientId), false);
+  }
+  assert.equal(powder.source.estimated.includes("calcium"), false);
+
+  const fluid = food("custom:mm-partly-skimmed-milk");
+  // USDA SR Legacy 173432 (nonfat fluid milk, no added vitamins).
+  assert.equal(fluid.source.baseFdcId, 173432);
+  assert.equal(fluid.per100g.phosphorus, 101);
+  assert.equal(fluid.per100g.vitB12, 0.5);
+  for (const nutrientId of ["vitA", "vitD", "vitE"]) {
+    assert.equal(fluid.per100g[nutrientId], null, `fluid ${nutrientId} must be null`);
+  }
+  const hema = food("custom:hema-zero-fat-milk");
+  assert.deepEqual(hema.per100g, { ...fluid.per100g, calcium: 116.5 });
+});
+
+test("the custom foods have measures.csv rows with a label basis", async () => {
+  const csv = parseCsv(await readFile(customFoodsPath, "utf8"));
+  assert.equal(csv.length, 3, `custom_foods.csv has ${csv.length} rows`);
+  for (const id of CUSTOM_IDS) {
+    const row = csv.find((item) => item.food_id === id);
+    assert.ok(row, `custom_foods.csv has no ${id}`);
+    const entry = food(id);
+    const defaults = entry.measures.filter((measure) => measure.default);
+    assert.equal(defaults.length, 1, `${id} must have exactly one default measure`);
+    for (const measure of entry.measures) {
+      assert.match(measure.basis, /^label:/, `${id} ${measure.id}: basis is not a label basis`);
+    }
+  }
+  const powder = food("custom:devondale-skim-powder");
+  assert.equal(powder.measures.length, 1);
+  assert.equal(powder.measures[0].labelZh, "一杯（25 g 奶粉冲 250 mL）");
+  assert.equal(powder.measures[0].grams, 25);
+  assert.equal(powder.measures[0].default, true);
+  for (const id of ["custom:mm-partly-skimmed-milk", "custom:hema-zero-fat-milk"]) {
+    const entry = food(id);
+    assert.deepEqual(
+      entry.measures.map((measure) => [measure.id, measure.grams, measure.default]),
+      [["cup", 257.5, true], ["box", 257.5, false]],
+      `${id}: measures differ`,
+    );
+  }
 });
