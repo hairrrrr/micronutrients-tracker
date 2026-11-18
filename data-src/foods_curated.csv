@@ -341,7 +341,7 @@ fdc_id,name_zh,name_en,category_zh,aliases_zh
 172521,兔肉（生）,Game meat rabbit domesticated composite of cuts raw,畜肉类,家兔肉
 175303,山羊肉（生）,Game meat goat raw,畜肉类,山羊肉
 171955,大西洋鳕鱼（生）,Fish cod Atlantic raw,鱼类,鳕鱼|真鳕
-174190,大西洋鳕鱼（盐腌风干）,Fish cod Atlantic dried and salted,鱼类,咸鳕鱼|鳕鱼干
+174191,太平洋鳕鱼（生）,Fish cod Pacific raw,鱼类,鳕鱼|太平洋鳕
 171964,黑线鳕（生）,Fish haddock raw,鱼类,黑线鳕鱼
 173725,阿拉斯加狭鳕（生）,Fish pollock Alaska raw,鱼类,明太鱼|狭鳕
 175129,大西洋狭鳕（生）,Fish pollock Atlantic raw,鱼类,狭鳕
@@ -350,22 +350,14 @@ fdc_id,name_zh,name_en,category_zh,aliases_zh
 175167,大西洋鲑鱼（养殖，生）,Fish salmon Atlantic farmed raw,鱼类,三文鱼|鲑鱼
 173691,红鲑（生）,Fish salmon sockeye raw,鱼类,红鲑鱼
 175136,银鲑（野生，生）,Fish salmon coho wild raw,鱼类,银鲑鱼
-175168,大西洋鲑鱼（养殖，熟）,Fish salmon Atlantic farmed cooked dry heat,鱼类,三文鱼|鲑鱼
-173693,红鲑（罐装，沥干）,Fish salmon sockeye canned drained solids,鱼类,鲑鱼罐头
 175159,黄鳍金枪鱼（生）,Fish tuna fresh yellowfin raw,鱼类,金枪鱼|吞拿鱼
 175156,鲣鱼（生）,Fish tuna fresh skipjack raw,鱼类,正鲣|柴鱼
 173706,蓝鳍金枪鱼（生）,Fish tuna fresh bluefin raw,鱼类,金枪鱼|吞拿鱼
-172006,黄鳍金枪鱼（熟，干热）,Fish tuna yellowfin fresh cooked dry heat,鱼类,金枪鱼|吞拿鱼
-171986,金枪鱼（水浸罐装，无盐，沥干）,Fish tuna light canned in water without salt drained solids,鱼类,金枪鱼罐头
-175158,白金枪鱼（水浸罐装，沥干）,Fish tuna white canned in water drained solids,鱼类,金枪鱼罐头|长鳍金枪鱼
-175139,沙丁鱼（大西洋，油浸罐装，带骨沥干）,Fish sardine Atlantic canned in oil drained solids with bone,鱼类,沙丁鱼罐头
 174182,凤尾鱼（欧洲，生）,Fish anchovy european raw,鱼类,鳀鱼|欧洲鳀
 175116,大西洋鲱鱼（生）,Fish herring Atlantic raw,鱼类,鲱鱼
 175119,大西洋鲭鱼（生）,Fish mackerel Atlantic raw,鱼类,鲭鱼|青花鱼
 174193,鳗鱼（混合种，生）,Fish eel mixed species raw,鱼类,鳗鲡|白鳝
-174194,鳗鱼（混合种，熟，干热）,Fish eel mixed species cooked dry heat,鱼类,鳗鲡|熟鳗鱼
 171952,鲤鱼（生）,Fish carp raw,鱼类,鲤鱼肉
-174185,鲤鱼（熟，干热）,Fish carp cooked dry heat,鱼类,鲤鱼肉
 174184,淡水鲈鱼（混合种，生）,Fish bass fresh water mixed species raw,鱼类,鲈鱼|淡水鲈
 171959,鲯鳅（生）,Fish mahimahi raw,鱼类,鬼头刀|麻哈鱼
 171962,石斑鱼（混合种，生）,Fish grouper mixed species raw,鱼类,石斑
@@ -384,44 +376,25 @@ fdc_id,name_zh,name_en,category_zh,aliases_zh
 173711,白鲑鱼（混合种，生）,Fish whitefish mixed species raw,鱼类,白鱼
 175123,条纹鲻鱼（生）,Fish mullet striped raw,鱼类,鲻鱼|乌鱼
 175146,胡瓜鱼（生）,Fish smelt rainbow raw,鱼类,多春鱼|池沼公鱼
-171956,大西洋鳕鱼（熟，干热）,Fish cod Atlantic cooked dry heat,鱼类,鳕鱼|真鳕
 175165,斑点叉尾鮰（养殖，生）,Fish catfish channel farmed raw,鱼类,鲶鱼|钳鱼
 173717,虹鳟（养殖，生）,Fish trout rainbow farmed raw,鱼类,鳟鱼
 175154,虹鳟（野生，生）,Fish trout rainbow wild raw,鱼类,鳟鱼
-171990,太平洋鳕鱼（熟，干热，可能含保水添加剂）,Fish cod Pacific cooked dry heat may contain additives to retain moisture,鱼类,鳕鱼
 175179,虾（生）,Crustaceans shrimp raw,虾蟹类,大虾|对虾
-175180,虾（熟）,Crustaceans shrimp cooked,虾蟹类,大虾|对虾
 174210,虾（混合种，生，可能含保水添加剂）,Crustaceans shrimp mixed species raw may contain additives to retain moisture,虾蟹类,虾仁
-171971,虾（混合种，熟，湿热，可能含保水添加剂）,Crustaceans shrimp mixed species cooked moist heat may contain additives to retain moisture,虾蟹类,虾仁
 174204,蓝蟹（生）,Crustaceans crab blue raw,虾蟹类,青蟹|梭子蟹
-174205,蓝蟹（熟，湿热）,Crustaceans crab blue cooked moist heat,虾蟹类,青蟹|梭子蟹
 171968,首长黄道蟹（生）,Crustaceans crab dungeness raw,虾蟹类,邓杰内斯蟹
-172007,首长黄道蟹（熟，湿热）,Crustaceans crab dungeness cooked moist heat,虾蟹类,邓杰内斯蟹
 175164,阿拉斯加帝王蟹（生）,Crustaceans crab alaska king raw,虾蟹类,帝王蟹
-174202,阿拉斯加帝王蟹（熟，湿热）,Crustaceans crab alaska king cooked moist heat,虾蟹类,帝王蟹
 174208,北方龙虾（生）,Crustaceans lobster northern raw,虾蟹类,波士顿龙虾
-174209,北方龙虾（熟，湿热）,Crustaceans lobster northern cooked moist heat,虾蟹类,波士顿龙虾
 174211,多棘龙虾（混合种，生）,Crustaceans spiny lobster mixed species raw,虾蟹类,青龙虾|锦绣龙虾
-172009,多棘龙虾（混合种，熟，湿热）,Crustaceans spiny lobster mixed species cooked moist heat,虾蟹类,青龙虾|锦绣龙虾
 174206,小龙虾（野生，生）,Crustaceans crayfish mixed species wild raw,虾蟹类,克氏原螯虾
-174207,小龙虾（野生，熟，湿热）,Crustaceans crayfish mixed species wild cooked moist heat,虾蟹类,克氏原螯虾
 174214,蛤蜊（混合种，生）,Mollusks clam mixed species raw,贝类,花蛤|蚬子
-171975,蛤蜊（混合种，熟，湿热）,Mollusks clam mixed species cooked moist heat,贝类,花蛤|蚬子
-171976,蛤蜊（混合种，罐装，沥干）,Mollusks clam mixed species canned drained solids,贝类,蛤蜊罐头
 174216,蓝贻贝（生）,Mollusks mussel blue raw,贝类,青口|淡菜
-174217,蓝贻贝（熟，湿热）,Mollusks mussel blue cooked moist heat,贝类,青口|淡菜
 174219,太平洋牡蛎（生）,Mollusks oyster Pacific raw,贝类,生蚝|牡蛎
-174250,太平洋牡蛎（熟，湿热）,Mollusks oyster Pacific cooked moist heat,贝类,生蚝|牡蛎
 171978,东部牡蛎（野生，生）,Mollusks oyster eastern wild raw,贝类,牡蛎
-171980,东部牡蛎（野生，熟，湿热）,Mollusks oyster eastern wild cooked moist heat,贝类,牡蛎
-171981,东部牡蛎（罐装）,Mollusks oyster eastern canned,贝类,牡蛎罐头
 174220,扇贝（混合种，生）,Mollusks scallop mixed species raw,贝类,带子|鲜贝
-167742,扇贝（海湾与海产，熟，蒸）,Mollusks scallop bay and sea cooked steamed,贝类,带子|鲜贝
 174223,鱿鱼（混合种，生）,Mollusks squid mixed species raw,贝类,枪乌贼|柔鱼
 174218,章鱼（普通种，生）,Mollusks octopus common raw,贝类,八爪鱼
-174249,章鱼（普通种，熟，湿热）,Mollusks octopus common cooked moist heat,贝类,八爪鱼
 174215,墨鱼（混合种，生）,Mollusks cuttlefish mixed species raw,贝类,乌贼|花枝
-172010,墨鱼（混合种，熟，湿热）,Mollusks cuttlefish mixed species cooked moist heat,贝类,乌贼|花枝
 174212,鲍鱼（混合种，生）,Mollusks abalone mixed species raw,贝类,鲍鱼肉
 171983,海螺（未指明种，生）,Mollusks whelk unspecified raw,贝类,螺肉|海螺
 167744,蜗牛（生）,Mollusks snail raw,贝类,蜗牛|食用蜗牛

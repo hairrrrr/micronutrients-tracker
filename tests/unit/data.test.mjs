@@ -152,6 +152,59 @@ test("every 蛋类 food is raw (生 in name_zh, no cooking words)", async () => 
 });
 
 // ---------------------------------------------------------------------------
+// P24: fish and seafood are raw only
+// ---------------------------------------------------------------------------
+
+const REMOVED_SEAFOOD_IDS = [
+  "167742", "171956", "171971", "171975", "171976", "171980", "171981", "171986",
+  "171990", "172006", "172007", "172009", "172010", "173693", "174185", "174190",
+  "174194", "174202", "174205", "174207", "174209", "174217", "174249", "174250",
+  "175139", "175158", "175168", "175180",
+];
+
+test("fish and seafood are raw only: the 28 cooked ids are gone", () => {
+  for (const id of REMOVED_SEAFOOD_IDS) {
+    assert.equal(foodsById.has(`fdc:${id}`), false, `foods.json still has the cooked seafood fdc:${id}`);
+  }
+  assert.ok(foodsById.has("fdc:174191"), "foods.json lost the raw Pacific cod fdc:174191");
+});
+
+test("every 鱼类/虾蟹类/贝类 food is raw (生 in name_zh, no cooking words)", async () => {
+  const csv = parseCsv(await readFile(curatedPath, "utf8"));
+  const seafoodCategories = new Set(["鱼类", "虾蟹类", "贝类"]);
+  const seafood = csv.filter((row) => seafoodCategories.has(row.category_zh));
+  assert.ok(seafood.length > 0, "no seafood rows in foods_curated.csv");
+  const cookedZh = ["熟", "蒸", "煮", "烤", "煎", "炸", "罐装", "腌", "干", "熏"];
+  const cookedEn = [
+    "cooked",
+    "canned",
+    "dried",
+    "salted",
+    "smoked",
+    "fried",
+    "baked",
+    "broiled",
+    "steamed",
+    "moist heat",
+    "dry heat",
+  ];
+  for (const row of seafood) {
+    assert.match(row.name_zh, /生/, `${row.fdc_id}: seafood name_zh ${row.name_zh} must contain 生`);
+    for (const word of cookedZh) {
+      assert.equal(row.name_zh.includes(word), false, `${row.fdc_id}: cooked word ${word}`);
+    }
+    for (const word of cookedEn) {
+      assert.equal(row.name_en.toLowerCase().includes(word), false, `${row.fdc_id}: ${word}`);
+    }
+  }
+  assert.equal(seafood.some((row) => row.fdc_id === "174191"), true, "raw Pacific cod is missing");
+  const cod = food("fdc:174191");
+  assert.equal(cod.nameZh, "太平洋鳕鱼（生）");
+  assert.equal(cod.category, "鱼类");
+  assert.equal(cod.measures.filter((measure) => measure.default).length, 1);
+});
+
+// ---------------------------------------------------------------------------
 // P18b: commonness tiers, and no review text under docs/
 // ---------------------------------------------------------------------------
 

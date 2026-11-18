@@ -607,8 +607,8 @@ food_key,measure_id,label_zh,grams,basis,is_default
 175303,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 171955,usda89621,一片（鱼柳）,231,usda_portion:89621,0
 171955,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174190,usda93894,一块,80,usda_portion:93894,0
-174190,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
+174191,usda93896,一片（鱼柳）,116,usda_portion:93896,0
+174191,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 171964,usda89638,一片（鱼柳）,193,usda_portion:89638,0
 171964,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 173725,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
@@ -624,19 +624,10 @@ food_key,measure_id,label_zh,grams,basis,is_default
 173691,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 175136,usda95717,半片（鱼柳）,198,usda_portion:95717,0
 175136,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-175168,usda95789,半片（鱼柳）,178,usda_portion:95789,0
-175168,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-173693,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 175159,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 175156,usda95764,半片（鱼柳）,198,usda_portion:95764,0
 175156,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 173706,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-172006,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171986,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-175158,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-175139,usda95722,一杯,149,usda_portion:95722,0
-175139,usda95726,一条（小）,12,usda_portion:95726,0
-175139,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174182,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 175116,usda95669,一片（鱼柳）,184,usda_portion:95669,0
 175116,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
@@ -644,12 +635,8 @@ food_key,measure_id,label_zh,grams,basis,is_default
 175119,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174193,usda93901,一片（鱼柳）,204,usda_portion:93901,0
 174193,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174194,usda93905,一片（鱼柳）,159,usda_portion:93905,0
-174194,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 171952,usda89615,一片（鱼柳）,218,usda_portion:89615,0
 171952,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174185,usda93884,一片（鱼柳）,170,usda_portion:93884,0
-174185,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174184,usda93881,一片（鱼柳）,79,usda_portion:93881,0
 174184,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 171959,usda89629,一片（鱼柳）,204,usda_portion:89629,0
@@ -683,79 +670,45 @@ food_key,measure_id,label_zh,grams,basis,is_default
 175123,usda95688,一片（鱼柳）,119,usda_portion:95688,0
 175123,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 175146,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171956,usda89623,一片（鱼柳）,180,usda_portion:89623,0
-171956,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 175165,usda95783,一片（鱼柳）,159,usda_portion:95783,0
 175165,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 173717,usda93175,一片（鱼柳）,79,usda_portion:93175,0
 173717,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 175154,usda95760,一片（鱼柳）,159,usda_portion:95760,0
 175154,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171990,usda89692,一片（鱼柳）,90,usda_portion:89692,0
-171990,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 175179,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-175180,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174210,usda93939,一个（中）,6,usda_portion:93939,0
 174210,usda93940,一个（小）,5,usda_portion:93940,0
 174210,usda93942,四个,28,usda_portion:93942,0
 174210,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171971,usda89652,四个,22,usda_portion:89652,0
-171971,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174204,usda93927,一只,21,usda_portion:93927,0
 174204,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174205,usda93928,一杯,118,usda_portion:93928,0
-174205,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 171968,usda89647,一只,163,usda_portion:89647,0
 171968,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-172007,usda89726,一只,127,usda_portion:89726,0
-172007,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 175164,usda95781,一只,172,usda_portion:95781,0
 175164,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174202,usda93923,一只,134,usda_portion:93923,0
-174202,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174208,usda93935,一只,150,usda_portion:93935,0
 174208,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174209,usda93937,一杯,145,usda_portion:93937,0
-174209,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174211,usda93944,一只,209,usda_portion:93944,0
 174211,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-172009,usda89729,一只,163,usda_portion:89729,0
-172009,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174206,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174207,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174214,usda93948,一个,20,usda_portion:93948,0
 174214,usda93950,一个（中）,14.5,usda_portion:93950,0
 174214,usda93952,一杯,227,usda_portion:93952,0
 174214,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171975,usda89662,二十个（小）,190,usda_portion:89662,0
-171975,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171976,usda89664,一杯,160,usda_portion:89664,0
-171976,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174216,usda93954,一杯,150,usda_portion:93954,0
 174216,usda93956,一个,20,usda_portion:93956,0
 174216,usda93957,一个（中）,16,usda_portion:93957,0
 174216,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174217,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174219,usda93962,一个（中）,50,usda_portion:93962,0
 174219,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174250,usda94021,一个（中）,25,usda_portion:94021,0
-174250,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 171978,usda89667,六个（中）,84,usda_portion:89667,0
 171978,usda89668,一杯,248,usda_portion:89668,0
 171978,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171980,usda89672,六个（中）,42,usda_portion:89672,0
-171980,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-171981,usda89674,一杯,248,usda_portion:89674,0
-171981,usda89676,一罐,272,usda_portion:89676,0
-171981,usda89677,一只,8,usda_portion:89677,0
-171981,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174220,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-167742,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174223,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174218,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-174249,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174215,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
-172010,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 174212,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 171983,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
 167744,palm,一掌心大小,100,"estimate:palm-sized portion of meat or fish, about 100 g",1
