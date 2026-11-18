@@ -111,6 +111,13 @@ under `docs/` (no CDN, no runtime dependency), as noted per item.
   (38-40 px tap targets, 16 px inputs so iOS Safari does not zoom on focus, and
   `max(48px, calc(24px + env(safe-area-inset-bottom)))` page padding) follows
   the same hand-written utility ideas; no file is vendored or fetched for it.
+- **Pico CSS v2 (modal)** - https://picocss.com - MIT License, Copyright (c)
+  2019-2024 Pico. The food detail sheet in `docs/js/ui/detail.js` and
+  `docs/css/style.css` follows Pico's modal pattern: one native `<dialog>`
+  opened with `showModal()` (top layer, native Esc, `::backdrop` dimming)
+  instead of a hand-written overlay. The bottom-sheet / centred-dialog skin,
+  the nutrient rows and the focus return are written from scratch; no file is
+  vendored or fetched for it.
 
 ## Disclaimer
 

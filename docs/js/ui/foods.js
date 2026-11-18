@@ -64,6 +64,7 @@ import {
 import { MET_COLORS, nameZhOf, unitOf } from "../core/nutrients.js";
 import { DEFAULT_LIMIT, LIMIT_STEP, amountBasisGOf, commonnessOf, foodsForNutrient, nextLimit, valueOf } from "../core/order.js";
 import { FALLBACK_GRAMS } from "../core/state.js";
+import { DETAIL_LABEL, openDetail } from "./detail.js";
 
 /**
  * Ordering hint of the meta line, e.g. "维生素A · 按常见度排序".
@@ -353,22 +354,32 @@ export function buildFoodCards(ctx) {
 }
 
 /**
+ * Commonness badge of a card (P18b): tiers 4-5 only. Shared by the compact
+ * card, its expanded tile head and the tile's card body.
+ *
+ * @param {object} card card model from `buildFoodCards`
+ * @returns {string} HTML, empty for tiers 1-3
+ */
+function commonBadgeHtml(card) {
+  if (!card.commonBadge) return "";
+  return `<span class="food-card__badge food-card__badge--common"
+        title="${esc(COMMON_BADGE_TITLE)}">${esc(card.commonBadge)}</span>`;
+}
+
+/**
  * Markup of the head of a food card: name, commonness badge, English name and
  * the amount on the card's basis (per 100 g, or per 10 g for small-portion
  * foods). A bone-in food adds a short "带骨重量" note. Shared by the compact
  * card and the expanded tile.
  *
  * @param {object} card card model from `buildFoodCards`
+ * @param {{withName?: boolean}} [options] `withName: false` leaves the name out:
+ *   the expanded tile shows it in its own head row next to the 查看详情 button,
+ *   because a button cannot contain the detail button (P21c)
  * @returns {string} HTML
  */
-function cardBodyHtml(card) {
-  // Commonness badge (P18b): only tiers 4-5. The short text stays in the
-  // accessible name ("米饭 ★常见") and the title spells the tier out for hover
-  // and assistive tech.
-  const common = card.commonBadge
-    ? `<span class="food-card__badge food-card__badge--common"
-        title="${esc(COMMON_BADGE_TITLE)}">${esc(card.commonBadge)}</span>`
-    : "";
+function cardBodyHtml(card, options = {}) {
+  const common = commonBadgeHtml(card);
   const english = card.nameEn ? `<span class="food-card__en">${esc(card.nameEn)}</span>` : "";
   // The basis label stays visible on every card (P19b): a spoonful of sesame
   // paste must not read like a 100 g portion.
@@ -381,10 +392,15 @@ function cardBodyHtml(card) {
   const bone = card.boneIn
     ? `<span class="food-card__bone" title="${esc(card.boneNote)}">${esc(WITH_BONE_LABEL)} · ${esc(card.boneText)}</span>`
     : "";
-  return `<span class="food-card__head">
+  // The expanded tile shows the name in its own head row next to the 查看详情
+  // button (P21c), so its card body keeps only a screen-reader name.
+  const head = options.withName === false
+    ? `<span class="visually-hidden">${esc(card.nameZh)}</span>`
+    : `<span class="food-card__head">
       <span class="food-card__name">${esc(card.nameZh)}</span>
       ${common}
-    </span>
+    </span>`;
+  return `${head}
     ${english}
     <span class="food-card__amount">${esc(card.amountText)}</span>
     ${basis}${bone}`;
@@ -503,10 +519,16 @@ export function expandedTileHtml(card) {
 
   return `<div class="food-tile${card.selected ? " is-selected" : ""}"${metStyle(card)}
     data-food-tile="${esc(card.id)}">
+    <div class="food-tile__head">
+      <span class="food-tile__title">${esc(card.nameZh)}</span>
+      ${commonBadgeHtml(card)}
+      <button type="button" class="food-tile__detail" data-detail="${esc(card.id)}"
+        aria-haspopup="dialog">${DETAIL_LABEL}</button>
+    </div>
     <button type="button" class="food-card food-card--expanded" data-food="${esc(card.id)}"
       aria-pressed="${card.selected ? "true" : "false"}" aria-expanded="true"
       title="${esc(card.title)}">
-      ${cardBodyHtml(card)}
+      ${cardBodyHtml(card, { withName: false })}
     </button>
     <button type="button" class="food-tile__check" data-confirm="${esc(card.id)}"
       aria-label="${CONFIRM_LABEL}" title="${CONFIRM_LABEL}">✓</button>
@@ -895,6 +917,37 @@ function handleClick(event) {
     return;
   }
 
+  // P21c: 查看详情 opens the shared detail sheet. It must not toggle the tile
+  // or confirm anything, so it is handled before the card button.
+  const detail = event.target.closest("[data-detail]");
+  if (detail && container.contains(detail)) {
+    const food = foodById(ctx.foods, detail.dataset.detail);
+    if (!food) return;
+    const draft = container._foodsDraft;
+    const live = cellFor(container, food.id)?.querySelector("[data-grams]");
+    let grams = null;
+    if (draft && draft.foodId === food.id) {
+      grams = draft.quantity?.grams ?? null;
+    } else {
+      grams = ctx.state.selections?.[food.id]?.grams ?? null;
+    }
+    // A gram input that was typed but not blurred yet is the visible quantity:
+    // read it so the sheet matches what the user sees, without saving it.
+    if (live) {
+      const typed = Number(live.value);
+      if (Number.isFinite(typed) && typed > 0) grams = typed;
+    }
+    openDetail({
+      food,
+      dri: ctx.dri,
+      state: ctx.state,
+      nutrients: ctx.nutrients,
+      grams,
+      trigger: detail,
+    });
+    return;
+  }
+
   const confirm = event.target.closest("[data-confirm]");
   if (confirm && container.contains(confirm)) {
     confirmEditor(container, ctx, confirm.dataset.confirm);
@@ -1084,6 +1137,7 @@ export default {
   CONFIRM_LABEL,
   CANCEL_LABEL,
   DESELECT_LABEL,
+  DETAIL_LABEL,
   shortNumber,
   foodArray,
   foodById,

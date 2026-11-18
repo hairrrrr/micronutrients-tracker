@@ -51,6 +51,9 @@ export const SEL = Object.freeze({
   cancel: (id) => `[data-food-tile="${id}"] [data-cancel]`,
   deselect: (id) => `[data-food-tile="${id}"] [data-deselect]`,
   search: "[data-food-search]",
+  detailButton: (id) => `[data-food-tile="${id}"] [data-detail]`,
+  detailDialog: "dialog#food-detail",
+  detailRows: "dialog#food-detail .detail-row",
 });
 
 /**
@@ -272,4 +275,39 @@ export async function commonnessOfFood(foodId) {
   const food = payload.foods.find((entry) => entry.id === foodId);
   if (!food) throw new Error(`foods.json has no food ${foodId}`);
   return food.commonness ?? 0;
+}
+
+/**
+ * Expected ranking of the detail sheet of one food (P21c), computed from
+ * docs/data/foods.json and docs/data/dri.json: every nutrient whose food value
+ * is > 0 and whose target for the profile is > 0, by per100g / target
+ * descending, ties keeping nutrients.json order.
+ *
+ * @param {string} foodId
+ * @param {{standard?: string, sex?: string, age?: number}} [profile]
+ * @returns {Promise<Array<{id: string, ratio: number}>>}
+ */
+export async function expectedDetailRanking(foodId, profile = {}) {
+  const { standard = "cn2023", sex = "female", age = 30 } = profile;
+  const foods = JSON.parse(await readFile(new URL("../../docs/data/foods.json", import.meta.url), "utf8"));
+  const dri = JSON.parse(await readFile(new URL("../../docs/data/dri.json", import.meta.url), "utf8"));
+  const nutrients = JSON.parse(await readFile(new URL("../../docs/data/nutrients.json", import.meta.url), "utf8"));
+
+  const food = foods.foods.find((entry) => entry.id === foodId);
+  if (!food) throw new Error(`foods.json has no food ${foodId}`);
+  const group = dri.standards[standard].groups.find((entry) => entry.sex === sex
+    && entry.lifeStage === "none"
+    && entry.ageMin <= age
+    && (entry.ageMax === null || age <= entry.ageMax));
+  if (!group) throw new Error(`no ${standard} group for ${sex} ${age}`);
+
+  return nutrients.nutrients
+    .map((nutrient) => {
+      const value = food.per100g?.[nutrient.id];
+      const target = Number(group.values?.[nutrient.id]?.target);
+      if (typeof value !== "number" || !(value > 0) || !(target > 0)) return null;
+      return { id: nutrient.id, ratio: value / target };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.ratio - a.ratio);
 }

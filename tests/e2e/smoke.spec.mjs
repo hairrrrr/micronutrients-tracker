@@ -33,6 +33,7 @@ import {
   cardTarget,
   commonnessOfFood,
   confirmTile,
+  expectedDetailRanking,
   expectedRanking,
   expectedTopIds,
   measureOverflow,
@@ -891,6 +892,91 @@ test.describe("smoke", () => {
     expect(about).toContain("带骨重量");
     expect(about).toContain("可食部");
     expect(about.includes("菜肴")).toBe(false);
+
+    expect(errors).toEqual([]);
+  });
+
+  // -------------------------------------------------------------------------
+  // P21c: the food detail sheet
+  // -------------------------------------------------------------------------
+
+  test("19. 查看详情 opens the detail sheet of a food and Esc returns the focus (P21c)", async ({ page }) => {
+    const errors = watchErrors(page);
+    await resetApp(page);
+
+    // Default view: vitamin A, female 30, China 2023, no selections. The first
+    // card of the ranking is the one to open.
+    await expect(page.locator(SEL.tab("vitA"))).toHaveAttribute("aria-pressed", "true");
+    const ranking = await expectedTopIds("vitA", 1);
+    const foodId = ranking[0];
+    await page.locator(SEL.foodCard(foodId)).click();
+
+    const detailButton = page.locator(SEL.detailButton(foodId));
+    await expect(detailButton).toBeVisible();
+    await expect(detailButton).toHaveText("查看详情");
+    await expect(detailButton).toHaveAttribute("aria-haspopup", "dialog");
+
+    await detailButton.click();
+
+    // The dialog is visible (top layer), carries the food's Chinese name, the
+    // basis note and one row per nutrient of nutrients.json (22).
+    const dialog = page.locator(SEL.detailDialog);
+    await expect(dialog).toBeVisible();
+    const titleText = await page.locator(`[data-food-tile="${foodId}"] .food-tile__title`).innerText();
+    await expect(dialog.locator(".detail-dialog__title")).toHaveText(titleText);
+    await expect(dialog.locator(".detail__note")).toContainText("所有营养素按占每日目标的百分比从高到低排序");
+    const rows = page.locator(SEL.detailRows);
+    await expect(rows).toHaveCount(22);
+
+    // The first row is the nutrient with the highest per100g / target ratio of
+    // that food for the default profile, computed from the data files.
+    const expectedFirst = (await expectedDetailRanking(foodId))[0];
+    await expect(rows.first()).toHaveAttribute("data-nutrient", expectedFirst.id);
+
+    // The quantity line uses the draft grams of the tile (default amount).
+    await expect(rows.first().locator(".detail-row__qty")).toContainText("当前数量");
+
+    // No overflow at 390 px with the sheet open.
+    const box = await measureOverflow(page);
+    expect(box.scrollWidth).toBeLessThanOrEqual(390);
+
+    // Esc closes the sheet and the focus goes back to the 查看详情 button.
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    const focused = await page.evaluate(() => document.activeElement?.getAttribute("data-detail"));
+    expect(focused).toBe(foodId);
+
+    // Opening the sheet never selected the food or collapsed the tile.
+    await expect(page.locator(SEL.tile(foodId))).toBeVisible();
+    await expect(page.locator(SEL.foodCard(foodId))).toHaveAttribute("aria-pressed", "false");
+    const stored = JSON.parse(await page.evaluate(() => window.localStorage.getItem("mnt.state.v1")) ?? "{}");
+    expect(stored.selections ?? {}).toEqual({});
+
+    // A tap on the backdrop and the 关闭 button close it too, and the focus
+    // still returns to the 查看详情 button.
+    await detailButton.click();
+    await expect(dialog).toBeVisible();
+    await expect(dialog.locator("[data-detail-close]")).toHaveText("关闭");
+    await dialog.locator("[data-detail-close]").click();
+    await expect(dialog).toBeHidden();
+    expect(await page.evaluate(() => document.activeElement?.getAttribute("data-detail"))).toBe(foodId);
+
+    await detailButton.click();
+    await expect(dialog).toBeVisible();
+    // The sheet is a bottom sheet at 390 px, so the top of the viewport is the
+    // backdrop.
+    await page.mouse.click(5, 5);
+    await expect(dialog).toBeHidden();
+    expect(await page.evaluate(() => document.activeElement?.getAttribute("data-detail"))).toBe(foodId);
+
+    // 360 px: still no horizontal overflow with the sheet open.
+    await page.setViewportSize({ width: 360, height: 720 });
+    await detailButton.click();
+    await expect(dialog).toBeVisible();
+    const narrow = await measureOverflow(page);
+    expect(narrow.scrollWidth).toBeLessThanOrEqual(360);
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
 
     expect(errors).toEqual([]);
   });

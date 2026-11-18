@@ -5,6 +5,9 @@
 //   mobile-390.png           the page at 390 x 844, default state
 //   mobile-390-selected.png  the same, with a selected food and its editor open
 //
+// P21c adds mobile-390-detail.png: the same 390 px view with the food detail
+// sheet open.
+//
 // Only the page is captured (full page), not the browser chrome. The default
 // state is freshly cleared for every shot, so the images are reproducible.
 
@@ -57,5 +60,22 @@ test("mobile 390 px screenshot with a selected food", async ({ page }) => {
   await expect(page.locator(".food-card")).toHaveCount(61);
 
   await page.screenshot({ path: `${SHOTS}/mobile-390-selected.png`, fullPage: true });
+  expect(errors).toEqual([]);
+});
+
+test("mobile 390 px screenshot with the detail sheet", async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await resetApp(page);
+
+  // The first card of the default vitamin A ranking, with its tile open and the
+  // detail sheet showing all 22 nutrient rows.
+  const firstId = await page.locator(".food-cell").first().getAttribute("data-food-cell");
+  await openTile(page, firstId);
+  await page.locator(`[data-food-tile="${firstId}"] [data-detail]`).click();
+  await expect(page.locator("dialog#food-detail")).toBeVisible();
+  await expect(page.locator("dialog#food-detail .detail-row")).toHaveCount(22);
+
+  await page.screenshot({ path: `${SHOTS}/mobile-390-detail.png` });
   expect(errors).toEqual([]);
 });
