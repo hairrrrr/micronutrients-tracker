@@ -6,21 +6,21 @@ digraph modules {
   node [fontname="Noto Sans CJK SC", fontsize=11, margin="0.16,0.09"];
   edge [fontname="Noto Sans CJK SC", fontsize=10, arrowsize=0.7];
 
-  json [label="docs/data/*.json\napp.js 读 nutrients、foods、dri", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
-  app [label="docs/js/app.js\nfetch 数据、读 localStorage，\n再依次调用下面的 render 函数", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  store [label="localStorage\n已选食物与个人设置", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
+  json [label="docs/data/*.json\napp.js 读 nutrients、foods、dri", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=2.92, fixedsize=false, style="filled"];
+  app [label="docs/js/app.js\nfetch 数据、读 localStorage，\n再依次调用下面的 render 函数", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.72, fixedsize=false, style="rounded,filled"];
+  store [label="localStorage\n已选食物与个人设置", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=1.73, fixedsize=false, style="filled"];
 
   subgraph cluster_ui {
     label="docs/js/ui/：画出页面、接住点击和输入；括号里是它读的 core 模块";
     fontsize=11;
     style="rounded,dashed";
     color="#4A78A8";
-  profile_ui [label="profile.js\n性别、年龄、两种标准对比\n（calc、nutrients、dri）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  targets_ui [label="targets.js\n目标卡片\n（calc、dri、nutrients）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  tabs_ui [label="tabs.js\n营养素标签页\n（nutrients）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  foods_ui [label="foods.js\n食物卡片、数量编辑\n（order、measures、calc、\nnutrients、state）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  detail_ui [label="detail.js\n详情弹窗\n（detail、dri、calc、\nmeasures、nutrients、order）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  about_ui [label="about.js\n数据来源、说明、清空按钮\n（不 import 任何模块）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
+  profile_ui [label="profile.js\n性别、年龄、两种标准对比\n（calc、nutrients、dri）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.32, fixedsize=false, style="rounded,filled"];
+  targets_ui [label="targets.js\n目标卡片\n（calc、dri、nutrients）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.32, fixedsize=false, style="rounded,filled"];
+  tabs_ui [label="tabs.js\n营养素标签页\n（nutrients）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=1.42, fixedsize=false, style="rounded,filled"];
+  foods_ui [label="foods.js\n食物卡片、数量编辑\n（order、measures、calc、\nnutrients、state）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.40, fixedsize=false, style="rounded,filled"];
+  detail_ui [label="detail.js\n详情弹窗\n（detail、dri、calc、\nmeasures、nutrients、order）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.67, fixedsize=false, style="rounded,filled"];
+  about_ui [label="about.js\n数据来源、说明、清空按钮\n（不 import 任何模块）", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.19, fixedsize=false, style="rounded,filled"];
   }
 
   subgraph cluster_core {
@@ -28,13 +28,13 @@ digraph modules {
     fontsize=11;
     style="rounded,dashed";
     color="#4A78A8";
-  nutrients_js [label="nutrients.js\n营养素列表、单位、名称、颜色", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  dri_js [label="dri.js\n年龄组映射、targetsFor 取目标", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  calc_js [label="calc.js\n合计、可食部克数、状态文字", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  order_js [label="order.js\n每个营养素的食物排序", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  measures_js [label="measures.js\n家庭计量换算成克、带骨可食部", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  detail_js [label="detail.js\n详情页里的营养素排序", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  state_js [label="state.js\n状态模型、纯 reducer、读写存储", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
+  nutrients_js [label="nutrients.js\n营养素列表、单位、名称、颜色", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.50, fixedsize=false, style="rounded,filled"];
+  dri_js [label="dri.js\n年龄组映射、targetsFor 取目标", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.66, fixedsize=false, style="rounded,filled"];
+  calc_js [label="calc.js\n合计、可食部克数、状态文字", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.35, fixedsize=false, style="rounded,filled"];
+  order_js [label="order.js\n每个营养素的食物排序", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=1.89, fixedsize=false, style="rounded,filled"];
+  measures_js [label="measures.js\n家庭计量换算成克、带骨可食部", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.50, fixedsize=false, style="rounded,filled"];
+  detail_js [label="detail.js\n详情页里的营养素排序", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=1.89, fixedsize=false, style="rounded,filled"];
+  state_js [label="state.js\n状态模型、纯 reducer、读写存储", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.71, fixedsize=false, style="rounded,filled"];
   }
 
   json -> app [color="#666666", label="fetch"];
@@ -57,8 +57,8 @@ digraph modules {
     style="rounded,dashed";
     color="#999999";
     node [fontname="Noto Sans CJK SC", margin="0.10,0.05"];
-    legend_code [label="本项目代码", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9];
-    legend_stored [label="存储的数据：CSV、JSON、localStorage", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled", fontsize=9];
+    legend_code [label="本项目代码", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9, width=0.98, fixedsize=false];
+    legend_stored [label="存储的数据：CSV、JSON、localStorage", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled", fontsize=9, width=2.67, fixedsize=false];
     { rank=same; legend_code; legend_stored; }
   }
 }

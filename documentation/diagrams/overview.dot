@@ -12,21 +12,21 @@ digraph overview {
     style="rounded,filled";
     color="#CCCCCC";
     fillcolor="#FAFAFA";
-  usda [label="USDA SR Legacy 2018-04\n原始 CSV（data-raw/，不提交）", fillcolor="#E8F6EA", color="#3C8D4F", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  src [label="data-src/*.csv\n人工整理、提交到仓库的输入", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
-  build [label="tools/build_foods.py\ntools/build_dri.py", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  validate [label="tools/validate_data.py\n一项不合格就 exit 1", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  json [label="docs/data/*.json\nfoods / nutrients / dri / meta", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
+  usda [label="USDA SR Legacy 2018-04\n原始 CSV（data-raw/，不提交）", fillcolor="#E8F6EA", color="#3C8D4F", fontcolor="#1B1B1B", shape=box, width=2.67, fixedsize=false, style="rounded,filled"];
+  src [label="data-src/*.csv\n人工整理、提交到仓库的输入", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=2.35, fixedsize=false, style="filled"];
+  build [label="tools/build_foods.py\ntools/build_dri.py", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.04, fixedsize=false, style="rounded,filled"];
+  validate [label="tools/validate_data.py\n一项不合格就 exit 1", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.21, fixedsize=false, style="rounded,filled"];
+  json [label="docs/data/*.json\nfoods / nutrients / dri / meta", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=2.88, fixedsize=false, style="filled"];
   usda -> build [color="#666666"];
   src -> build [color="#666666"];
   build -> validate [color="#666666"];
   validate -> json [color="#666666"];
   }
 
-  pages [label="GitHub Pages\n按分支的 docs/ 目录发布静态站点", fillcolor="#E8F6EA", color="#3C8D4F", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  browser [label="浏览器\nindex.html + docs/js（ES 模块）", fillcolor="#FFF4D6", color="#C9A227", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  user [label="用户", fillcolor="#FFF4D6", color="#C9A227", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  store [label="localStorage\n已选食物、数量、个人设置", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
+  pages [label="GitHub Pages\n按分支的 docs/ 目录发布静态站点", fillcolor="#E8F6EA", color="#3C8D4F", fontcolor="#1B1B1B", shape=box, width=2.78, fixedsize=false, style="rounded,filled"];
+  browser [label="浏览器\nindex.html + docs/js（ES 模块）", fillcolor="#FFF4D6", color="#C9A227", fontcolor="#1B1B1B", shape=box, width=2.90, fixedsize=false, style="rounded,filled"];
+  user [label="用户", fillcolor="#FFF4D6", color="#C9A227", fontcolor="#1B1B1B", shape=box, width=0.67, fixedsize=false, style="rounded,filled"];
+  store [label="localStorage\n已选食物、数量、个人设置", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=2.19, fixedsize=false, style="filled"];
 
   json -> pages [color="#666666", label="随仓库提交"];
   pages -> browser [color="#666666", label="打开网址"];
@@ -40,10 +40,10 @@ digraph overview {
     style="rounded,dashed";
     color="#999999";
     node [fontname="Noto Sans CJK SC", margin="0.10,0.05"];
-    legend_input [label="输入 / 输出：用户、浏览器、文件", fillcolor="#FFF4D6", color="#C9A227", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9];
-    legend_code [label="本项目代码", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9];
-    legend_source [label="外部来源：USDA、CNS / NASEM 表、GitHub Pages", fillcolor="#E8F6EA", color="#3C8D4F", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9];
-    legend_stored [label="存储的数据：CSV、JSON、localStorage", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled", fontsize=9];
+    legend_input [label="输入 / 输出：用户、浏览器、文件", fillcolor="#FFF4D6", color="#C9A227", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9, width=2.32, fixedsize=false];
+    legend_code [label="本项目代码", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9, width=0.98, fixedsize=false];
+    legend_source [label="外部来源：USDA、CNS / NASEM 表、GitHub Pages", fillcolor="#E8F6EA", color="#3C8D4F", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9, width=3.29, fixedsize=false];
+    legend_stored [label="存储的数据：CSV、JSON、localStorage", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled", fontsize=9, width=2.67, fixedsize=false];
     { rank=same; legend_input; legend_code; legend_source; legend_stored; }
   }
 }

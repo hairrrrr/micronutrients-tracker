@@ -6,27 +6,27 @@ digraph data_build {
   node [fontname="Noto Sans CJK SC", fontsize=11, margin="0.16,0.09"];
   edge [fontname="Noto Sans CJK SC", fontsize=10, arrowsize=0.7];
 
-  usda [label="USDA SR Legacy 2018-04\nfood / nutrient / food_nutrient\n/ food_portion CSV", fillcolor="#E8F6EA", color="#3C8D4F", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
+  usda [label="USDA SR Legacy 2018-04\nfood / nutrient / food_nutrient\n/ food_portion CSV", fillcolor="#E8F6EA", color="#3C8D4F", fontcolor="#1B1B1B", shape=box, width=2.96, fixedsize=false, style="rounded,filled"];
 
   subgraph cluster_src {
     label="data-src/：提交到仓库的输入";
     fontsize=11;
     style="rounded,dashed";
     color="#7D5BA6";
-  nutrients_csv [label="nutrients.csv\n22 种营养素的元数据", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
-  foods_csv [label="foods_curated.csv\n收录哪些食物 + 中文名", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
-  measures_csv [label="measures.csv\n每种食物的家庭计量", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
-  commonness_csv [label="commonness.csv\n常见度分层 1..5", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
-  custom_csv [label="custom_foods.csv\n3 种包装标签牛奶", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
-  dri_csv [label="dri/cn2023.csv、dri/us.csv\n各 220 行参考值", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
+  nutrients_csv [label="nutrients.csv\n22 种营养素的元数据", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=1.83, fixedsize=false, style="filled"];
+  foods_csv [label="foods_curated.csv\n收录哪些食物 + 中文名", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=1.99, fixedsize=false, style="filled"];
+  measures_csv [label="measures.csv\n每种食物的家庭计量", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=1.73, fixedsize=false, style="filled"];
+  commonness_csv [label="commonness.csv\n常见度分层 1..5", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=1.54, fixedsize=false, style="filled"];
+  custom_csv [label="custom_foods.csv\n3 种包装标签牛奶", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=1.70, fixedsize=false, style="filled"];
+  dri_csv [label="dri/cn2023.csv、dri/us.csv\n各 220 行参考值", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=2.53, fixedsize=false, style="filled"];
   }
 
-  build_foods [label="tools/build_foods.py\n读原始 CSV + data-src，算每 100 g", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  build_dri [label="tools/build_dri.py\n按年龄组整理参考值", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  validate [label="tools/validate_data.py\n行、食物、json 全部检查", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
-  foods_json [label="docs/data/foods.json\n591 个食物", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
-  other_json [label="docs/data/nutrients.json\nmeta.json、dri.json", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled"];
-  rejected [label="有问题的行 / 数据\n不写进 json，脚本报错退出", fillcolor="#FCE8E6", color="#C0392B", fontcolor="#1B1B1B", shape=box, style="rounded,filled"];
+  build_foods [label="tools/build_foods.py\n读原始 CSV + data-src，算每 100 g", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=3.04, fixedsize=false, style="rounded,filled"];
+  build_dri [label="tools/build_dri.py\n按年龄组整理参考值", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=1.87, fixedsize=false, style="rounded,filled"];
+  validate [label="tools/validate_data.py\n行、食物、json 全部检查", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, width=2.21, fixedsize=false, style="rounded,filled"];
+  foods_json [label="docs/data/foods.json\n591 个食物", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=2.04, fixedsize=false, style="filled"];
+  other_json [label="docs/data/nutrients.json\nmeta.json、dri.json", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, width=2.38, fixedsize=false, style="filled"];
+  rejected [label="有问题的行 / 数据\n不写进 json，脚本报错退出", fillcolor="#FCE8E6", color="#C0392B", fontcolor="#1B1B1B", shape=box, width=2.31, fixedsize=false, style="rounded,filled"];
 
   usda -> build_foods [color="#666666"];
   nutrients_csv -> build_foods [color="#666666"];
@@ -47,10 +47,10 @@ digraph data_build {
     style="rounded,dashed";
     color="#999999";
     node [fontname="Noto Sans CJK SC", margin="0.10,0.05"];
-    legend_source [label="外部来源：USDA、CNS / NASEM 表、GitHub Pages", fillcolor="#E8F6EA", color="#3C8D4F", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9];
-    legend_code [label="本项目代码", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9];
-    legend_stored [label="存储的数据：CSV、JSON、localStorage", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled", fontsize=9];
-    legend_error [label="被拒绝 / 出错的分支", fillcolor="#FCE8E6", color="#C0392B", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9];
+    legend_source [label="外部来源：USDA、CNS / NASEM 表、GitHub Pages", fillcolor="#E8F6EA", color="#3C8D4F", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9, width=3.29, fixedsize=false];
+    legend_code [label="本项目代码", fillcolor="#EAF2FB", color="#4A78A8", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9, width=0.98, fixedsize=false];
+    legend_stored [label="存储的数据：CSV、JSON、localStorage", fillcolor="#F1ECF8", color="#7D5BA6", fontcolor="#1B1B1B", shape=cylinder, style="filled", fontsize=9, width=2.67, fixedsize=false];
+    legend_error [label="被拒绝 / 出错的分支", fillcolor="#FCE8E6", color="#C0392B", fontcolor="#1B1B1B", shape=box, style="rounded,filled", fontsize=9, width=1.57, fixedsize=false];
     { rank=same; legend_source; legend_code; legend_stored; legend_error; }
   }
 }

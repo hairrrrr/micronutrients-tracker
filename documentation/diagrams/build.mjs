@@ -48,6 +48,33 @@ const KINDS = {
   },
 };
 
+/**
+ * Approximate the width of one line of text, in em.
+ *
+ * `@viz-js/viz` estimates text width from the fonts bundled with the WebAssembly
+ * build, which have no CJK glyphs, so a Chinese label is measured as if every
+ * character were a narrow blank and the box comes out too small. We measure it
+ * ourselves instead: about 1 em per CJK character and 0.55 em per ASCII
+ * character, then set the node width from that (see `nodeWidth`).
+ */
+function lineWidthEm(text) {
+  let em = 0;
+  for (const char of String(text)) {
+    em += char.codePointAt(0) >= 0x2000 ? 1 : 0.55;
+  }
+  return em;
+}
+
+/** Horizontal padding inside a node, in inches, on each side. */
+const MARGIN_X = 0.18;
+
+/** Width in inches that fits every line of `label` at `fontSize` points. */
+function nodeWidth(label, fontSize = 11) {
+  const lines = String(label).split("\n");
+  const widest = Math.max(...lines.map(lineWidthEm));
+  return widest * (fontSize / 72) + MARGIN_X * 2;
+}
+
 /** Escape a label for a quoted Graphviz string, keeping "\n" as line breaks. */
 function esc(text) {
   return String(text)
@@ -59,12 +86,15 @@ function esc(text) {
 /** One node with the style of its colour kind. */
 function node(id, label, kind = "code") {
   const style = KINDS[kind];
+  const width = nodeWidth(label);
   const attributes = [
     `label="${esc(label)}"`,
     `fillcolor="${style.fill}"`,
     `color="${style.border}"`,
     `fontcolor="#1B1B1B"`,
     `shape=${style.shape || "box"}`,
+    `width=${width.toFixed(2)}`,
+    `fixedsize=false`,
     style.shape === "cylinder" ? `style="filled"` : `style="rounded,filled"`,
   ];
   return `  ${id} [${attributes.join(", ")}];`;
@@ -91,7 +121,7 @@ function edge(from, to, label = "", red = false, toCluster = false) {
 function legend(prefix, used) {
   const nodes = used.map((kind) => {
     const style = KINDS[kind];
-    return `    ${prefix}_${kind} [label="${esc(style.legend)}", fillcolor="${style.fill}", color="${style.border}", fontcolor="#1B1B1B", shape=${style.shape || "box"}, style="${style.shape === "cylinder" ? "filled" : "rounded,filled"}", fontsize=9];`;
+    return `    ${prefix}_${kind} [label="${esc(style.legend)}", fillcolor="${style.fill}", color="${style.border}", fontcolor="#1B1B1B", shape=${style.shape || "box"}, style="${style.shape === "cylinder" ? "filled" : "rounded,filled"}", fontsize=9, width=${nodeWidth(style.legend, 9).toFixed(2)}, fixedsize=false];`;
   });
   const same = `    { rank=same; ${used.map((kind) => `${prefix}_${kind}`).join("; ")}; }`;
   return [

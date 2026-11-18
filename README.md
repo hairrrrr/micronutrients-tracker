@@ -105,8 +105,12 @@ npm run validate     # 生成之后再检查一遍
 ## 文档
 
 - [`documentation/README.md`](documentation/README.md) — 文档目录和阅读顺序（第一次来建议先看这里）。
+- [`documentation/ARCHITECTURE.md`](documentation/ARCHITECTURE.md) — 架构：整体结构和三张图，每个文件夹和数据文件的字段。
+- [`documentation/KEY_IMPLEMENTATION.md`](documentation/KEY_IMPLEMENTATION.md) — 关键实现：目标查找、摄入合计、家庭计量与带骨换算、排序、详情排名、数据构建规则。
+- [`documentation/EXPLAINED.md`](documentation/EXPLAINED.md) — 入门讲解：写给没写过代码的人，用真实数字走一遍从点击食物到卡片出数的过程。
 - [`documentation/GLOSSARY.md`](documentation/GLOSSARY.md) — 术语表：DRI、RNI、AI、UL、RAE、NE、常见度、包装标签等词的含义。
-- `documentation/diagrams/` — 图表的 `.dot` 源文件和渲染出来的 `.svg`，用 `npm run docs:diagrams` 重新生成。
+- [`documentation/diagrams/`](documentation/diagrams/) — 图表的 `.dot` 源文件和渲染出来的 `.svg`，用 `npm run docs:diagrams` 重新生成。
+- 改完文档可以运行 `npm run docs:check`，检查所有相对链接和写到的文件路径是否还存在。
 
 ## 致谢
 
@@ -166,6 +170,7 @@ npm run validate     # 生成之后再检查一遍
 
 ## 免责声明
 
-本站仅供一般信息参考，不构成医疗建议。家庭计量只是近似值；食物列表只收原料（生食材）。
-带骨食物按带骨重量记录，营养素按可食部计算（重量 ×（1 − 废弃率））。
+本站仅供一般信息参考，不构成医疗建议。家庭计量只是近似值；食物列表不收做好的菜肴。
+肉类、蛋类、鱼和海鲜只保留生的数据，没有熟菜；米饭、蔬菜等既有生的条目，
+也有煮熟的条目。带骨食物按带骨重量记录，营养素按可食部计算（重量 ×（1 − 废弃率））。
 如有健康问题或特殊饮食需求，请咨询医生或注册营养师。

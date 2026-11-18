@@ -10,7 +10,8 @@
     "build:data": "python3 tools/build_foods.py && python3 tools/build_dri.py",
     "validate": "python3 tools/validate_data.py",
     "e2e": "playwright test",
-    "docs:diagrams": "node documentation/diagrams/build.mjs"
+    "docs:diagrams": "node documentation/diagrams/build.mjs",
+    "docs:check": "node tools/check_docs.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.65.1",

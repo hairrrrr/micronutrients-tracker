@@ -21,6 +21,12 @@
 | [`GLOSSARY.md`](GLOSSARY.md) | 术语表：DRI、RNI、AI、UL、RAE、NE、DFE、常见度、包装标签等词的中文解释和在本项目里的含义。 |
 | [`diagrams/`](diagrams/) | 图表：`build.mjs` 加 5 张图（`overview`、`data-build`、`modules`、`ordering`、`intake`），源文件 `.dot`，渲染结果 `.svg`。 |
 
+## 改完文档检查一下
+
+文档里的相对链接、图片路径，以及用反引号写出来的仓库路径，都可以用 `npm run docs:check`
+检查（脚本是 `tools/check_docs.mjs`）。它还会确认 `docs/` 里没有混进说明文档，
+因为 GitHub Pages 只发布 `docs/`。有找不到的链接或路径时，脚本会列出文件和问题并以 1 退出。
+
 ## 看图说明
 
 图都用 `documentation/diagrams/build.mjs` 生成，改了图要运行 `npm run docs:diagrams`。
