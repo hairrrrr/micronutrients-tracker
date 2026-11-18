@@ -20,8 +20,9 @@
 // stepper (or a gram input) and the computed weight ("约 28 g"). The editor is
 // a SIBLING of the card button, never a child of it, so no click inside it can
 // toggle the card; the click handler also skips anything inside it. Selection
-// is global, so the same food is pinned and green on every nutrient tab while
-// the target cards update live.
+// is global, so the same food is pinned and green in every nutrient tab that
+// the food actually contains (P16: a food with 0 or no value for a nutrient is
+// not listed in that tab at all) while the target cards update live.
 //
 // Card density and the 2/4-column grid follow the food-card grids of common
 // nutrition trackers (see "Credits" in README.md); the markup and CSS are
@@ -368,7 +369,7 @@ export function foodsHtml(cards, ctx) {
         value="${esc(search)}">
     </div>
     <div class="foods__body" data-food-body>${foodsBodyHtml(cards, ctx)}</div>
-    <p class="foods__note">点击卡片可选择或取消食物；已选食物固定在列表最前，家庭计量为估算值。</p>`;
+    <p class="foods__note">点击卡片可选择或取消食物；本列表只显示含有该营养素的食物，已选食物固定在列表最前；家庭计量为估算值。</p>`;
 }
 
 /**

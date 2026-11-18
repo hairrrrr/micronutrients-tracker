@@ -1,7 +1,8 @@
 // Per-nutrient ordering with pinned selections (PLAN.md 1.7, phase P8).
 //
 // Small in-test fixtures: five foods with different per100g values, one food
-// without data for the nutrient under test, and one with a zero value.
+// without data for the nutrient under test, one with a zero value and one with
+// a nutrient key that is missing entirely.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
@@ -72,23 +73,52 @@ test("selected foods are pinned first, ordered by actual contribution", () => {
   assert.deepEqual(list.slice(2).map((food) => food.id), ["fdc:liver", "fdc:sweetpotato"]);
 });
 
-test("a pinned food with a null value for the nutrient is not listed", () => {
+test("a selected food with a null or missing value is not listed", () => {
   const selections = { "fdc:salt": { grams: 100 } };
   const list = foodsForNutrient(FOODS, "vitA", selections);
   assert.equal(list.some((food) => food.id === "fdc:salt"), false);
-  // It is listed in a nutrient it does have data for (iron 0 is still data,
-  // but a 0 per100g food is not shown in the unpinned part).
-  const iron = foodsForNutrient(FOODS, "iron", selections);
-  assert.equal(iron[0].id, "fdc:salt");
-  assert.equal(iron[0].selected, true);
+
+  // A missing per100g key behaves like null: no data, so not listed.
+  const noKey = [{ id: "fdc:bare", nameZh: "无数据食物", per100g: { iron: 1 } }];
+  const bare = foodsForNutrient(noKey, "vitA", { "fdc:bare": { grams: 100 } });
+  assert.deepEqual(bare, []);
+  const { pinned, unpinned } = partitionFoods(noKey, "vitA", { "fdc:bare": { grams: 100 } });
+  assert.deepEqual(pinned, []);
+  assert.deepEqual(unpinned, []);
 });
 
-test("a pinned food with a zero value stays pinned and counts as 0 g", () => {
+test("a selected food with a zero value is not pinned and not listed", () => {
+  // User review (P16): carrot in the Vitamin A tab (vitD = 0) used to be
+  // pinned in the Vitamin D tab. 0 means "none of this nutrient".
   const selections = { "fdc:rice": { grams: 150 } };
   const list = foodsForNutrient(FOODS, "vitA", selections);
-  assert.equal(list[0].id, "fdc:rice");
+  assert.equal(list.some((food) => food.id === "fdc:rice"), false);
+  const { pinned, unpinned } = partitionFoods(FOODS, "vitA", selections);
+  assert.deepEqual(pinned, []);
+  assert.equal(unpinned.some((food) => food.id === "fdc:rice"), false);
+
+  // A selected food with iron 0 is likewise absent from the iron tab.
+  const iron = foodsForNutrient(FOODS, "iron", { "fdc:salt": { grams: 100 } });
+  assert.equal(iron.some((food) => food.id === "fdc:salt"), false);
+
+  // ... while a selected food that does contain the nutrient is still pinned.
+  const pinnedRice = partitionFoods(FOODS, "iron", { "fdc:rice": { grams: 150 } }).pinned;
+  assert.deepEqual(pinnedRice.map((food) => food.id), ["fdc:rice"]);
+  assert.equal(pinnedRice[0].selected, true);
+  assert.equal(pinnedRice[0].contribution, 0.3);
+});
+
+test("a selected food with a value > 0 is pinned in that nutrient's tab", () => {
+  const selections = { "fdc:carrot": { grams: 200 } };
+  const { pinned } = partitionFoods(FOODS, "vitA", selections);
+  assert.deepEqual(pinned.map((food) => food.id), ["fdc:carrot"]);
+  assert.equal(pinned[0].selected, true);
+  assert.equal(pinned[0].contribution, 1670);
+  const list = foodsForNutrient(FOODS, "vitA", selections);
+  assert.equal(list[0].id, "fdc:carrot");
   assert.equal(list[0].selected, true);
-  assert.equal(list[0].contribution, 0);
+  // The same selection is not listed under a nutrient the food lacks.
+  assert.equal(foodsForNutrient(FOODS, "vitD", selections).length, 0);
 });
 
 test("pinned foods come before unpinned ones regardless of the limit", () => {

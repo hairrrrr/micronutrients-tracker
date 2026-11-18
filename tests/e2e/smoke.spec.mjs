@@ -1,11 +1,11 @@
 // End-to-end smoke tests (PLAN.md phase P13).
 //
-// Eight scenarios that cover the user-visible promises of the app: the profile
+// Nine scenarios that cover the user-visible promises of the app: the profile
 // and standard switch, selecting a food, the cross-tab pinning, a target card
 // turning green, the surplus wording, persistence across a reload, no
-// horizontal overflow at 390 px and finally the same site served from a
-// sub-path. Every flow goes through the real UI; only the reset touches
-// localStorage.
+// horizontal overflow at 390 px, the same site served from a sub-path and
+// (P16) a selected food that lacks the nutrient not appearing in that tab.
+// Every flow goes through the real UI; only the reset touches localStorage.
 //
 // The reference numbers used here are the fixed DRI fixtures of the unit
 // tests (Cn male 30-49 iron 12 mg, US male 31-50 iron 8 mg, vitamin A 770 /
@@ -16,6 +16,8 @@
 import { expect, test } from "@playwright/test";
 import { SUBPATH_BASE } from "../../playwright.config.mjs";
 import {
+  CARROT_ID,
+  CARROT_NAME,
   LIVER_ID,
   LIVER_NAME,
   SEL,
@@ -331,5 +333,42 @@ test.describe("smoke", () => {
       body: page.url(),
       contentType: "text/plain",
     });
+  });
+
+  test("9. a selected food with no vitamin D is not pinned in the vitamin D tab", async ({ page }) => {
+    const errors = watchErrors(page);
+    await resetApp(page);
+
+    // Carrot per 100 g: 835 ug RAE vitamin A, 0 ug vitamin D.
+    await expect(page.locator(SEL.tab("vitA"))).toHaveAttribute("aria-pressed", "true");
+    await selectFood(page, "胡萝卜", CARROT_ID);
+    await expect(page.locator(".food-cell").first()).toHaveAttribute("data-food-cell", CARROT_ID);
+    await expect(page.locator(SEL.foodCard(CARROT_ID))).toContainText(CARROT_NAME);
+    await expect(page.locator(SEL.foodCard(CARROT_ID))).toHaveAttribute("aria-pressed", "true");
+
+    // Clear the search so the whole vitamin D list is rendered, then switch.
+    await page.locator(SEL.search).fill("");
+    await page.locator(SEL.tab("vitD")).click();
+    await expect(page.locator(SEL.tab("vitD"))).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator(".foods__hint")).toContainText("维生素D");
+    await expect(page.locator(".food-cell").first()).toBeVisible();
+
+    // P16: the carrot does not contain vitamin D, so it is neither pinned nor
+    // listed in that tab, and its cross-tab editor is gone with it.
+    await expect(page.locator(SEL.foodCard(CARROT_ID))).toHaveCount(0);
+    await expect(page.locator(`.food-cell[data-food-cell="${CARROT_ID}"]`)).toHaveCount(0);
+    await expect(page.locator(SEL.editor(CARROT_ID))).toHaveCount(0);
+
+    // The selection itself is untouched: back in the vitamin A tab the carrot
+    // is pinned first and still selected.
+    await page.locator(SEL.tab("vitA")).click();
+    await expect(page.locator(SEL.tab("vitA"))).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator(".food-cell").first()).toHaveAttribute("data-food-cell", CARROT_ID);
+    await expect(page.locator(SEL.foodCard(CARROT_ID))).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator(SEL.editor(CARROT_ID))).toBeVisible();
+    const stored = await page.evaluate(() => window.localStorage.getItem("mnt.state.v1"));
+    expect(stored).toContain(CARROT_ID);
+
+    expect(errors).toEqual([]);
   });
 });

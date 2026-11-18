@@ -11,6 +11,13 @@ import { expect } from "@playwright/test";
 export const LIVER_ID = "fdc:167862";
 export const LIVER_NAME = "猪肝（生）";
 
+/**
+ * Carrot fixture for the P16 regression: 835 ug RAE but 0 ug vitamin D per
+ * 100 g, so it belongs in the vitamin A tab and not in the vitamin D tab.
+ */
+export const CARROT_ID = "fdc:170393";
+export const CARROT_NAME = "胡萝卜（生）";
+
 /** Selectors of the sections rendered by app.js. */
 export const SEL = Object.freeze({
   profile: "#profile",

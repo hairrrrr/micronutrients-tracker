@@ -2,16 +2,21 @@
 //
 // Pure ES module: no DOM access. It imports only `selectionGrams` from
 // calc.js, so node --test can load it directly. Ordering is:
-//   1. pinned: selected foods that have a non-null value for this nutrient,
-//      sorted by their actual contribution (per100g * grams / 100) descending
-//      (ties keep food-name order);
+//   1. pinned: selected foods with per100g[n] > 0, sorted by their actual
+//      contribution (per100g * grams / 100) descending (ties keep food-name
+//      order);
 //   2. unpinned: every other food with per100g[n] > 0, sorted by per100g[n]
 //      descending, ties broken by nameZh;
 //   3. `limit` (default 60) applies to the unpinned part only, so a user's
 //      pinned foods never disappear behind "show more".
 //
-// Selected foods with a null value for the nutrient are not listed at all: a
-// food without data must not look like a zero contributor.
+// Only foods that actually contain the nutrient are listed in a nutrient tab
+// (user review, P16): a food with per100g[n] = 0, null or no key at all is not
+// listed at all, whether it is selected or not. A zero value means "none of
+// this nutrient", and a missing value has no data; neither belongs in a
+// ranking of foods that contain it, so a selected carrot (vitamin D = 0) is
+// not pinned in the vitamin D tab. The selection itself is global and stays
+// untouched; it only does not show up in tabs of nutrients the food lacks.
 
 import { selectionGrams } from "./calc.js";
 
@@ -65,6 +70,9 @@ export function contribution(food, nutrientId, selection) {
 /**
  * Split foods into pinned and unpinned groups for one nutrient.
  *
+ * Only foods that contain the nutrient are considered: a food whose per100g
+ * value is 0, null or missing is neither pinned nor listed (P16).
+ *
  * Exposed separately because the UI needs the total count for its "show more"
  * button without building the whole list.
  *
@@ -84,11 +92,12 @@ export function partitionFoods(foods, nutrientId, selections) {
 
   for (const food of list) {
     const per100g = valueOf(food, nutrientId);
-    if (per100g === null) continue;
+    // 0, null and missing all mean "this food does not contain the nutrient":
+    // not listed in this tab at all, selected or not (P16).
+    if (per100g === null || per100g <= 0) continue;
 
     const selection = picked[food.id];
     if (selection) {
-      // Selected, but no data for this nutrient -> not listed in this group.
       pinned.push({
         ...food,
         selected: true,
@@ -96,7 +105,7 @@ export function partitionFoods(foods, nutrientId, selections) {
       });
       continue;
     }
-    if (per100g > 0) unpinned.push(food);
+    unpinned.push(food);
   }
 
   pinned.sort((a, b) => {
