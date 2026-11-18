@@ -48,3 +48,22 @@ AC: validator OK; unit tests for the new ordering; a test that docs/data/*.json 
 
 ## Release
 Push to origin main, wait until Pages is `built`, confirm that the live site shows the changes (live smoke test), and take fresh screenshots into shots/: desktop 1440, mobile 390 and mobile 390 with an expanded editor.
+
+## P19 - Per-10 g ranking for condiments and dried goods (user decision after v1.1 review)
+- **P19a (supervisor):** create `data-src/small_portion_foods.csv` (`food_id,name_zh,basis_g,rule`) with 58 flagged foods:
+  - every food in the categories 调味料, 香辛料 and 食用油脂
+  - an explicit, reviewed list: 大蒜, 小葱, 细香葱, dried shiitake, dried wood ear, agar, spirulina, dehydrated radish/carrot, sun-dried tomato, dried tofu, sesame seeds/paste, flaxseed and chia
+
+  Fresh seaweed (海带/紫菜/裙带菜 raw in SR Legacy) is not flagged, because the data is for the raw form.
+- **P19b (hms):** build_foods.py adds `amountBasisG` (10 or 100) to every food. Rules:
+  - Ordering: commonness tier first. Within a tier, richness = per100g[n] * amountBasisG / 100, then nameZh.
+  - Flagged cards show the amount per 10 g with a clear "每 10 g" label; other cards show "每 100 g".
+  - About explains the rule. The food list heading is renamed from 「食物含量排行」 to 「常见食物」.
+
+  Commit: `feat(order): rank condiments and dried goods per 10 g`
+
+AC:
+- The validator checks that every flagged id exists and that amountBasisG ∈ {10, 100}.
+- Unit tests cover the ordering and the card labels.
+- e2e: in the calcium tab, garlic is no longer ahead of tofu or milk-tier foods with more calcium per 100 g than garlic's per-10 g value. Flagged cards show "每 10 g". The heading reads 常见食物.
+- npm test and Playwright pass.
