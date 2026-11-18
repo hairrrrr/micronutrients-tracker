@@ -828,6 +828,22 @@ select.input {
   opacity: 0.7;
 }
 
+/* Commonness badge (P18b: tiers 4-5). Deliberately lighter than the 估算 mark:
+ * hollow, no border, so a card with both a 估算 and a 常见 badge still reads as
+ * one name plus two small labels. */
+.food-card__badge--common {
+  border-color: transparent;
+  background: rgba(31, 35, 40, 0.08);
+  font-weight: 650;
+  opacity: 1;
+  white-space: nowrap;
+}
+
+.food-card.is-selected .food-card__badge--common,
+.food-tile.is-selected .food-card__badge--common {
+  background: rgba(20, 92, 42, 0.14);
+}
+
 .food-card__en {
   color: var(--text-muted);
   font-size: 0.625rem;

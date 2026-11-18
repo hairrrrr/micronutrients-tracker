@@ -9,8 +9,14 @@
 // P17: a tap on a card only expands the editing tile at that position. A food
 // becomes selected only after 确认 (the round check or the 确认 button), so
 // `selectFood` and `setGrams` open the tile, set the quantity and confirm.
+//
+// P18b: `expectedRanking` / `expectedTopIds` / `commonnessOfFood` read
+// docs/data/foods.json (data, never a site module) and apply the ordering rule
+// of order.js, so a test can compute the expected first card instead of
+// hard-coding a food that the new commonness-first rule may have moved.
 
 import { expect } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 /** Food used by the smoke tests: raw pork liver, a fixed data fixture. */
 export const LIVER_ID = "fdc:167862";
@@ -171,8 +177,7 @@ export async function cardTarget(page, nutrient) {
 }
 
 /**
- * Horizontal overflow of the page, in CSS pixels, with the elements that stick
- * out of the viewport (for a readable failure message).
+ * Horizontal overflow of the page, in CSS pixels, with the elements that stick out of the viewport (for a readable failure message).
  *
  * @param {import('@playwright/test').Page} page
  * @returns {Promise<{scrollWidth: number, clientWidth: number, innerWidth: number,
@@ -211,4 +216,50 @@ export async function measureOverflow(page) {
       offenders: offenders.slice(0, 10),
     };
   });
+}
+
+/**
+ * Expected ranking of the unpinned cards of one nutrient, computed from
+ * docs/data/foods.json with the same rule as order.js (P18b): commonness
+ * descending (missing = 0), then per100g descending, then nameZh. Foods with
+ * no value or a zero value for the nutrient are not listed (P16).
+ *
+ * @param {string} nutrientId
+ * @returns {Promise<Array<{id: string, nameZh: string, commonness: number,
+ *   amount: number|null}>>>}
+ */
+export async function expectedRanking(nutrientId) {
+  const path = new URL("../../docs/data/foods.json", import.meta.url);
+  const payload = JSON.parse(await readFile(path, "utf8"));
+  return payload.foods
+    .filter((food) => typeof food.per100g?.[nutrientId] === "number" && food.per100g[nutrientId] > 0)
+    .sort((a, b) => ((b.commonness ?? 0) - (a.commonness ?? 0))
+      || (b.per100g[nutrientId] - a.per100g[nutrientId])
+      || (a.nameZh < b.nameZh ? -1 : a.nameZh > b.nameZh ? 1 : 0))
+    .map((food) => ({
+      id: food.id,
+      nameZh: food.nameZh,
+      commonness: food.commonness ?? 0,
+      amount: food.per100g[nutrientId],
+    }));
+}
+
+/**
+ * Ids of the first `count` cards of one nutrient under the P18b rule.
+ *
+ * @param {string} nutrientId
+ * @param {number} [count] defaults to 60 (the initial limit)
+ * @returns {Promise<Array<string>>}
+ */
+export async function expectedTopIds(nutrientId, count = 60) {
+  return (await expectedRanking(nutrientId)).slice(0, count).map((entry) => entry.id);
+}
+
+/** Commonness tier of one food in foods.json (0 when it has none). */
+export async function commonnessOfFood(foodId) {
+  const path = new URL("../../docs/data/foods.json", import.meta.url);
+  const payload = JSON.parse(await readFile(path, "utf8"));
+  const food = payload.foods.find((entry) => entry.id === foodId);
+  if (!food) throw new Error(`foods.json has no food ${foodId}`);
+  return food.commonness ?? 0;
 }

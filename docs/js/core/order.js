@@ -1,5 +1,5 @@
 // Per-nutrient food ordering with pinned selections (PLAN.md 1.7, phase P8;
-// confirmation order since P17).
+// confirmation order since P17; commonness first since P18b).
 //
 // Pure ES module: no DOM access. It imports only `selectionGrams` from
 // calc.js, so node --test can load it directly. Ordering is:
@@ -9,8 +9,10 @@
 //      editing a portion never reshuffles it. A selection missing from `order`
 //      (older saved state) falls back to the key order of `selections`, which
 //      older versions wrote in confirmation order;
-//   2. unpinned: every other food with per100g[n] > 0, sorted by per100g[n]
-//      descending, ties broken by nameZh;
+//   2. unpinned: every other food with per100g[n] > 0, sorted by commonness
+//      descending (the AI-estimated everyday-use tier, P18), then by per100g[n]
+//      descending within a tier, ties broken by nameZh. A food without a
+//      commonness tier counts as 0, so it sorts after every tiered food;
 //   3. `limit` (default 60) applies to the unpinned part only, so a user's
 //      pinned foods never disappear behind "show more".
 //
@@ -50,6 +52,22 @@ function byName(a, b) {
   if (left < right) return -1;
   if (left > right) return 1;
   return 0;
+}
+
+/**
+ * Commonness tier of a food as a number, 0 when it has none.
+ *
+ * The tier is the AI-estimated everyday-use rank from foods.json (1 = rare,
+ * 5 = everyday staple, P18). A food without a usable tier sorts behind every
+ * tiered food instead of failing or landing at the top.
+ *
+ * @param {{commonness?: number}|null|undefined} food
+ * @returns {number} 1..5, or 0 when missing/invalid
+ */
+export function commonnessOf(food) {
+  const value = Number(food?.commonness);
+  if (!Number.isFinite(value) || value < 0) return 0;
+  return value;
 }
 
 /** Descending numeric sort helper, Infinity for empty input. */
@@ -158,6 +176,11 @@ export function partitionFoods(foods, nutrientId, selections, order) {
   }
 
   unpinned.sort((a, b) => {
+    // Commonness first (P18b): an everyday food outranks a niche one even when
+    // the niche food is far richer in the nutrient. Only inside one tier does
+    // the per-100 g amount decide, then the Chinese name.
+    const byCommonness = desc(commonnessOf(a), commonnessOf(b));
+    if (byCommonness !== 0) return byCommonness;
     const byValue = desc(valueOf(a, nutrientId) ?? 0, valueOf(b, nutrientId) ?? 0);
     return byValue !== 0 ? byValue : byName(a, b);
   });
@@ -233,6 +256,7 @@ export default {
   DEFAULT_LIMIT,
   LIMIT_STEP,
   valueOf,
+  commonnessOf,
   selectionOrder,
   contribution,
   partitionFoods,

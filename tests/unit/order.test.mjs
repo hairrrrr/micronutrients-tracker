@@ -1,5 +1,5 @@
 // Per-nutrient ordering with pinned selections (PLAN.md 1.7, phase P8;
-// confirmation order since P17).
+// confirmation order since P17; commonness first since P18b).
 //
 // Small in-test fixtures: five foods with different per100g values, one food
 // without data for the nutrient under test, one with a zero value and one with
@@ -11,6 +11,7 @@ import {
   DEFAULT_LIMIT,
   LIMIT_STEP,
   valueOf,
+  commonnessOf,
   selectionOrder,
   contribution,
   partitionFoods,
@@ -178,14 +179,70 @@ test("limit applies only to the unpinned part and defaults to 60", () => {
 
 test("ties are broken by nameZh in the unpinned part", () => {
   const tied = [
-    { id: "fdc:c", nameZh: "丙", per100g: { vitA: 100 } },
-    { id: "fdc:a", nameZh: "甲", per100g: { vitA: 100 } },
-    { id: "fdc:b", nameZh: "乙", per100g: { vitA: 100 } },
+    { id: "fdc:c", nameZh: "丙", commonness: 3, per100g: { vitA: 100 } },
+    { id: "fdc:a", nameZh: "甲", commonness: 3, per100g: { vitA: 100 } },
+    { id: "fdc:b", nameZh: "乙", commonness: 3, per100g: { vitA: 100 } },
   ];
   assert.deepEqual(
     foodsForNutrient(tied, "vitA", {}).map((food) => food.nameZh),
     ["丙", "乙", "甲"], // code-point order
   );
+});
+
+// ---------------------------------------------------------------------------
+// P18b: commonness first, richness second
+// ---------------------------------------------------------------------------
+
+test("commonnessOf reads the integer tier and treats junk as 0", () => {
+  assert.equal(commonnessOf({ commonness: 5 }), 5);
+  assert.equal(commonnessOf({ commonness: 1 }), 1);
+  assert.equal(commonnessOf({}), 0);
+  assert.equal(commonnessOf(null), 0);
+  assert.equal(commonnessOf({ commonness: null }), 0);
+  assert.equal(commonnessOf({ commonness: "x" }), 0);
+  assert.equal(commonnessOf({ commonness: -2 }), 0);
+});
+
+test("unpinned foods sort by commonness first, richness within a tier", () => {
+  const foods = [
+    { id: "fdc:rare", nameZh: "鹿肉", commonness: 1, per100g: { vitA: 9000 } },
+    { id: "fdc:liver", nameZh: "猪肝", commonness: 3, per100g: { vitA: 6502 } },
+    { id: "fdc:carrot", nameZh: "胡萝卜", commonness: 5, per100g: { vitA: 835 } },
+    { id: "fdc:spinach", nameZh: "菠菜", commonness: 5, per100g: { vitA: 469 } },
+    { id: "fdc:sweetpotato", nameZh: "红薯", commonness: 4, per100g: { vitA: 709 } },
+  ];
+  assert.deepEqual(
+    foodsForNutrient(foods, "vitA", {}).map((food) => food.id),
+    ["fdc:carrot", "fdc:spinach", "fdc:sweetpotato", "fdc:liver", "fdc:rare"],
+  );
+  // Within tier 5 the richer food still leads; the rare but very rich food is
+  // last because a tier decides before the amount does.
+  const tiered = foodsForNutrient(foods, "vitA", {}).filter((food) => food.commonness === 5);
+  assert.deepEqual(tiered.map((food) => food.per100g.vitA), [835, 469]);
+});
+
+test("a missing commonness sorts last, behind every tiered food", () => {
+  const foods = [
+    { id: "fdc:none", nameZh: "某食物", per100g: { vitA: 10000 } },
+    { id: "fdc:tier1", nameZh: "鹿肉", commonness: 1, per100g: { vitA: 1 } },
+    { id: "fdc:tier5", nameZh: "米饭", commonness: 5, per100g: { vitA: 2 } },
+  ];
+  assert.deepEqual(
+    foodsForNutrient(foods, "vitA", {}).map((food) => food.id),
+    ["fdc:tier5", "fdc:tier1", "fdc:none"],
+  );
+});
+
+test("the pinned group ignores commonness and keeps the confirmation order", () => {
+  const foods = [
+    { id: "fdc:rare", nameZh: "鹿肉", commonness: 1, per100g: { vitA: 9000 } },
+    { id: "fdc:carrot", nameZh: "胡萝卜", commonness: 5, per100g: { vitA: 835 } },
+    { id: "fdc:spinach", nameZh: "菠菜", commonness: 5, per100g: { vitA: 469 } },
+  ];
+  const selections = { "fdc:rare": { grams: 10 }, "fdc:spinach": { grams: 10 } };
+  const list = foodsForNutrient(foods, "vitA", selections, { order: ["fdc:rare", "fdc:spinach"] });
+  assert.deepEqual(list.map((food) => food.id), ["fdc:rare", "fdc:spinach", "fdc:carrot"]);
+  assert.deepEqual(list.slice(0, 2).map((food) => food.selected), [true, true]);
 });
 
 test("partitionFoods exposes both sorted groups without truncation", () => {

@@ -51,6 +51,14 @@ Phase P6 adds:
                      foods.json must carry every composite with estimate true, a
                      basis that lists its ingredients and grams, and per-100 g
                      values recomputed here from the ingredient values.
+
+Phase P18b adds:
+    data-src/commonness.csv - header, one row per food of foods.json and no
+                     other id, integer tiers within 1..5. Every food in
+                     foods.json carries that same integer `commonness`, and no
+                     review text leaks into docs/: no docs/data/*.json has a
+                     `reason`/`reason_zh` key, and no file under docs/ (JSON,
+                     JS, HTML) contains any reason_zh string of the CSV.
 """
 
 from __future__ import annotations
@@ -78,6 +86,13 @@ COMPOSITES_COLUMNS = [
 COMPOSITE_GRAMS_TOLERANCE = 0.5
 MIN_COMPOSITE_INGREDIENTS = 2
 MAX_COMPOSITES = 25
+
+# data-src/commonness.csv columns (phase P18b).
+COMMONNESS_COLUMNS = ["food_id", "name_zh", "commonness", "reason_zh"]
+COMMONNESS_MIN = 1
+COMMONNESS_MAX = 5
+# Files under docs/ that are scanned for leaked review text (P18b).
+DOCS_SCAN_SUFFIXES = {".json", ".js", ".mjs", ".html"}
 
 # Sanity ranges from PLAN.md P5: (name, food+measure matcher, min g, max g).
 # Each matcher only picks the plain household measure it talks about, so a
@@ -1119,7 +1134,145 @@ def validate_measure_merge(checks, label, food, measures):
         )
 
 
-def validate_generated_json(checks, curated_count, measures=None, composite_rows=None):
+def validate_commonness_csv(checks):
+    """Checks for data-src/commonness.csv (phase P18b).
+
+    Returns food_id -> tier so the generated foods.json can be compared.
+    """
+    path = DATA_SRC / "commonness.csv"
+    if not checks.check(path.is_file(), "missing data-src/commonness.csv"):
+        return {}
+
+    header, rows = read_csv(path)
+    checks.check(
+        header == COMMONNESS_COLUMNS,
+        f"commonness.csv columns are {header}, expected {COMMONNESS_COLUMNS}",
+    )
+
+    tiers = {}
+    for line_no, row in enumerate(rows, start=2):
+        food_id = (row.get("food_id") or "").strip()
+        label = f"commonness.csv line {line_no} ({food_id or 'no food_id'})"
+
+        if not checks.check(food_id != "", f"{label}: empty food_id"):
+            continue
+        if food_id in tiers:
+            checks.fail(f"{label}: duplicate food_id (also on line {tiers[food_id][1]})")
+            continue
+
+        raw_tier = (row.get("commonness") or "").strip()
+        tier = None
+        if checks.check(raw_tier.isdigit(), f"{label}: commonness must be an integer, got {raw_tier!r}"):
+            tier = int(raw_tier)
+            checks.check(
+                COMMONNESS_MIN <= tier <= COMMONNESS_MAX,
+                f"{label}: commonness {tier} is outside {COMMONNESS_MIN}..{COMMONNESS_MAX}",
+            )
+
+        name_zh = (row.get("name_zh") or "").strip()
+        checks.check(
+            name_zh != "" and has_cjk(name_zh),
+            f"{label}: name_zh must be a non-empty Chinese name, got {name_zh!r}",
+        )
+        checks.check(
+            (row.get("reason_zh") or "").strip() != "",
+            f"{label}: reason_zh must not be empty (review material, never published)",
+        )
+        if tier is not None:
+            tiers[food_id] = (tier, line_no)
+    return {food_id: entry[0] for food_id, entry in tiers.items()}
+
+
+def validate_commonness_json(checks, foods, tiers):
+    """Every food in foods.json has its CSV tier as an integer of 1..5."""
+    food_ids = {str(food.get("id") or "") for food in foods}
+    tier_ids = set(tiers)
+
+    missing = sorted(food_ids - tier_ids)
+    checks.check(
+        not missing,
+        f"commonness.csv has no tier for {len(missing)} food(s) of foods.json: "
+        f"{', '.join(missing[:10])}",
+    )
+    unknown = sorted(tier_ids - food_ids)
+    checks.check(
+        not unknown,
+        f"commonness.csv lists {len(unknown)} id(s) that are not in foods.json: "
+        f"{', '.join(unknown[:10])}",
+    )
+
+    for food in foods:
+        food_id = str(food.get("id") or "")
+        label = f"foods.json {food_id or 'no id'}"
+        tier = food.get("commonness")
+        checks.check(
+            isinstance(tier, int) and not isinstance(tier, bool)
+            and COMMONNESS_MIN <= tier <= COMMONNESS_MAX,
+            f"{label}: commonness must be an integer {COMMONNESS_MIN}..{COMMONNESS_MAX}, "
+            f"got {tier!r}",
+        )
+        if food_id in tiers:
+            checks.check(
+                tier == tiers[food_id],
+                f"{label}: commonness {tier!r} != commonness.csv {tiers[food_id]}",
+            )
+
+
+def iter_json_keys(value, path=""):
+    """Yield (key path) of every object key in a decoded JSON value."""
+    if isinstance(value, dict):
+        for key, item in value.items():
+            yield f"{path}.{key}" if path else str(key)
+            yield from iter_json_keys(item, f"{path}.{key}" if path else str(key))
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            yield from iter_json_keys(item, f"{path}[{index}]")
+
+
+def validate_no_reason_leak(checks):
+    """No review reason text and no `reason` key may reach docs/ (P18b)."""
+    path = DATA_SRC / "commonness.csv"
+    if not checks.check(path.is_file(), "missing data-src/commonness.csv"):
+        return 0
+    _, rows = read_csv(path)
+    reasons = sorted({
+        (row.get("reason_zh") or "").strip()
+        for row in rows
+        if (row.get("reason_zh") or "").strip()
+    })
+
+    docs_root = REPO_ROOT / "docs"
+    scanned = 0
+    leaked = []
+    reason_hits = []
+    for file_path in sorted(docs_root.rglob("*")):
+        if not file_path.is_file() or file_path.suffix.lower() not in DOCS_SCAN_SUFFIXES:
+            continue
+        scanned += 1
+        text = file_path.read_text(encoding="utf-8", errors="replace")
+        relative = file_path.relative_to(REPO_ROOT)
+        for reason in reasons:
+            if reason in text:
+                reason_hits.append(f"{relative}: contains reason text {reason!r}")
+        if file_path.parent == DOCS_DATA and file_path.suffix.lower() == ".json":
+            try:
+                decoded = json.loads(text)
+            except json.JSONDecodeError:
+                continue
+            for key in iter_json_keys(decoded):
+                bare = key.rsplit(".", 1)[-1].split("[", 1)[0]
+                if bare in ("reason", "reason_zh"):
+                    leaked.append(f"{relative}: key {key}")
+
+    checks.check(not leaked, "docs/data JSON must not contain reason keys: " + "; ".join(leaked[:5]))
+    checks.check(
+        not reason_hits,
+        "docs/ must not contain commonness reason text: " + "; ".join(reason_hits[:3]),
+    )
+    return scanned
+
+
+def validate_generated_json(checks, curated_count, measures=None, composite_rows=None, tiers=None):
     """Checks for docs/data/*.json written by tools/build_foods.py (phase P4)."""
     foods_path = DOCS_DATA / "foods.json"
     if not checks.check(foods_path.is_file(), "missing docs/data/foods.json"):
@@ -1152,6 +1305,8 @@ def validate_generated_json(checks, curated_count, measures=None, composite_rows
     food_count, composite_count = validate_foods_json(
         checks, foods_data, curated_count, measures, composite_rows
     )
+    if tiers is not None:
+        validate_commonness_json(checks, foods_data.get("foods") or [], tiers)
     return food_count, composite_count, size
 
 
@@ -1162,8 +1317,10 @@ def main():
     food_count = validate_foods(checks, load_usda_foods(), load_excluded_categories())
     measures_count, estimate_share, measures = validate_measures_csv(checks)
     composite_count_csv, composites = validate_composites_csv(checks, measures)
+    tiers = validate_commonness_csv(checks)
+    docs_scanned = validate_no_reason_leak(checks)
     json_food_count, composite_count, foods_json_size = validate_generated_json(
-        checks, food_count, measures, composites if composites else None
+        checks, food_count, measures, composites if composites else None, tiers
     )
 
     if checks.failures:
@@ -1171,6 +1328,8 @@ def main():
         print(f"foods: {food_count} rows checked")
         print(f"measures: {measures_count} rows checked, {estimate_share:.1f}% estimates")
         print(f"composites: {composite_count_csv} rows checked")
+        print(f"commonness: {len(tiers)} tiers checked")
+        print(f"docs/ text scan: {docs_scanned} files checked")
         print(f"foods.json: {json_food_count} foods checked")
         print(f"{len(checks.failures)} problem(s) found")
         return checks.report()
@@ -1182,6 +1341,8 @@ def main():
         f"{estimate_share:.1f}% estimates"
     )
     print(f"composites: {composite_count_csv} OK (ingredients sum to 100 g +/- {COMPOSITE_GRAMS_TOLERANCE:g})")
+    print(f"commonness: {len(tiers)} tiers OK (1..5, no reason text under docs/)")
+    print(f"docs/ text scan: {docs_scanned} files OK")
     print(
         f"foods.json: {json_food_count} foods OK "
         f"({composite_count} composites, {foods_json_size} bytes)"

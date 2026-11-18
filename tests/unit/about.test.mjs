@@ -14,6 +14,7 @@ import {
   ABOUT_SOURCES,
   CLEAR_CONFIRM,
   CLEAR_LABEL,
+  ORDER_NOTE,
   UNIT_NOTES,
   UNTRACKED,
   aboutHtml,
@@ -106,6 +107,24 @@ test("about markup states estimates, privacy and the not-medical-advice note", (
   const hrefs = [...html.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
   assert.equal(hrefs.length, 3);
   for (const href of hrefs) assert.ok(ABOUT_SOURCES.some((source) => source.url === href));
+});
+
+// P18b: the About section explains the commonness-first ordering and that the
+// tier is an AI estimate reviewed by hand, not an official classification.
+test("about markup explains commonness-first ordering and the AI estimate", () => {
+  const html = aboutHtml(ctx());
+  assert.ok(html.includes(ORDER_NOTE.title));
+  assert.match(html, /常见度/);
+  assert.match(html, /每 100 克/);
+  assert.match(html, /DeepSeek/);
+  assert.match(html, /AI 模型/);
+  assert.match(html, /中国居民膳食指南/);
+  assert.match(html, /人工复核|经人工/);
+  assert.match(html, /并非官方分级/);
+  // The note is its own labelled section, after the sources.
+  assert.match(html, /id="about-order"/);
+  assert.ok(html.indexOf('about-sources') < html.indexOf('about-order'));
+  assert.ok(html.indexOf('about-order') < html.indexOf('about-estimates'));
 });
 
 test("clear button is disabled with no selection and enabled after one", () => {

@@ -4,9 +4,11 @@
 // `buildFoodCards` / `foodCardHtml` / `foodsHtml` / `hiddenCount` work from
 // plain objects. The invariants checked here are the ones the phase's
 // acceptance criteria depend on: the cards follow `order.js` (pinned first,
-// then highest per 100 g), 60 cards initially with a "show more" button that
-// adds 60, the amount text carries the active nutrient's unit, an estimate
-// badge only on composites, and every card is a button with `aria-pressed`.
+// then commonness first and the highest per 100 g within a tier), 60 cards
+// initially with a "show more" button that adds 60, the amount text carries the
+// active nutrient's unit, an estimate badge only on composites, a 常见 badge
+// only for commonness tiers 4-5 (P18b), and every card is a button with
+// `aria-pressed`.
 
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -15,6 +17,7 @@ import { DEFAULT_LIMIT, LIMIT_STEP } from "../../docs/js/core/order.js";
 import { reduce } from "../../docs/js/core/state.js";
 import {
   CANCEL_LABEL,
+  COMMON_BADGES,
   CONFIRM_LABEL,
   DESELECT_LABEL,
   ESTIMATE_BADGE,
@@ -44,14 +47,15 @@ const NUTRIENTS = {
 };
 
 const FOODS = [
-  { id: "fdc:liver", nameZh: "猪肝", nameEn: "Pork liver, raw", per100g: { vitA: 6502, iron: 23.3 }, estimate: false },
-  { id: "fdc:carrot", nameZh: "胡萝卜", nameEn: "Carrots, raw", per100g: { vitA: 835, iron: 0.3 }, estimate: false },
-  { id: "fdc:spinach", nameZh: "菠菜", nameEn: "Spinach, raw", per100g: { vitA: 469, iron: 2.7 }, estimate: false },
-  { id: "fdc:salt", nameZh: "食盐", nameEn: "Salt", per100g: { vitA: null, iron: 0 }, estimate: false },
+  { id: "fdc:liver", nameZh: "猪肝", nameEn: "Pork liver, raw", commonness: 3, per100g: { vitA: 6502, iron: 23.3 }, estimate: false },
+  { id: "fdc:carrot", nameZh: "胡萝卜", nameEn: "Carrots, raw", commonness: 3, per100g: { vitA: 835, iron: 0.3 }, estimate: false },
+  { id: "fdc:spinach", nameZh: "菠菜", nameEn: "Spinach, raw", commonness: 3, per100g: { vitA: 469, iron: 2.7 }, estimate: false },
+  { id: "fdc:salt", nameZh: "食盐", nameEn: "Salt", commonness: 3, per100g: { vitA: null, iron: 0 }, estimate: false },
   {
     id: "composite:fanqie",
     nameZh: "番茄炒蛋",
     nameEn: "Tomato and egg stir-fry",
+    commonness: 3,
     per100g: { vitA: 66.95, iron: 0.6154 },
     estimate: true,
   },
@@ -127,6 +131,47 @@ test("the estimate badge appears only on composite dishes", () => {
   assert.equal(composite.estimate, true);
   assert.match(foodCardHtml(composite), new RegExp(ESTIMATE_BADGE));
   assert.equal(foodCardHtml(cards[0]).includes("food-card__badge"), false);
+});
+
+// P18b: a small 常见 badge only for commonness tiers 4-5, next to the amount.
+test("the commonness badge appears only for tiers 4 and 5", () => {
+  const base = {
+    nameZh: "米饭",
+    nameEn: "Cooked rice",
+    amountText: "1.2 mg",
+    estimate: false,
+    selected: false,
+    pinned: false,
+    title: "t",
+  };
+  const htmlOf = (commonness) => {
+    const card = { ...base, id: `fdc:${commonness}`, commonness };
+    return foodCardHtml({ ...card, commonBadge: COMMON_BADGES[commonness] ?? "" });
+  };
+
+  for (const tier of [1, 2, 3]) {
+    const html = htmlOf(tier);
+    assert.equal(html.includes("food-card__badge--common"), false, `tier ${tier} has no badge`);
+    assert.equal(html.includes("常见"), false, `tier ${tier} has no 常见 text`);
+  }
+  assert.match(htmlOf(4), /food-card__badge--common/);
+  assert.match(htmlOf(4), /常见/);
+  assert.equal(htmlOf(4).includes("★"), false);
+  assert.match(htmlOf(5), /★常见/);
+  // The badge never replaces the per-100 g amount.
+  assert.match(htmlOf(5), /1\.2 mg/);
+  // The badge model comes from the food's tier, not from the caller.
+  const cards = buildFoodCards({
+    ...ctx(),
+    foods: {
+      foods: [
+        { id: "fdc:rice", nameZh: "米饭", commonness: 5, per100g: { vitA: 1 } },
+        { id: "fdc:liver", nameZh: "猪肝", commonness: 3, per100g: { vitA: 2 } },
+      ],
+    },
+  });
+  assert.equal(cards.find((card) => card.id === "fdc:rice").commonBadge, "★常见");
+  assert.equal(cards.find((card) => card.id === "fdc:liver").commonBadge, "");
 });
 
 test("every card is a button with aria-pressed and the food id", () => {
@@ -257,10 +302,11 @@ test("buildFoodCards tolerates a missing state, food and limit", () => {
   assert.equal(buildFoodCards(ctx({ limit: Number.NaN })).length, 4);
 });
 
-// Acceptance for P11a against the real data files: on the default Vitamin A
-// tab the first card must be the food with the highest vitamin A per 100 g in
-// foods.json, and exactly DEFAULT_LIMIT cards are visible before "show more".
-test("against foods.json, the first Vitamin A card is the highest vitamin A food", async () => {
+// Acceptance for P11a against the real data files, updated for P18b: on the
+// default Vitamin A tab the first card follows the new rule (commonness
+// descending, then vitamin A per 100 g, then nameZh) and exactly DEFAULT_LIMIT
+// cards are visible before "show more".
+test("against foods.json, the first Vitamin A card follows the commonness-first ranking", async () => {
   const { readFile } = await import("node:fs/promises");
   const read = async (name) =>
     JSON.parse(await readFile(new URL(`../../docs/data/${name}.json`, import.meta.url), "utf8"));
@@ -269,11 +315,16 @@ test("against foods.json, the first Vitamin A card is the highest vitamin A food
   const nutrient = realNutrients.nutrients.find((entry) => entry.id === "vitA");
   assert.ok(nutrient, "nutrients.json has no vitA");
 
-  // Same rule as order.js: value descending, ties broken by nameZh.
+  // Same rule as order.js: commonness descending (missing = 0), then value
+  // descending, ties broken by nameZh.
   const ranked = realFoods.foods
     .filter((food) => typeof food.per100g?.vitA === "number" && food.per100g.vitA > 0)
-    .sort((a, b) => (b.per100g.vitA - a.per100g.vitA) || (a.nameZh < b.nameZh ? -1 : a.nameZh > b.nameZh ? 1 : 0));
+    .sort((a, b) => ((b.commonness ?? 0) - (a.commonness ?? 0))
+      || (b.per100g.vitA - a.per100g.vitA)
+      || (a.nameZh < b.nameZh ? -1 : a.nameZh > b.nameZh ? 1 : 0));
   assert.ok(ranked.length > DEFAULT_LIMIT, "not enough foods with vitamin A for this check");
+  // The tiered top is what the ordering is about: an everyday food leads.
+  assert.equal(ranked[0].commonness, 5, "the richest very common vitamin A food leads");
 
   const cards = buildFoodCards({
     nutrients: realNutrients,
@@ -288,7 +339,7 @@ test("against foods.json, the first Vitamin A card is the highest vitamin A food
   });
 
   assert.equal(cards.length, DEFAULT_LIMIT, "60 food cards are visible initially");
-  assert.equal(cards[0].id, ranked[0].id, "first card is the highest vitamin A food");
+  assert.equal(cards[0].id, ranked[0].id, "first card follows the commonness-first ranking");
   assert.equal(cards[0].nameZh, ranked[0].nameZh);
   assert.equal(cards[0].amountText, `${ranked[0].per100g.vitA} ${nutrient.unit}`.trim());
   // Sorted all the way down, not just at the top.

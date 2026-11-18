@@ -1,7 +1,8 @@
 // Food list for the active nutrient: one card per food in `order.js` order
-// (pinned selections in confirmation order, then the highest amount per 100 g),
-// with a "show more" button that raises the limit by 60 and a search box
-// (PLAN.md 1.7 and 1.8 item 5, phases P11a, P11b and P17).
+// (pinned selections in confirmation order, then commonness first and the
+// highest amount per 100 g within a tier), with a "show more" button that
+// raises the limit by 60 and a search box (PLAN.md 1.7 and 1.8 item 5, phases
+// P11a, P11b, P17 and P18b).
 //
 // Rendering only: ordering, the limit, the search text and the selections all
 // come from the pure modules (`core/order.js`, `core/measures.js`,
@@ -45,13 +46,22 @@ import {
   stepCount,
 } from "../core/measures.js";
 import { MET_COLORS, nameZhOf, unitOf } from "../core/nutrients.js";
-import { DEFAULT_LIMIT, LIMIT_STEP, foodsForNutrient, nextLimit, valueOf } from "../core/order.js";
+import { DEFAULT_LIMIT, LIMIT_STEP, commonnessOf, foodsForNutrient, nextLimit, valueOf } from "../core/order.js";
 import { FALLBACK_GRAMS } from "../core/state.js";
 
 /** Label above the grid, e.g. "维生素A · 每 100 克含量". */
 export const UNIT_HINT_PREFIX = "每 100 克";
 /** Badge text on a composite (recipe estimate) food card. */
 export const ESTIMATE_BADGE = "估算";
+/**
+ * Small commonness badge for everyday foods (P18b): tier 5 = a staple almost
+ * everywhere, tier 4 = very common. Tiers 1-3 get no badge.
+ *
+ * @type {Readonly<Record<number, string>>}
+ */
+export const COMMON_BADGES = Object.freeze({ 4: "常见", 5: "★常见" });
+/** Screen-reader/title expansion of the commonness badge. */
+export const COMMON_BADGE_TITLE = "常见度：日常饮食中经常出现（AI 估算）";
 /** Hint inside the search box. */
 export const SEARCH_PLACEHOLDER = "搜索食物（中文或英文名）";
 /** Note under the editor: household measures are rough. */
@@ -229,12 +239,15 @@ export function buildFoodCards(ctx) {
       ? `${base}（按食谱估算）· 点击${selected ? "修改份量" : "选择"}`
       : `${base} · 点击${selected ? "修改份量" : "选择"}`;
     const quantity = expanded ? (draft ?? selection ?? draftQuantity(food, null)) : null;
+    const commonness = commonnessOf(food);
     return {
       id: food.id,
       nameZh: String(food.nameZh ?? ""),
       nameEn: String(food.nameEn ?? ""),
       amountText,
       estimate: food.estimate === true,
+      commonness,
+      commonBadge: COMMON_BADGES[commonness] ?? "",
       selected,
       pinned: selected,
       expanded,
@@ -255,10 +268,17 @@ function cardBodyHtml(card) {
   const badge = card.estimate
     ? `<span class="food-card__badge">${ESTIMATE_BADGE}</span>`
     : "";
+  // Commonness badge (P18b): only tiers 4-5, next to the estimate badge. The
+  // short text stays in the accessible name ("米饭 ★常见") and the title spells
+  // the tier out for hover and assistive tech.
+  const common = card.commonBadge
+    ? `<span class="food-card__badge food-card__badge--common"
+        title="${esc(COMMON_BADGE_TITLE)}">${esc(card.commonBadge)}</span>`
+    : "";
   const english = card.nameEn ? `<span class="food-card__en">${esc(card.nameEn)}</span>` : "";
   return `<span class="food-card__head">
       <span class="food-card__name">${esc(card.nameZh)}</span>
-      ${badge}
+      ${badge}${common}
     </span>
     ${english}
     <span class="food-card__amount">${esc(card.amountText)}</span>`;
@@ -470,7 +490,7 @@ export function foodsHtml(cards, ctx) {
         value="${esc(search)}">
     </div>
     <div class="foods__body" data-food-body>${foodsBodyHtml(cards, ctx)}</div>
-    <p class="foods__note">点击卡片就地展开，确认后才会加入已选；已选食物按确认顺序排在列表最前；本列表只显示含有该营养素的食物；家庭计量为估算值。</p>`;
+    <p class="foods__note">点击卡片就地展开，确认后才会加入已选；已选食物按确认顺序排在列表最前；其余食物按常见度优先、再按每 100 克含量排序；本列表只显示含有该营养素的食物；家庭计量为估算值。</p>`;
 }
 
 /**

@@ -24,6 +24,7 @@
     "Values are rounded to at most 4 significant digits, never otherwise changed.",
     "Niacin is in mg NE = niacin + tryptophan*1000/60; when tryptophan is missing only niacin is used and flags.niacinNoTryptophan is true.",
     "Composite dishes are labeled estimates: per 100 g is the sum of the ingredient per-100 g values times grams/100, on a raw-weight basis without cooking retention factors.",
-    "When an ingredient has no value for a nutrient but another ingredient does, the missing part counts as 0 and flags.partialNullNutrients lists that nutrient, so the value is a lower bound."
+    "When an ingredient has no value for a nutrient but another ingredient does, the missing part counts as 0 and flags.partialNullNutrients lists that nutrient, so the value is a lower bound.",
+    "commonness tiers 1-5: AI model estimate (DeepSeek via hms), supervisor-reviewed"
   ]
 }

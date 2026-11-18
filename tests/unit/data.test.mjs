@@ -107,3 +107,140 @@ test("household measures stay in their sanity ranges (PLAN P5)", () => {
     );
   }
 });
+
+// ---------------------------------------------------------------------------
+// P18b: commonness tiers, and no review text under docs/
+// ---------------------------------------------------------------------------
+
+const commonnessPath = new URL("../../data-src/commonness.csv", import.meta.url);
+const docsDataPath = new URL("../../docs/data/", import.meta.url);
+
+/** Minimal CSV reader for the four-column commonness file (quoted fields). */
+function parseCsv(text) {
+  const rows = [];
+  let row = [];
+  let field = "";
+  let quoted = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    if (quoted) {
+      if (char === '"' && text[index + 1] === '"') {
+        field += '"';
+        index += 1;
+      } else if (char === '"') {
+        quoted = false;
+      } else {
+        field += char;
+      }
+      continue;
+    }
+    if (char === '"') {
+      quoted = true;
+    } else if (char === ",") {
+      row.push(field);
+      field = "";
+    } else if (char === "\n") {
+      row.push(field);
+      rows.push(row);
+      row = [];
+      field = "";
+    } else if (char !== "\r") {
+      field += char;
+    }
+  }
+  if (field !== "" || row.length > 0) {
+    row.push(field);
+    rows.push(row);
+  }
+  const [header, ...body] = rows;
+  return body
+    .filter((line) => line.some((cell) => cell !== ""))
+    .map((line) => Object.fromEntries(header.map((key, index) => [key, line[index] ?? ""])));
+}
+
+/** Every key path of a decoded JSON value (for the "reason" key check). */
+function keyPaths(value, prefix = "") {
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) => keyPaths(item, `${prefix}[${index}]`));
+  }
+  if (value && typeof value === "object") {
+    return Object.entries(value).flatMap(([key, item]) => {
+      const path = prefix ? `${prefix}.${key}` : key;
+      return [path, ...keyPaths(item, path)];
+    });
+  }
+  return [];
+}
+
+test("every food has a commonness tier of 1-5 that matches commonness.csv", async () => {
+  const csv = parseCsv(await readFile(commonnessPath, "utf8"));
+  assert.ok(csv.length > 100, `commonness.csv has only ${csv.length} rows`);
+  const tiers = new Map(csv.map((row) => [row.food_id, Number(row.commonness)]));
+
+  assert.equal(tiers.size, csv.length, "commonness.csv repeats a food_id");
+  assert.equal(tiers.size, data.foods.length, "commonness.csv and foods.json differ in size");
+
+  for (const food of data.foods) {
+    assert.ok(
+      Number.isInteger(food.commonness) && food.commonness >= 1 && food.commonness <= 5,
+      `${food.id}: commonness ${food.commonness} is not an integer 1-5`,
+    );
+    assert.equal(food.commonness, tiers.get(food.id), `${food.id}: tier differs from the CSV`);
+  }
+  for (const id of tiers.keys()) {
+    assert.ok(foodsById.has(id), `commonness.csv has an unknown food_id ${id}`);
+  }
+});
+
+test("no docs/data JSON contains a reason key or any reason_zh text", async () => {
+  const { readdir } = await import("node:fs/promises");
+  const csv = parseCsv(await readFile(commonnessPath, "utf8"));
+  const reasons = [...new Set(csv.map((row) => row.reason_zh.trim()).filter(Boolean))];
+  assert.ok(reasons.length > 100, "no reason strings found in commonness.csv");
+
+  const names = (await readdir(docsDataPath)).filter((name) => name.endsWith(".json"));
+  assert.ok(names.length >= 3, `only ${names.length} docs/data JSON files`);
+  for (const name of names) {
+    const text = await readFile(new URL(name, docsDataPath), "utf8");
+    const decoded = JSON.parse(text);
+    for (const path of keyPaths(decoded)) {
+      const bare = path.split(".").at(-1).split("[").at(0);
+      assert.ok(
+        bare !== "reason" && bare !== "reason_zh",
+        `docs/data/${name} contains the key ${path}`,
+      );
+    }
+    for (const reason of reasons) {
+      assert.equal(text.includes(reason), false, `docs/data/${name} leaks a reason_zh string`);
+    }
+  }
+});
+
+test("no docs JS or HTML file contains a reason_zh string", async () => {
+  const { readdir } = await import("node:fs/promises");
+  const csv = parseCsv(await readFile(commonnessPath, "utf8"));
+  const reasons = [...new Set(csv.map((row) => row.reason_zh.trim()).filter(Boolean))];
+
+  const docsRoot = new URL("../../docs/", import.meta.url);
+  const files = [];
+  const walk = async (url) => {
+    for (const entry of await readdir(url, { withFileTypes: true })) {
+      const child = new URL(`${entry.name}${entry.isDirectory() ? "/" : ""}`, url);
+      if (entry.isDirectory()) await walk(child);
+      else if (/\.(js|mjs|html)$/i.test(entry.name)) files.push(child);
+    }
+  };
+  await walk(docsRoot);
+  assert.ok(files.length > 5, `only ${files.length} docs JS/HTML files`);
+
+  for (const file of files) {
+    const text = await readFile(file, "utf8");
+    for (const reason of reasons) {
+      assert.equal(
+        text.includes(reason),
+        false,
+        `${file.pathname.split("/docs/")[1]} leaks a reason_zh string`,
+      );
+    }
+  }
+});

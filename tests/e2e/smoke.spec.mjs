@@ -5,16 +5,18 @@
 // cross-tab pinning, a target card turning green, the surplus wording,
 // persistence across a reload, no horizontal overflow at 390 px, the same site
 // served from a sub-path, (P16) a selected food that lacks the nutrient not
-// appearing in that tab, and (P17) the expand/cancel/confirm flow, the
+// appearing in that tab, (P17) the expand/cancel/confirm flow, the
 // confirmation order of the pinned group, the single change of the measure
-// select and no overflow with an open tile.
+// select and no overflow with an open tile, and (P18b) the commonness-first
+// ranking of the vitamin A and calcium tabs plus the 常见 badge of tiers 4-5.
 // Every flow goes through the real UI; only the reset touches localStorage.
 //
 // The reference numbers used here are the fixed DRI fixtures of the unit
 // tests (Cn male 30-49 iron 12 mg, US male 31-50 iron 8 mg, vitamin A 770 /
 // 900 ug RAE) and the fixed food fixture fdc:167862 (raw pork liver,
 // 6502 ug RAE and 26 ug B12 per 100 g). No nutrient or DRI value is invented
-// in this file.
+// in this file. The expected card order is computed from docs/data/foods.json
+// through helpers.mjs, never from a hard-coded first food.
 
 import { expect, test } from "@playwright/test";
 import { SUBPATH_BASE } from "../../playwright.config.mjs";
@@ -27,7 +29,10 @@ import {
   cancelTile,
   cardStatus,
   cardTarget,
+  commonnessOfFood,
   confirmTile,
+  expectedRanking,
+  expectedTopIds,
   measureOverflow,
   openTile,
   resetApp,
@@ -511,13 +516,18 @@ test.describe("smoke", () => {
     ids = await cellIds(page);
     expect(ids.slice(0, 2)).toEqual([LIVER_ID, EGG_ID]);
 
-    // 取消选择 removes it but keeps the liver pinned.
+    // 取消选择 removes it from the pinned group but keeps the liver pinned.
+    // The egg still contains vitamin A, so it stays in the ranked list as an
+    // ordinary (unpinned) card at its P18b position instead of leading it.
     await openTile(page, EGG_ID);
     await page.locator(SEL.deselect(EGG_ID)).click();
     await expect(page.locator(SEL.tile(EGG_ID))).toHaveCount(0);
     ids = await cellIds(page);
     expect(ids[0]).toBe(LIVER_ID);
-    expect(ids.includes(EGG_ID)).toBe(false);
+    expect(ids.slice(1, 2)).not.toContain(EGG_ID);
+    const rankedIds = (await expectedRanking("vitA")).map((entry) => entry.id);
+    expect(ids.indexOf(EGG_ID)).toBe(rankedIds.indexOf(EGG_ID) + 1); // +1 pinned liver
+    await expect(page.locator(SEL.foodCard(EGG_ID))).toHaveAttribute("aria-pressed", "false");
     const cleared = JSON.parse(await page.evaluate(() => window.localStorage.getItem("mnt.state.v1")));
     expect(cleared.order).toEqual([LIVER_ID]);
 
@@ -640,6 +650,76 @@ test.describe("smoke", () => {
     expect(box.scrollWidth).toBeLessThanOrEqual(390);
     expect(box.offenders).toEqual([]);
     await cancelTile(page, ids[1]);
+
+    expect(errors).toEqual([]);
+  });
+
+  // -------------------------------------------------------------------------
+  // P18b: commonness first, richness second
+  // -------------------------------------------------------------------------
+
+  test("14. the vitamin A and calcium tabs lead with common foods", async ({ page }) => {
+    const errors = watchErrors(page);
+    await resetApp(page);
+
+    for (const nutrient of ["vitA", "calcium"]) {
+      await page.locator(SEL.tab(nutrient)).click();
+      await expect(page.locator(SEL.tab(nutrient))).toHaveAttribute("aria-pressed", "true");
+
+      // The expected order comes from foods.json with the P18b rule
+      // (commonness desc, then per100g desc, then nameZh), not from a fixture.
+      const expected = await expectedTopIds(nutrient, 60);
+      const shown = await cellIds(page);
+      expect(shown).toEqual(expected);
+
+      const ranking = await expectedRanking(nutrient);
+      expect(ranking[0].commonness).toBe(5);
+      // The visible top stays inside the most common tiers, rather than being
+      // made of rare but very rich foods.
+      expect(ranking.slice(0, 10).every((entry) => entry.commonness >= 4)).toBe(true);
+
+      // The first card is a common food and carries the 常见 badge while still
+      // showing its per-100 g amount.
+      const first = page.locator(".food-cell").first();
+      const firstId = expected[0];
+      await expect(first).toHaveAttribute("data-food-cell", firstId);
+      const card = page.locator(SEL.foodCard(firstId));
+      await expect(card.locator(".food-card__badge--common")).toHaveText("★常见");
+      await expect(card.locator(".food-card__amount")).not.toHaveText("");
+    }
+
+    // A rare food is not in the visible top of the vitamin A tab.
+    const rare = (await expectedRanking("vitA")).filter((entry) => entry.commonness <= 2);
+    expect(rare.length).toBeGreaterThan(0);
+    expect(await cellIds(page)).not.toContain(rare[0].id);
+
+    expect(errors).toEqual([]);
+  });
+
+  test("15. a tier-4 food shows 常见 and a tier-3 food shows no badge", async ({ page }) => {
+    const errors = watchErrors(page);
+    await resetApp(page);
+
+    // Pick one tier-4 and one tier-3 food with vitamin A out of the data, then
+    // find them through the search box instead of guessing their rank.
+    const ranking = await expectedRanking("vitA");
+    const tier4 = ranking.find((entry) => entry.commonness === 4);
+    const tier3 = ranking.find((entry) => entry.commonness === 3);
+    expect(tier4, "no tier-4 food with vitamin A").toBeTruthy();
+    expect(tier3, "no tier-3 food with vitamin A").toBeTruthy();
+
+    for (const entry of [tier4, tier3]) {
+      await page.locator(SEL.search).fill(entry.nameZh);
+      const card = page.locator(SEL.foodCard(entry.id));
+      await expect(card).toBeVisible();
+      await expect(card.locator(".food-card__badge--common")).toHaveCount(entry.commonness >= 4 ? 1 : 0);
+      await expect(card.locator(".food-card__amount")).not.toHaveText("");
+    }
+
+    await page.locator(SEL.search).fill(tier4.nameZh);
+    await expect(page.locator(SEL.foodCard(tier4.id)).locator(".food-card__badge--common"))
+      .toHaveText("常见");
+    expect(await commonnessOfFood(tier4.id)).toBe(4);
 
     expect(errors).toEqual([]);
   });

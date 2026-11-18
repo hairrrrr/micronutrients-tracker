@@ -9,6 +9,7 @@ Inputs (see PLAN.md 1.3):
     data-src/foods_curated.csv  which foods to include + Chinese names
     data-src/measures.csv       optional household measures (phase P5)
     data-src/composites.csv     optional composite dish estimates (phase P6)
+    data-src/commonness.csv     commonness tier 1-5 per food (phase P18b)
     data-raw/<dataset>/*.csv    USDA FoodData Central SR Legacy 2018-04
 
 Outputs:
@@ -87,6 +88,9 @@ COMPOSITE_COLUMNS = [
     "grams_per_100g",
     "note",
 ]
+COMMONNESS_COLUMNS = ["food_id", "name_zh", "commonness", "reason_zh"]
+COMMONNESS_MIN = 1
+COMMONNESS_MAX = 5
 
 
 def read_csv(path, expected_columns):
@@ -164,6 +168,40 @@ def nutrient_value(nutrient, amounts):
     primary_id = nutrient["usdaNutrientIds"][0]
     value = amounts.get(primary_id)
     return (None if value is None else value), {"niacinNoTryptophan": False}
+
+
+def load_commonness():
+    """food_id -> integer commonness tier (1-5) from data-src/commonness.csv.
+
+    Phase P18b: only the integer tier is merged into foods.json. The Chinese
+    reason column is review material for the supervisor and must never reach
+    docs/ (the validator checks that too).
+    """
+    path = DATA_SRC / "commonness.csv"
+    rows = read_csv(path, COMMONNESS_COLUMNS)
+    if not rows:
+        raise SystemExit("data-src/commonness.csv is missing or empty")
+    tiers = {}
+    for line_no, row in enumerate(rows, start=2):
+        food_id = row["food_id"]
+        if not food_id:
+            raise SystemExit(f"commonness.csv line {line_no}: empty food_id")
+        if food_id in tiers:
+            raise SystemExit(f"commonness.csv line {line_no}: duplicate food_id {food_id}")
+        raw = row["commonness"]
+        try:
+            tier = int(raw)
+        except ValueError:
+            raise SystemExit(
+                f"commonness.csv line {line_no} ({food_id}): commonness {raw!r} is not an integer"
+            )
+        if not COMMONNESS_MIN <= tier <= COMMONNESS_MAX:
+            raise SystemExit(
+                f"commonness.csv line {line_no} ({food_id}): commonness {tier} is outside "
+                f"{COMMONNESS_MIN}..{COMMONNESS_MAX}"
+            )
+        tiers[food_id] = tier
+    return tiers
 
 
 def load_measures():
@@ -339,6 +377,31 @@ def build():
     composites, composite_count = load_composites(nutrient_meta, foods_by_id, measures)
     foods.extend(composites)
 
+    # Phase P18b: every food needs its integer commonness tier (1-5). The id
+    # match covers SR Legacy foods (`fdc:<id>`) and composites
+    # (`composite:<id>`) alike; a food without a tier fails the build.
+    commonness = load_commonness()
+    missing_tiers = []
+    for food in foods:
+        tier = commonness.get(food["id"])
+        if tier is None:
+            missing_tiers.append(food["id"])
+            continue
+        # Appended as the last key of the food object; only the integer tier
+        # is carried over, never the CSV reason column.
+        food["commonness"] = tier
+    if missing_tiers:
+        preview = ", ".join(missing_tiers[:10])
+        raise SystemExit(
+            f"data-src/commonness.csv has no tier for {len(missing_tiers)} food(s): {preview}"
+        )
+    unknown_tiers = sorted(set(commonness) - {food["id"] for food in foods})
+    if unknown_tiers:
+        preview = ", ".join(unknown_tiers[:10])
+        raise SystemExit(
+            f"data-src/commonness.csv lists {len(unknown_tiers)} unknown food id(s): {preview}"
+        )
+
     foods.sort(
         key=lambda food: (
             food["fdcId"] is None,
@@ -391,6 +454,7 @@ def main():
             "When an ingredient has no value for a nutrient but another ingredient does, "
             "the missing part counts as 0 and flags.partialNullNutrients lists that "
             "nutrient, so the value is a lower bound.",
+            "commonness tiers 1-5: AI model estimate (DeepSeek via hms), supervisor-reviewed",
         ],
     }
 
