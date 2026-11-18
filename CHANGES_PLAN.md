@@ -107,3 +107,14 @@ AC:
   - Esc, 关闭 button and backdrop click close it; focus returns to the button. No horizontal overflow at 360/390 px.
   - e2e: open, first row = highest % computed from foods.json + dri.json, 22 rows, Esc closes, focus returns.
   - Commit: `feat(ui): add food detail sheet`
+
+## P22 - Eggs raw only (user decision after v1.2)
+- Remove the 3 cooked egg rows from `data-src/foods_curated.csv`, `data-src/measures.csv` and `data-src/commonness.csv`: 172187 炒鸡蛋（全蛋） (Egg, whole, cooked, scrambled), 173423 煎鸡蛋（全蛋） (Egg, whole, cooked, fried), 173424 鸡蛋（水煮，全熟） (Egg, whole, cooked, hard-boiled).
+- Keep the raw eggs: 171287 鸡蛋（全蛋，生）, 172183 蛋清（生）, 172184 蛋黄（生）, 172189 鸭蛋（全蛋，生）, 172191 鹌鹑蛋（全蛋，生）. Egg noodles (面条与面食) and mayonnaise (调味料) are not in 蛋类 and stay.
+- Validator: extend the raw-only meat check to 蛋类 (no cooked words in name_zh such as 熟/煮/煎/炒/烤/蒸/荷包/炖, and no cooked/fried/scrambled/boiled/poached/omelet/baked in the USDA description). Every 蛋类 food must contain 生 in name_zh.
+- Tests: unit data test that 蛋类 is raw-only and the 3 ids are gone; update any unit/e2e test that referenced a cooked egg (use 鸡蛋（全蛋，生） 171287 instead); e2e vitamin A/calcium top checks keep following the P19 rule.
+- Rebuild foods.json (618 -> 615 foods); nutrient values of other foods must not change.
+
+  Commit: `refactor(data): keep raw eggs only`
+
+AC: validator exit 0, check_values 50/50, npm test and Playwright pass, no cooked egg name on the site.
