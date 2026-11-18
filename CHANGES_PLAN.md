@@ -144,3 +144,21 @@ Scope: categories 鱼类, 虾蟹类, 贝类. Seaweed (海藻类), vegetables and
   Commit: `refactor(data): keep raw fish and seafood only`
 
 AC: validator exit 0, check_values 50/50, npm test and Playwright pass.
+
+## P25 - User-owned branded milks pinned at the top of the calcium tab (user request after v1.4)
+- **P25-data (supervisor, done):** `data-src/custom_foods.csv` (3 rows, the site's input) and `data-src/custom_labels.csv` (full label transcription, archive only, not used by the build).
+  - Base unit: like every other food, values are per 100 g. The powder row is per 100 g of POWDER (calcium 288 mg per 25 g serving -> 1152 mg/100 g); the two fluid milks are per 100 g of milk (label per 100 mL / 1.03 g/mL: 130 -> 126.2 mg, 120 -> 116.5 mg).
+  - Calcium = label value. All other micronutrients are copied from the USDA SR Legacy base food (`base_fdc_id`: 170877 nonfat dry milk without added A/D for the powder; 173432 nonfat fluid milk without added A/D for both fluid milks), computed exactly like a normal SR Legacy food (including niacin NE), then the nutrients in `null_nutrients` (vitA|vitD|vitE) are set to null (unfortified, no data).
+  - `source_note_zh` and `custom_labels.csv` stay in data-src only; nothing from them goes to docs/.
+- **P25a (hms): build + validator + unit tests**
+  - build_foods.py reads custom_foods.csv and appends 3 foods to foods.json: `id` = food_id, `fdcId: null`, `nameZh`, `nameEn`, `usdaDescription: null`, category, aliases, `per100g` as above, `flags` like the base food, `source: {"type": "package_label", "baseFdcId": <n>, "estimated": [all nutrient ids except calcium and the null ones]}`, `pinTop: ["calcium"]`, `commonness` from commonness.csv, `amountBasisG: 100`.
+  - commonness.csv: add the 3 ids with commonness 4 and reason 用户自家常备的品牌牛奶 (data-src only).
+  - measures.csv (food_key = the custom id): powder `cup,一杯（25 g 奶粉冲 250 mL）,25,label:serving 25 g powder in 250 mL water,1`; each fluid milk `cup,一杯（250 mL）,257.5,label:250 mL x 1.03 g/mL,1` and `box,一盒（250 mL）,257.5,label:250 mL x 1.03 g/mL,0` (validator accepts a `label:` basis).
+  - Validator: custom rows need source=package_label, an existing base_fdc_id, a numeric calcium, null_nutrients from the nutrient list, pin_top from the nutrient list; foods.json custom foods have fdcId null and a `source` object; still no Chinese reason text under docs/. check_values.py keeps sampling only foods with fdcId.
+  - Unit tests: the 3 foods exist with the expected calcium (1152, 126.2, 116.5), vitA/vitD/vitE null, another nutrient (e.g. phosphorus) equals the base USDA food value, pinTop calcium, measures.
+  - Commit: `feat(data): add user-owned branded milks from package labels`
+- **P25b (hms): ordering + UI + e2e**
+  - order.js: in a nutrient tab, order = selected pinned group (unchanged P17 rule, includes a selected custom milk) -> unselected foods whose `pinTop` contains this nutrient, in foods.json order -> the usual commonness/richness order. Other tabs treat these foods normally.
+  - Card and detail view show a small badge 包装标签 for foods with `source.type === "package_label"`; the detail view adds one short line 钙为包装标签值，其余营养素参考 USDA 同类食品估算 for them. About gets one sentence about user-added label foods. No other Chinese text from data-src.
+  - Unit tests for the ordering; e2e: calcium tab first 3 cards = 德运脱脂奶粉, 山姆部分脱脂牛奶, 盒马零脂牛奶; the powder card's default measure is 一杯（25 g 奶粉冲 250 mL） and confirming it adds 288 mg calcium; after confirming another calcium food it is pinned above the milks; the vitamin A tab does not lead with the milks.
+  - Commit: `feat(ui): pin user-owned milks at the top of the calcium tab`

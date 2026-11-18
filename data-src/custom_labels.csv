@@ -1,0 +1,4 @@
+food_id,label_basis,energy_kj,protein_g,fat_g,carbohydrate_g,sugars_g,sodium_mg,calcium_mg,note_zh
+custom:devondale-skim-powder,per serving (25 g powder in 250 mL),383,8.8,0.3,13.3,13.3,113,288,用户确认的包装标签转录；仅存档，网站只用钙
+custom:mm-partly-skimmed-milk,per 100 mL,200,4.0,1.0,5.6,,60,130,用户确认的包装标签转录；仅存档，网站只用钙
+custom:hema-zero-fat-milk,per 100 mL,150,3.6,0,5.2,4.9,58,120,用户确认的包装标签转录；仅存档，网站只用钙；盒马益生菌酸奶标签无钙值，不收录
