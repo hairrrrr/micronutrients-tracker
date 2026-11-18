@@ -102,6 +102,21 @@ COOKED_NAME_WORDS_EN = (
     "boiled",
 )
 
+# Phase P22: eggs are raw only as well. Every 蛋类 food must say 生 in name_zh
+# and no cooked word may appear in either name or in the USDA description.
+EGG_CATEGORY = "蛋类"
+COOKED_EGG_WORDS_ZH = ("熟", "煮", "煎", "炒", "烤", "蒸", "荷包", "炖")
+COOKED_EGG_WORDS_EN = (
+    "cooked",
+    "fried",
+    "scrambled",
+    "boiled",
+    "poached",
+    "omelet",
+    "omelette",
+    "baked",
+)
+
 # data-src/bone_in_foods.csv columns (phase P20).
 BONE_IN_COLUMNS = ["food_id", "name_zh", "refuse_pct", "refuse_desc", "source"]
 # Suffix of a household measure label whose grams include the bone (P20).
@@ -890,6 +905,53 @@ def validate_raw_meat(checks):
     return meat_rows
 
 
+def validate_raw_eggs(checks, usda_foods):
+    """Only raw eggs may stay in 蛋类 (phase P22).
+
+    Every 蛋类 row must carry 生 in name_zh, must not use a cooked word in
+    name_zh or name_en, and its SR Legacy description must not describe a
+    cooked egg. Returns the number of egg rows checked.
+    """
+    _, rows = read_csv(DATA_SRC / "foods_curated.csv")
+    egg_rows = 0
+    for line_no, row in enumerate(rows, start=2):
+        category = (row.get("category_zh") or "").strip()
+        if category != EGG_CATEGORY:
+            continue
+        egg_rows += 1
+        raw_id = (row.get("fdc_id") or "").strip()
+        name_zh = (row.get("name_zh") or "").strip()
+        name_en = (row.get("name_en") or "").strip()
+        label = f"foods_curated.csv line {line_no} ({raw_id or 'no fdc_id'})"
+        checks.check(
+            "生" in name_zh,
+            f"{label}: 蛋类 name_zh {name_zh!r} must contain 生 (raw egg only)",
+        )
+        zh_hits = [word for word in COOKED_EGG_WORDS_ZH if word in name_zh]
+        checks.check(
+            not zh_hits,
+            f"{label}: cooked egg name_zh {name_zh!r} contains {'/'.join(zh_hits)}",
+        )
+        lowered = name_en.lower()
+        en_hits = [word for word in COOKED_EGG_WORDS_EN if word in lowered]
+        checks.check(
+            not en_hits,
+            f"{label}: cooked egg name_en {name_en!r} contains {'/'.join(en_hits)}",
+        )
+        usda_food = usda_foods.get(int(raw_id)) if raw_id.isdigit() else None
+        if usda_food is None:
+            continue
+        description = (usda_food.get("description") or "").strip().lower()
+        desc_hits = [word for word in COOKED_EGG_WORDS_EN if word in description]
+        checks.check(
+            not desc_hits,
+            f"{label}: USDA description {description!r} contains "
+            f"{'/'.join(desc_hits)} (raw eggs only)",
+        )
+    checks.check(egg_rows > 0, "no 蛋类 rows found in foods_curated.csv")
+    return egg_rows
+
+
 def validate_bone_in_csv(checks, foods):
     """Checks for data-src/bone_in_foods.csv (phase P20).
 
@@ -1377,10 +1439,12 @@ def validate_generated_json(
 def main():
     checks = Checks()
     usda_nutrients = load_usda_nutrients()
+    usda_foods = load_usda_foods()
     nutrient_count = validate_nutrients(checks, usda_nutrients)
-    food_count = validate_foods(checks, load_usda_foods(), load_excluded_categories())
+    food_count = validate_foods(checks, usda_foods, load_excluded_categories())
     measures_count, estimate_share, measures = validate_measures_csv(checks)
     meat_count = validate_raw_meat(checks)
+    egg_count = validate_raw_eggs(checks, usda_foods)
     tiers = validate_commonness_csv(checks)
     flagged = validate_small_portion_csv(checks)
     docs_scanned = validate_no_reason_leak(checks)
@@ -1393,6 +1457,7 @@ def main():
         print(f"nutrients: {nutrient_count} rows checked")
         print(f"foods: {food_count} rows checked")
         print(f"meat rows (raw only): {meat_count} checked")
+        print(f"egg rows (raw only): {egg_count} checked")
         print(f"measures: {measures_count} rows checked, {estimate_share:.1f}% estimates")
         print(f"commonness: {len(tiers)} tiers checked")
         print(f"small portions: {len(flagged)} flagged foods checked")
@@ -1405,6 +1470,7 @@ def main():
     print(f"nutrients: {nutrient_count} OK")
     print(f"foods: {food_count} OK")
     print(f"meat rows: {meat_count} OK (raw only, no cooking words)")
+    print(f"egg rows: {egg_count} OK (raw only, 生 in name_zh, no cooking words)")
     print(
         f"measures: {measures_count} rows OK for {food_count} foods, "
         f"{estimate_share:.1f}% estimates"

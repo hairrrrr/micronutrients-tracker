@@ -589,13 +589,6 @@ food_key,measure_id,label_zh,grams,basis,is_default
 171287,usda88374,一个,50,usda_portion:88374,1
 171287,usda88377,一杯,243,usda_portion:88377,0
 171287,usda88378,一个（中）,44,usda_portion:88378,0
-173424,usda92498,一杯,136,usda_portion:92498,0
-173424,usda92499,一勺,8.5,usda_portion:92499,0
-173424,usda92500,一个,50,usda_portion:92500,1
-173423,usda92497,一个,46,usda_portion:92497,1
-172187,usda90050,一个,61,usda_portion:90050,1
-172187,usda90051,一勺,13.7,usda_portion:90051,0
-172187,usda90052,一杯,220,usda_portion:90052,0
 172183,usda90043,一个,33,usda_portion:90043,1
 172183,usda90044,一杯,243,usda_portion:90044,0
 172184,usda90045,一个,17,usda_portion:90045,1

@@ -111,6 +111,47 @@ test("household measures stay in their sanity ranges (PLAN P5)", () => {
 });
 
 // ---------------------------------------------------------------------------
+// P22: eggs are raw only
+// ---------------------------------------------------------------------------
+
+test("eggs are raw only: the 3 cooked egg ids are gone", () => {
+  for (const id of ["fdc:172187", "fdc:173423", "fdc:173424"]) {
+    assert.equal(foodsById.has(id), false, `foods.json still has the cooked egg ${id}`);
+  }
+  assert.ok(foodsById.has("fdc:171287"), "foods.json lost the raw whole egg fdc:171287");
+});
+
+test("every 蛋类 food is raw (生 in name_zh, no cooking words)", async () => {
+  const csv = parseCsv(await readFile(curatedPath, "utf8"));
+  const eggs = csv.filter((row) => row.category_zh === "蛋类");
+  assert.ok(eggs.length > 0, "no 蛋类 rows in foods_curated.csv");
+  const cookedZh = ["熟", "煮", "煎", "炒", "烤", "蒸", "荷包", "炖"];
+  const cookedEn = [
+    "cooked",
+    "fried",
+    "scrambled",
+    "boiled",
+    "poached",
+    "omelet",
+    "omelette",
+    "baked",
+  ];
+  for (const row of eggs) {
+    assert.match(row.name_zh, /生/, `${row.fdc_id}: 蛋类 name_zh ${row.name_zh} must contain 生`);
+    for (const word of cookedZh) {
+      assert.equal(row.name_zh.includes(word), false, `${row.fdc_id}: cooked word ${word}`);
+    }
+    for (const word of cookedEn) {
+      assert.equal(row.name_en.toLowerCase().includes(word), false, `${row.fdc_id}: ${word}`);
+    }
+  }
+  for (const food of data.foods) {
+    if (food.category !== "蛋类") continue;
+    assert.match(food.nameZh, /生/, `${food.id}: egg nameZh ${food.nameZh} must contain 生`);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // P18b: commonness tiers, and no review text under docs/
 // ---------------------------------------------------------------------------
 
