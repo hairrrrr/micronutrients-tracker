@@ -666,8 +666,9 @@ test.describe("smoke", () => {
       await page.locator(SEL.tab(nutrient)).click();
       await expect(page.locator(SEL.tab(nutrient))).toHaveAttribute("aria-pressed", "true");
 
-      // The expected order comes from foods.json with the P18b rule
-      // (commonness desc, then per100g desc, then nameZh), not from a fixture.
+      // The expected order comes from foods.json with the P18b + P19b rule
+      // (commonness desc, then per100g * amountBasisG / 100 desc, then nameZh),
+      // not from a fixture.
       const expected = await expectedTopIds(nutrient, 60);
       const shown = await cellIds(page);
       expect(shown).toEqual(expected);
@@ -679,7 +680,7 @@ test.describe("smoke", () => {
       expect(ranking.slice(0, 10).every((entry) => entry.commonness >= 4)).toBe(true);
 
       // The first card is a common food and carries the 常见 badge while still
-      // showing its per-100 g amount.
+      // showing an amount.
       const first = page.locator(".food-cell").first();
       const firstId = expected[0];
       await expect(first).toHaveAttribute("data-food-cell", firstId);
@@ -720,6 +721,97 @@ test.describe("smoke", () => {
     await expect(page.locator(SEL.foodCard(tier4.id)).locator(".food-card__badge--common"))
       .toHaveText("常见");
     expect(await commonnessOfFood(tier4.id)).toBe(4);
+
+    expect(errors).toEqual([]);
+  });
+
+  // P19b: the renamed heading, the per-10 g cards and the calcium top.
+  test("16. the list is 常见食物 and small-portion foods show 每 10 g", async ({ page }) => {
+    const errors = watchErrors(page);
+    await resetApp(page);
+
+    // The heading was renamed from 食物含量排行 to 常见食物, and the meta line
+    // no longer claims that every card is per 100 g.
+    await expect(page.locator(".foods__title")).toHaveText("常见食物");
+    await expect(page.locator(SEL.foods)).toHaveAttribute("aria-label", "常见食物");
+    const vitAHint = await page.locator(".foods__hint").innerText();
+    expect(vitAHint).toBe("维生素A · 按常见度排序");
+    expect(vitAHint).not.toContain("每 100");
+
+    // Calcium: garlic (181 mg per 100 g, per 10 g = 18.1 mg) must no longer sit
+    // ahead of the tofu/milk-tier foods that have more calcium per 100 g than
+    // garlic's per-10 g value. The expected order is computed from foods.json.
+    await page.locator(SEL.tab("calcium")).click();
+    const hint = await page.locator(".foods__hint").innerText();
+    expect(hint).toBe("钙 · 按常见度排序");
+    expect(hint).not.toContain("每 100");
+    expect(hint).not.toContain("含量");
+    const ranking = await expectedRanking("calcium");
+    const garlic = ranking.find((entry) => entry.id === "fdc:169230");
+    expect(garlic, "garlic with calcium is missing from the data").toBeTruthy();
+    expect(garlic.amountBasisG).toBe(10);
+    expect(garlic.richness).toBeCloseTo(garlic.amount / 10, 6);
+
+    // The first card is the richest tier-5 unflagged food by per-100 g calcium,
+    // which is also the top of the new ranking.
+    const tier5Unflagged = ranking
+      .filter((entry) => entry.commonness === 5 && entry.amountBasisG === 100)
+      .sort((a, b) => b.amount - a.amount);
+    expect(tier5Unflagged.length).toBeGreaterThan(0);
+    await expect(page.locator(".food-cell").first()).toHaveAttribute("data-food-cell", tier5Unflagged[0].id);
+    expect(ranking[0].id).toBe(tier5Unflagged[0].id);
+
+    const garlicRank = ranking.findIndex((entry) => entry.id === "fdc:169230");
+    const ahead = ranking.slice(0, garlicRank);
+    expect(ahead.length).toBeGreaterThan(0);
+    // Every food above garlic has either a higher tier or more calcium in its
+    // comparison portion; several of them beat garlic's per-10 g value.
+    for (const entry of ahead) {
+      expect(entry.commonness > garlic.commonness
+        || entry.richness > garlic.richness
+        || (entry.richness === garlic.richness && entry.nameZh < garlic.nameZh)).toBe(true);
+    }
+    expect(ahead.filter((entry) => entry.richness > garlic.richness).length).toBeGreaterThan(5);
+    // Tofu, soybeans and milk-like foods with more calcium per 100 g than
+    // garlic's per-10 g value now come before garlic.
+    for (const id of ["fdc:172475", "fdc:172476", "fdc:174270"]) {
+      const index = ranking.findIndex((entry) => entry.id === id);
+      expect(index).toBeGreaterThanOrEqual(0);
+      expect(index).toBeLessThan(garlicRank);
+    }
+
+    // Garlic shows the per-10 g amount with a clear 每 10 g label; the tofu
+    // above it keeps 每 100 g.
+    await page.locator(SEL.search).fill("大蒜");
+    const garlicCard = page.locator(SEL.foodCard("fdc:169230"));
+    await expect(garlicCard).toBeVisible();
+    await expect(garlicCard.locator(".food-card__amount")).toHaveText("18.1 mg");
+    await expect(garlicCard.locator(".food-card__basis")).toHaveText("每 10 g");
+    await expect(garlicCard).toHaveAttribute("title", /每 10 g/);
+
+    await page.locator(SEL.search).fill("北豆腐");
+    const tofuCard = page.locator(SEL.foodCard("fdc:172475"));
+    await expect(tofuCard).toBeVisible();
+    await expect(tofuCard.locator(".food-card__basis")).toHaveText("每 100 g");
+    await expect(tofuCard.locator(".food-card__amount")).toHaveText("683 mg");
+
+    // The editor still works on a per-10 g food: 12 g of garlic adds
+    // 181 * 12 / 100 = 21.72 mg, whatever the card basis is. Read the target
+    // from the card and check the remaining amount against it.
+    await page.locator(SEL.search).fill("大蒜");
+    await openTile(page, "fdc:169230");
+    // The default household measure of garlic is one clove (一瓣, 3 g).
+    await expect(page.locator(SEL.editor("fdc:169230"))).toContainText("约 3 g");
+    await setGrams(page, 12, "fdc:169230", false);
+    await confirmTile(page, "fdc:169230");
+    await expect(page.locator(SEL.foodCard("fdc:169230"))).toHaveAttribute("aria-pressed", "true");
+
+    const firstNumber = (text) => Number(text.match(/\d+(?:\.\d+)?/)[0]);
+    const target = firstNumber(await cardTarget(page, "calcium"));
+    const remaining = firstNumber(await cardStatus(page, "calcium"));
+    // 800 - 21.72 = 778.28, shown as "还差 778 mg".
+    expect(target - remaining).toBeGreaterThan(21);
+    expect(target - remaining).toBeLessThan(22.5);
 
     expect(errors).toEqual([]);
   });

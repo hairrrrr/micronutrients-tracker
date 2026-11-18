@@ -866,6 +866,26 @@ select.input {
   overflow-wrap: anywhere;
 }
 
+/* Basis label under the amount (P19b): "每 100 g", or "每 10 g" for the
+ * condiments, spices, cooking oils and dried goods that are eaten by the
+ * spoonful. Deliberately small and muted so the amount itself stays the
+ * strongest line of the card. */
+.food-card__basis {
+  display: block;
+  margin-top: 1px;
+  color: var(--text-muted);
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.food-card.is-selected .food-card__basis,
+.food-tile.is-selected .food-card__basis {
+  color: inherit;
+  opacity: 0.8;
+}
+
 /* ---------------------------------------------------------------------------
  * Expanded editing tile (P17)
  *

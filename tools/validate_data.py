@@ -59,6 +59,12 @@ Phase P18b adds:
                      review text leaks into docs/: no docs/data/*.json has a
                      `reason`/`reason_zh` key, and no file under docs/ (JSON,
                      JS, HTML) contains any reason_zh string of the CSV.
+
+Phase P19b adds:
+    data-src/small_portion_foods.csv - header, unique ids, every flagged id a
+                     food of foods.json, basis_g 10. Every food in foods.json
+                     has an integer `amountBasisG` of exactly 10 or 100, and
+                     the flagged foods have exactly 10.
 """
 
 from __future__ import annotations
@@ -93,6 +99,12 @@ COMMONNESS_MIN = 1
 COMMONNESS_MAX = 5
 # Files under docs/ that are scanned for leaked review text (P18b).
 DOCS_SCAN_SUFFIXES = {".json", ".js", ".mjs", ".html"}
+
+# data-src/small_portion_foods.csv columns (phase P19b).
+SMALL_PORTION_COLUMNS = ["food_id", "name_zh", "basis_g", "rule"]
+SMALL_PORTION_BASIS_G = 10
+DEFAULT_AMOUNT_BASIS_G = 100
+AMOUNT_BASIS_VALUES = {SMALL_PORTION_BASIS_G, DEFAULT_AMOUNT_BASIS_G}
 
 # Sanity ranges from PLAN.md P5: (name, food+measure matcher, min g, max g).
 # Each matcher only picks the plain household measure it talks about, so a
@@ -1218,6 +1230,83 @@ def validate_commonness_json(checks, foods, tiers):
             )
 
 
+def validate_small_portion_csv(checks):
+    """Checks for data-src/small_portion_foods.csv (phase P19b).
+
+    Returns the set of flagged food ids. Every id must be a food of
+    foods.json, must be unique, and its basis_g must be 10. The `rule` column is
+    review material and is never copied into docs/.
+    """
+    path = DATA_SRC / "small_portion_foods.csv"
+    if not checks.check(path.is_file(), "missing data-src/small_portion_foods.csv"):
+        return set()
+
+    header, rows = read_csv(path)
+    checks.check(
+        header == SMALL_PORTION_COLUMNS,
+        f"small_portion_foods.csv columns are {header}, expected {SMALL_PORTION_COLUMNS}",
+    )
+
+    foods_data = load_json(checks, DOCS_DATA / "foods.json") or {}
+    food_ids = {str(food.get("id") or "") for food in foods_data.get("foods") or []}
+    flagged = set()
+    for line_no, row in enumerate(rows, start=2):
+        food_id = (row.get("food_id") or "").strip()
+        label = f"small_portion_foods.csv line {line_no} ({food_id or 'no food_id'})"
+
+        if not checks.check(food_id != "", f"{label}: empty food_id"):
+            continue
+        checks.check(food_id in food_ids, f"{label}: food_id is not in foods.json")
+        if food_id in flagged:
+            checks.fail(f"{label}: duplicate food_id")
+        flagged.add(food_id)
+
+        raw_basis = (row.get("basis_g") or "").strip()
+        if checks.check(
+            raw_basis.isdigit(), f"{label}: basis_g must be an integer, got {raw_basis!r}"
+        ):
+            checks.check(
+                int(raw_basis) == SMALL_PORTION_BASIS_G,
+                f"{label}: basis_g must be {SMALL_PORTION_BASIS_G}, got {raw_basis}",
+            )
+        checks.check(
+            has_cjk((row.get("name_zh") or "").strip()),
+            f"{label}: name_zh must be Chinese, got {row.get('name_zh')!r}",
+        )
+        checks.check(
+            (row.get("rule") or "").strip() != "",
+            f"{label}: rule must not be empty (review material, never published)",
+        )
+    return flagged
+
+
+def validate_amount_basis(checks, foods, flagged):
+    """Every food has amountBasisG 10 or 100, flagged foods exactly 10 (P19b)."""
+    for food in foods:
+        food_id = str(food.get("id") or "")
+        label = f"foods.json {food_id or 'no id'}"
+        basis = food.get("amountBasisG")
+        if not checks.check(
+            isinstance(basis, int)
+            and not isinstance(basis, bool)
+            and basis in AMOUNT_BASIS_VALUES,
+            f"{label}: amountBasisG must be 10 or 100, got {basis!r}",
+        ):
+            continue
+        if food_id in flagged:
+            checks.check(
+                basis == SMALL_PORTION_BASIS_G,
+                f"{label}: flagged small-portion food must have amountBasisG "
+                f"{SMALL_PORTION_BASIS_G}, got {basis}",
+            )
+        else:
+            checks.check(
+                basis == DEFAULT_AMOUNT_BASIS_G,
+                f"{label}: unflagged food must have amountBasisG "
+                f"{DEFAULT_AMOUNT_BASIS_G}, got {basis}",
+            )
+
+
 def iter_json_keys(value, path=""):
     """Yield (key path) of every object key in a decoded JSON value."""
     if isinstance(value, dict):
@@ -1272,7 +1361,9 @@ def validate_no_reason_leak(checks):
     return scanned
 
 
-def validate_generated_json(checks, curated_count, measures=None, composite_rows=None, tiers=None):
+def validate_generated_json(
+    checks, curated_count, measures=None, composite_rows=None, tiers=None, flagged=None
+):
     """Checks for docs/data/*.json written by tools/build_foods.py (phase P4)."""
     foods_path = DOCS_DATA / "foods.json"
     if not checks.check(foods_path.is_file(), "missing docs/data/foods.json"):
@@ -1307,6 +1398,8 @@ def validate_generated_json(checks, curated_count, measures=None, composite_rows
     )
     if tiers is not None:
         validate_commonness_json(checks, foods_data.get("foods") or [], tiers)
+    if flagged is not None:
+        validate_amount_basis(checks, foods_data.get("foods") or [], flagged)
     return food_count, composite_count, size
 
 
@@ -1318,9 +1411,10 @@ def main():
     measures_count, estimate_share, measures = validate_measures_csv(checks)
     composite_count_csv, composites = validate_composites_csv(checks, measures)
     tiers = validate_commonness_csv(checks)
+    flagged = validate_small_portion_csv(checks)
     docs_scanned = validate_no_reason_leak(checks)
     json_food_count, composite_count, foods_json_size = validate_generated_json(
-        checks, food_count, measures, composites if composites else None, tiers
+        checks, food_count, measures, composites if composites else None, tiers, flagged
     )
 
     if checks.failures:
@@ -1329,6 +1423,7 @@ def main():
         print(f"measures: {measures_count} rows checked, {estimate_share:.1f}% estimates")
         print(f"composites: {composite_count_csv} rows checked")
         print(f"commonness: {len(tiers)} tiers checked")
+        print(f"small portions: {len(flagged)} flagged foods checked")
         print(f"docs/ text scan: {docs_scanned} files checked")
         print(f"foods.json: {json_food_count} foods checked")
         print(f"{len(checks.failures)} problem(s) found")
@@ -1342,6 +1437,7 @@ def main():
     )
     print(f"composites: {composite_count_csv} OK (ingredients sum to 100 g +/- {COMPOSITE_GRAMS_TOLERANCE:g})")
     print(f"commonness: {len(tiers)} tiers OK (1..5, no reason text under docs/)")
+    print(f"small portions: {len(flagged)} flagged OK (amountBasisG 10, others 100)")
     print(f"docs/ text scan: {docs_scanned} files OK")
     print(
         f"foods.json: {json_food_count} foods OK "

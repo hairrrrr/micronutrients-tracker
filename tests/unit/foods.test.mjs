@@ -16,11 +16,15 @@ import assert from "node:assert/strict";
 import { DEFAULT_LIMIT, LIMIT_STEP } from "../../docs/js/core/order.js";
 import { reduce } from "../../docs/js/core/state.js";
 import {
+  BASIS_100_LABEL,
+  BASIS_10_LABEL,
   CANCEL_LABEL,
   COMMON_BADGES,
   CONFIRM_LABEL,
   DESELECT_LABEL,
   ESTIMATE_BADGE,
+  amountText,
+  basisLabel,
   buildFoodCards,
   draftQuantity,
   expandedTileHtml,
@@ -267,9 +271,121 @@ test("switching nutrient re-ranks around the new nutrient's values", () => {
   assert.notEqual(cards[3].amountText, iron[3].amountText);
 });
 
-test("the heading names the active nutrient and the per 100 g basis", () => {
-  assert.equal(foodsHeading(ctx()), "维生素A · 每 100 克含量");
-  assert.equal(foodsHeading(ctx({ activeNutrient: "iron" })), "铁 · 每 100 克含量");
+test("the heading names the active nutrient and no longer claims a single basis", () => {
+  assert.equal(foodsHeading(ctx()), "维生素A · 按常见度排序");
+  assert.equal(foodsHeading(ctx({ activeNutrient: "iron" })), "铁 · 按常见度排序");
+  // P19b: the meta text must not claim everything is per 100 g, because
+  // condiments and dried goods are per 10 g.
+  assert.equal(foodsHeading(ctx()).includes("每 100"), false);
+  assert.equal(foodsHeading(ctx()).includes("每 10"), false);
+});
+
+test("the list heading reads 常见食物 (P19b)", () => {
+  const html = foodsHtml(buildFoodCards(ctx()), { ...ctx(), more: 0 });
+  assert.match(html, /<h2 class="foods__title">常见食物<\/h2>/);
+  assert.equal(html.includes("食物含量排行"), false);
+});
+
+// ---------------------------------------------------------------------------
+// P19b: per-10 g cards for condiments, spices, cooking oils and dried goods
+// ---------------------------------------------------------------------------
+
+const SMALL_FOOD = {
+  id: "fdc:garlic",
+  nameZh: "大蒜（生）",
+  nameEn: "Garlic, raw",
+  commonness: 5,
+  amountBasisG: 10,
+  per100g: { calcium: 181, vitA: 0 },
+};
+
+test("a flagged food shows the per-10 g amount with a 每 10 g label", () => {
+  // 181 mg per 100 g -> 18.1 mg per 10 g, through the same number formatter.
+  assert.equal(amountText(SMALL_FOOD, "calcium", "mg"), "18.1 mg");
+  assert.equal(basisLabel(SMALL_FOOD), BASIS_10_LABEL);
+  assert.equal(BASIS_10_LABEL, "每 10 g");
+
+  const cards = buildFoodCards({
+    nutrients: { nutrients: [{ id: "calcium", nameZh: "钙", nameEn: "Calcium", unit: "mg", color: "#cfe3f7", kind: "mineral" }] },
+    foods: { foods: [SMALL_FOOD] },
+    state: { activeNutrient: "calcium", selections: {}, order: [] },
+  });
+  const card = cards[0];
+  assert.equal(card.amountText, "18.1 mg");
+  assert.equal(card.basisLabel, "每 10 g");
+  assert.equal(card.smallPortion, true);
+  assert.equal(card.amountBasisG, 10);
+  const html = foodCardHtml(card);
+  assert.match(html, /18\.1 mg/);
+  assert.match(html, /每 10 g/);
+  assert.equal(html.includes("每 100 g"), false);
+  // Both the visible label and the accessible title carry the basis.
+  assert.match(card.title, /每 10 g/);
+});
+
+test("an unflagged food keeps the per-100 g amount and label", () => {
+  const tofu = {
+    id: "fdc:tofu",
+    nameZh: "北豆腐",
+    nameEn: "Firm tofu",
+    commonness: 5,
+    amountBasisG: 100,
+    per100g: { calcium: 683 },
+  };
+  assert.equal(amountText(tofu, "calcium", "mg"), "683 mg");
+  assert.equal(basisLabel(tofu), BASIS_100_LABEL);
+  assert.equal(BASIS_100_LABEL, "每 100 g");
+
+  // A missing basis behaves like 100 g (older data and test fixtures).
+  const legacy = { ...tofu, amountBasisG: undefined };
+  assert.equal(amountText(legacy, "calcium", "mg"), "683 mg");
+  assert.equal(basisLabel(legacy), "每 100 g");
+
+  const html = foodCardHtml({
+    id: tofu.id,
+    nameZh: tofu.nameZh,
+    nameEn: tofu.nameEn,
+    amountText: amountText(tofu, "calcium", "mg"),
+    basisLabel: basisLabel(tofu),
+    commonness: 5,
+    commonBadge: "★常见",
+    estimate: false,
+    selected: false,
+    pinned: false,
+    title: "t",
+  });
+  assert.match(html, /每 100 g/);
+  assert.equal(html.includes("每 10 g"), false);
+});
+
+test("the per-10 g card keeps a no-data food at 无数据 with its basis label", () => {
+  const empty = { ...SMALL_FOOD, per100g: { calcium: null } };
+  assert.equal(amountText(empty, "calcium", "mg"), "无数据");
+  assert.equal(basisLabel(empty), "每 10 g");
+});
+
+test("the editor still computes a contribution from grams x per100g / 100", () => {
+  // The card basis only changes how the food is compared and labelled; a
+  // confirmed 12 g of garlic still adds 181 * 12 / 100 = 21.72 mg of calcium.
+  const cards = buildFoodCards({
+    nutrients: { nutrients: [{ id: "calcium", nameZh: "钙", nameEn: "Calcium", unit: "mg", color: "#cfe3f7", kind: "mineral" }] },
+    foods: { foods: [SMALL_FOOD] },
+    state: {
+      activeNutrient: "calcium",
+      selections: { [SMALL_FOOD.id]: { grams: 12 } },
+      order: [SMALL_FOOD.id],
+    },
+    expandedId: SMALL_FOOD.id,
+    quantity: { measureId: "grams", grams: 12 },
+  });
+  const card = cards[0];
+  assert.equal(card.selected, true);
+  assert.ok(card.editor, "the expanded tile keeps its editor");
+  assert.equal(card.editor.grams, 12);
+  assert.equal(card.amountText, "18.1 mg");
+  assert.equal(card.basisLabel, "每 10 g");
+  // The saved selection is stored in grams, untouched by the basis.
+  assert.equal(card.editor.measureId, "grams");
 });
 
 test("the show more button appears only while foods are hidden", () => {
@@ -315,12 +431,13 @@ test("against foods.json, the first Vitamin A card follows the commonness-first 
   const nutrient = realNutrients.nutrients.find((entry) => entry.id === "vitA");
   assert.ok(nutrient, "nutrients.json has no vitA");
 
-  // Same rule as order.js: commonness descending (missing = 0), then value
-  // descending, ties broken by nameZh.
+  // Same rule as order.js: commonness descending (missing = 0), then richness
+  // on the comparison basis (P19b), ties broken by nameZh.
+  const richness = (food) => (food.per100g.vitA * (food.amountBasisG ?? 100)) / 100;
   const ranked = realFoods.foods
     .filter((food) => typeof food.per100g?.vitA === "number" && food.per100g.vitA > 0)
     .sort((a, b) => ((b.commonness ?? 0) - (a.commonness ?? 0))
-      || (b.per100g.vitA - a.per100g.vitA)
+      || (richness(b) - richness(a))
       || (a.nameZh < b.nameZh ? -1 : a.nameZh > b.nameZh ? 1 : 0));
   assert.ok(ranked.length > DEFAULT_LIMIT, "not enough foods with vitamin A for this check");
   // The tiered top is what the ordering is about: an everyday food leads.
@@ -342,6 +459,7 @@ test("against foods.json, the first Vitamin A card follows the commonness-first 
   assert.equal(cards[0].id, ranked[0].id, "first card follows the commonness-first ranking");
   assert.equal(cards[0].nameZh, ranked[0].nameZh);
   assert.equal(cards[0].amountText, `${ranked[0].per100g.vitA} ${nutrient.unit}`.trim());
+  assert.equal(cards[0].basisLabel, "每 100 g");
   // Sorted all the way down, not just at the top.
   const shown = cards.map((card) => card.id);
   assert.deepEqual(shown, ranked.slice(0, DEFAULT_LIMIT).map((food) => food.id));

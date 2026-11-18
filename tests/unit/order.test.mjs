@@ -10,8 +10,11 @@ import assert from "node:assert/strict";
 import {
   DEFAULT_LIMIT,
   LIMIT_STEP,
+  DEFAULT_AMOUNT_BASIS_G,
   valueOf,
   commonnessOf,
+  amountBasisGOf,
+  richnessOf,
   selectionOrder,
   contribution,
   partitionFoods,
@@ -266,4 +269,89 @@ test("optional search keeps pinned foods on top and matches nameZh/aliases/nameE
   // The search never reorders pinned foods below an unpinned match.
   const mixed = foodsForNutrient(foods, "vitA", { "fdc:liverpaste": { grams: 1 } }, { search: "肝" });
   assert.equal(mixed[0].id, "fdc:liverpaste");
+});
+
+// ---------------------------------------------------------------------------
+// P19b: richness on the comparison basis (per 10 g for small-portion foods)
+// ---------------------------------------------------------------------------
+
+test("amountBasisGOf reads 10 or 100 and defaults to 100", () => {
+  assert.equal(amountBasisGOf({ amountBasisG: 10 }), 10);
+  assert.equal(amountBasisGOf({ amountBasisG: 100 }), 100);
+  assert.equal(amountBasisGOf({}), DEFAULT_AMOUNT_BASIS_G);
+  assert.equal(amountBasisGOf(null), DEFAULT_AMOUNT_BASIS_G);
+  assert.equal(amountBasisGOf({ amountBasisG: null }), DEFAULT_AMOUNT_BASIS_G);
+  assert.equal(amountBasisGOf({ amountBasisG: "x" }), DEFAULT_AMOUNT_BASIS_G);
+  assert.equal(amountBasisGOf({ amountBasisG: 0 }), DEFAULT_AMOUNT_BASIS_G);
+  assert.equal(DEFAULT_AMOUNT_BASIS_G, 100);
+});
+
+test("richnessOf is per100g * amountBasisG / 100", () => {
+  assert.equal(richnessOf({ per100g: { calcium: 181 }, amountBasisG: 10 }, "calcium"), 18.1);
+  assert.equal(richnessOf({ per100g: { calcium: 181 } }, "calcium"), 181);
+  assert.equal(richnessOf({ per100g: { calcium: null }, amountBasisG: 10 }, "calcium"), 0);
+  assert.equal(richnessOf(null, "calcium"), 0);
+});
+
+test("a per-10 g food ranks below a same-tier food richer than its per-10 g value", () => {
+  // Acceptance case for P19b, modelled on the calcium tab: garlic (181 mg per
+  // 100 g, eaten per 10 g = 18.1 mg) and tofu (350 mg per 100 g). Both are
+  // tier 5, so the tier does not decide; the comparison portion does. The
+  // flagged food's per-100 g value (181) is higher than the unflagged food's
+  // (100), yet the unflagged food wins because 100 > 18.1.
+  const foods = [
+    { id: "fdc:garlic", nameZh: "大蒜（生）", commonness: 5, amountBasisG: 10, per100g: { calcium: 181 } },
+    { id: "fdc:tofu", nameZh: "豆腐（常规）", commonness: 5, amountBasisG: 100, per100g: { calcium: 350 } },
+    { id: "fdc:seaweed", nameZh: "海带（生）", commonness: 5, amountBasisG: 100, per100g: { calcium: 100 } },
+  ];
+  assert.deepEqual(
+    foodsForNutrient(foods, "calcium", {}).map((food) => food.id),
+    ["fdc:tofu", "fdc:seaweed", "fdc:garlic"],
+  );
+  // The flagged food is not buried: a same-tier food that is poorer than
+  // garlic's per-10 g value (e.g. 10 mg per 100 g) still comes after it.
+  const mixed = [...foods, { id: "fdc:milk", nameZh: "牛奶", commonness: 5, amountBasisG: 100, per100g: { calcium: 10 } }];
+  assert.deepEqual(
+    foodsForNutrient(mixed, "calcium", {}).map((food) => food.id),
+    ["fdc:tofu", "fdc:seaweed", "fdc:garlic", "fdc:milk"],
+  );
+});
+
+test("the per-10 g basis never lets a food jump a commonness tier", () => {
+  const foods = [
+    { id: "fdc:spice", nameZh: "辣椒粉", commonness: 3, amountBasisG: 10, per100g: { calcium: 100000 } },
+    { id: "fdc:tofu", nameZh: "豆腐（常规）", commonness: 5, amountBasisG: 100, per100g: { calcium: 1 } },
+  ];
+  // 100000 * 10 / 100 = 10000 is far above 1, but tier 5 still leads.
+  assert.deepEqual(
+    foodsForNutrient(foods, "calcium", {}).map((food) => food.id),
+    ["fdc:tofu", "fdc:spice"],
+  );
+});
+
+test("a missing amountBasisG competes like 100 g and ties keep the name order", () => {
+  const foods = [
+    { id: "fdc:b", nameZh: "乙", commonness: 5, per100g: { calcium: 100 } },
+    { id: "fdc:a", nameZh: "甲", commonness: 5, per100g: { calcium: 100 } },
+    { id: "fdc:ten", nameZh: "丙", commonness: 5, amountBasisG: 10, per100g: { calcium: 1000 } },
+  ];
+  // 1000 * 10 / 100 = 100, a three-way tie on richness, so the name decides
+  // (code-point order: 丙, 乙, 甲).
+  assert.deepEqual(
+    foodsForNutrient(foods, "calcium", {}).map((food) => food.id),
+    ["fdc:ten", "fdc:b", "fdc:a"],
+  );
+});
+
+test("the pinned group still follows the confirmation order with per-10 g foods", () => {
+  const foods = [
+    { id: "fdc:garlic", nameZh: "大蒜（生）", commonness: 5, amountBasisG: 10, per100g: { calcium: 181 } },
+    { id: "fdc:tofu", nameZh: "豆腐（常规）", commonness: 5, amountBasisG: 100, per100g: { calcium: 350 } },
+  ];
+  const selections = { "fdc:garlic": { grams: 5 }, "fdc:tofu": { grams: 100 } };
+  const list = foodsForNutrient(foods, "calcium", selections, { order: ["fdc:garlic", "fdc:tofu"] });
+  assert.deepEqual(list.map((food) => food.id), ["fdc:garlic", "fdc:tofu"]);
+  // The contribution is grams x per100g / 100, untouched by the basis.
+  assert.equal(list[0].contribution, 9.05);
+  assert.equal(list[1].contribution, 350);
 });

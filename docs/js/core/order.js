@@ -1,5 +1,6 @@
 // Per-nutrient food ordering with pinned selections (PLAN.md 1.7, phase P8;
-// confirmation order since P17; commonness first since P18b).
+// confirmation order since P17; commonness first since P18b; per-10 g
+// comparison for small-portion foods since P19b).
 //
 // Pure ES module: no DOM access. It imports only `selectionGrams` from
 // calc.js, so node --test can load it directly. Ordering is:
@@ -10,10 +11,17 @@
 //      (older saved state) falls back to the key order of `selections`, which
 //      older versions wrote in confirmation order;
 //   2. unpinned: every other food with per100g[n] > 0, sorted by commonness
-//      descending (the AI-estimated everyday-use tier, P18), then by per100g[n]
-//      descending within a tier, ties broken by nameZh. A food without a
-//      commonness tier counts as 0, so it sorts after every tiered food;
-//   3. `limit` (default 60) applies to the unpinned part only, so a user's
+//      descending (the AI-estimated everyday-use tier, P18), then by richness
+//      within a tier, ties broken by nameZh. A food without a commonness tier
+//      counts as 0, so it sorts after every tiered food;
+//   3. richness (P19b) is the amount in the food's comparison portion:
+//      per100g[n] * amountBasisG / 100. Condiments, spices, cooking oils and
+//      dried goods are eaten by the spoonful, so their `amountBasisG` is 10 and
+//      they are compared per 10 g; every other food keeps 100 g. A missing or
+//      unusable amountBasisG means 100, so old data and test fixtures behave as
+//      before. Note that the tier still decides first: a per-10 g food never
+//      jumps above a food of a higher tier;
+//   4. `limit` (default 60) applies to the unpinned part only, so a user's
 //      pinned foods never disappear behind "show more".
 //
 // Only foods that actually contain the nutrient are listed in a nutrient tab
@@ -73,6 +81,41 @@ export function commonnessOf(food) {
 /** Descending numeric sort helper, Infinity for empty input. */
 function desc(a, b) {
   return b - a;
+}
+
+/** Default comparison portion in grams (P19b). */
+export const DEFAULT_AMOUNT_BASIS_G = 100;
+
+/**
+ * Comparison portion of a food in grams (P19b): 10 for condiments, spices,
+ * cooking oils and dried goods, 100 for everything else.
+ *
+ * A missing or unusable value means the default 100 g, so older data and test
+ * fixtures keep the per-100 g comparison.
+ *
+ * @param {{amountBasisG?: number}|null|undefined} food
+ * @returns {number} 10 or 100
+ */
+export function amountBasisGOf(food) {
+  const value = Number(food?.amountBasisG);
+  return Number.isFinite(value) && value > 0 ? value : DEFAULT_AMOUNT_BASIS_G;
+}
+
+/**
+ * Richness of a food in a comparison portion: per100g[n] * amountBasisG / 100.
+ *
+ * This is what the unpinned order compares inside one commonness tier, so a
+ * condiment eaten per 10 g is neither flattered nor buried by the per-100 g
+ * number of a staple.
+ *
+ * @param {{per100g?: Record<string, number|null>, amountBasisG?: number}} food
+ * @param {string} nutrientId
+ * @returns {number} 0 when the food has no value for the nutrient
+ */
+export function richnessOf(food, nutrientId) {
+  const per100g = valueOf(food, nutrientId);
+  if (per100g === null) return 0;
+  return (per100g * amountBasisGOf(food)) / 100;
 }
 
 /**
@@ -178,11 +221,12 @@ export function partitionFoods(foods, nutrientId, selections, order) {
   unpinned.sort((a, b) => {
     // Commonness first (P18b): an everyday food outranks a niche one even when
     // the niche food is far richer in the nutrient. Only inside one tier does
-    // the per-100 g amount decide, then the Chinese name.
+    // the richness decide (P19b: the per-10 g comparison for condiments and
+    // dried goods, per 100 g otherwise), then the Chinese name.
     const byCommonness = desc(commonnessOf(a), commonnessOf(b));
     if (byCommonness !== 0) return byCommonness;
-    const byValue = desc(valueOf(a, nutrientId) ?? 0, valueOf(b, nutrientId) ?? 0);
-    return byValue !== 0 ? byValue : byName(a, b);
+    const byRichness = desc(richnessOf(a, nutrientId), richnessOf(b, nutrientId));
+    return byRichness !== 0 ? byRichness : byName(a, b);
   });
 
   return { pinned, unpinned };
@@ -255,8 +299,11 @@ export function hasMore(foods, nutrientId, selections, limit = DEFAULT_LIMIT, or
 export default {
   DEFAULT_LIMIT,
   LIMIT_STEP,
+  DEFAULT_AMOUNT_BASIS_G,
   valueOf,
   commonnessOf,
+  amountBasisGOf,
+  richnessOf,
   selectionOrder,
   contribution,
   partitionFoods,

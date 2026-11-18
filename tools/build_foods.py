@@ -10,6 +10,7 @@ Inputs (see PLAN.md 1.3):
     data-src/measures.csv       optional household measures (phase P5)
     data-src/composites.csv     optional composite dish estimates (phase P6)
     data-src/commonness.csv     commonness tier 1-5 per food (phase P18b)
+    data-src/small_portion_foods.csv  foods eaten in small amounts (phase P19b)
     data-raw/<dataset>/*.csv    USDA FoodData Central SR Legacy 2018-04
 
 Outputs:
@@ -24,7 +25,11 @@ Rules (PLAN.md 1.3):
       tryptophan is missing only niacin is used and flags.niacinNoTryptophan
       is true;
     * numbers are rounded to at most 4 significant digits, never otherwise
-      changed.
+      changed;
+    * every food carries `amountBasisG` (P19b): 10 for the condiments, spices,
+      cooking oils and dried goods of data-src/small_portion_foods.csv, 100 for
+      everything else. Only the integer basis is merged, never the CSV rule
+      text, and an id of the CSV that is not a food fails the build.
 
 Usage:
     python3 tools/build_foods.py
@@ -91,6 +96,10 @@ COMPOSITE_COLUMNS = [
 COMMONNESS_COLUMNS = ["food_id", "name_zh", "commonness", "reason_zh"]
 COMMONNESS_MIN = 1
 COMMONNESS_MAX = 5
+# Phase P19b: foods eaten in small amounts, compared and shown per 10 g.
+SMALL_PORTION_COLUMNS = ["food_id", "name_zh", "basis_g", "rule"]
+SMALL_PORTION_BASIS_G = 10
+DEFAULT_AMOUNT_BASIS_G = 100
 
 
 def read_csv(path, expected_columns):
@@ -202,6 +211,43 @@ def load_commonness():
             )
         tiers[food_id] = tier
     return tiers
+
+
+def load_small_portions():
+    """set of food ids eaten in small amounts (basis 10 g), phase P19b.
+
+    `data-src/small_portion_foods.csv` is the reviewed list (P19a) of
+    condiments, spices, cooking oils and dried goods. Only the ids are used:
+    the `basis_g` column must be 10 and the `rule` column is review material
+    that never reaches docs/.
+    """
+    path = DATA_SRC / "small_portion_foods.csv"
+    rows = read_csv(path, SMALL_PORTION_COLUMNS)
+    if not rows:
+        raise SystemExit("data-src/small_portion_foods.csv is missing or empty")
+    ids = set()
+    for line_no, row in enumerate(rows, start=2):
+        food_id = row["food_id"]
+        if not food_id:
+            raise SystemExit(f"small_portion_foods.csv line {line_no}: empty food_id")
+        if food_id in ids:
+            raise SystemExit(
+                f"small_portion_foods.csv line {line_no}: duplicate food_id {food_id}"
+            )
+        try:
+            basis = int(row["basis_g"])
+        except ValueError:
+            raise SystemExit(
+                f"small_portion_foods.csv line {line_no} ({food_id}): "
+                f"basis_g {row['basis_g']!r} is not an integer"
+            )
+        if basis != SMALL_PORTION_BASIS_G:
+            raise SystemExit(
+                f"small_portion_foods.csv line {line_no} ({food_id}): basis_g {basis} "
+                f"!= {SMALL_PORTION_BASIS_G}"
+            )
+        ids.add(food_id)
+    return ids
 
 
 def load_measures():
@@ -402,6 +448,24 @@ def build():
             f"data-src/commonness.csv lists {len(unknown_tiers)} unknown food id(s): {preview}"
         )
 
+    # Phase P19b: every food gets its amount basis. The reviewed list marks
+    # condiments, spices, cooking oils and dried goods as eaten in small
+    # amounts, so they are compared and shown per 10 g; everything else keeps
+    # the per-100 g basis. An id of the list that is not a food fails the
+    # build, exactly like an unknown commonness id.
+    small_portions = load_small_portions()
+    unknown_portions = sorted(small_portions - {food["id"] for food in foods})
+    if unknown_portions:
+        preview = ", ".join(unknown_portions[:10])
+        raise SystemExit(
+            f"data-src/small_portion_foods.csv lists {len(unknown_portions)} "
+            f"unknown food id(s): {preview}"
+        )
+    for food in foods:
+        food["amountBasisG"] = (
+            SMALL_PORTION_BASIS_G if food["id"] in small_portions else DEFAULT_AMOUNT_BASIS_G
+        )
+
     foods.sort(
         key=lambda food: (
             food["fdcId"] is None,
@@ -455,6 +519,9 @@ def main():
             "the missing part counts as 0 and flags.partialNullNutrients lists that "
             "nutrient, so the value is a lower bound.",
             "commonness tiers 1-5: AI model estimate (DeepSeek via hms), supervisor-reviewed",
+            "amountBasisG is the comparison basis: 10 g for condiments, spices, cooking "
+            "oils and dried goods eaten in small amounts, 100 g for every other food; "
+            "per100g values themselves are always per 100 g",
         ],
     }
 
@@ -469,6 +536,8 @@ def main():
           f"({len(foods) - composite_count} SR Legacy, {composite_count} composites)")
     print(f"wrote docs/data/nutrients.json: {len(nutrient_meta)} nutrients")
     print(f"wrote docs/data/meta.json: build date {meta_payload['buildDate']}")
+    small = sum(1 for food in foods if food["amountBasisG"] == SMALL_PORTION_BASIS_G)
+    print(f"amountBasisG 10 g: {small} foods, 100 g: {len(foods) - small} foods")
     print(f"null nutrient values kept: {null_total}")
     return 0
 

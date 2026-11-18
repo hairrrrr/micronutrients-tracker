@@ -121,6 +121,16 @@ test("about markup explains commonness-first ordering and the AI estimate", () =
   assert.match(html, /中国居民膳食指南/);
   assert.match(html, /人工复核|经人工/);
   assert.match(html, /并非官方分级/);
+  // P19b: the per-10 g exception is explained with its food groups and an
+  // example, so a reader can tell why garlic is not compared per 100 g.
+  assert.match(html, /每 10 克/);
+  assert.match(html, /调味料/);
+  assert.match(html, /香辛料/);
+  assert.match(html, /食用油/);
+  assert.match(html, /干货/);
+  assert.match(html, /大蒜/);
+  assert.match(html, /木耳/);
+  assert.match(html, /芝麻酱/);
   // The note is its own labelled section, after the sources.
   assert.match(html, /id="about-order"/);
   assert.ok(html.indexOf('about-sources') < html.indexOf('about-order'));

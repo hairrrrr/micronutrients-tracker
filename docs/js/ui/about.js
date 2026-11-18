@@ -1,7 +1,7 @@
 // Footer/About section: data sources, the ordering/commonness note, estimates
 // and unit caveats, nutrients that are not tracked, the privacy note, the
 // disclaimer and the "clear all" button (PLAN.md 1.8 item 6, phase P12; the
-// commonness note since P18b).
+// commonness note since P18b, the per-10 g exception since P19b).
 //
 // Rendering only: this module never touches localStorage and never mutates
 // state. The clear button asks for confirmation and then reports
@@ -78,11 +78,12 @@ export const UNTRACKED = Object.freeze([
   Object.freeze({ name: "钼、铬、氟", reason: "v1 未纳入" }),
 ]);
 
-/** Heading and text of the ordering note (P18b). */
+/** Heading and text of the ordering note (P18b; per-10 g rule since P19b). */
 export const ORDER_NOTE = Object.freeze({
   title: "排序与常见度",
   text:
-    "每种营养素的食物列表先按“常见度”从高到低排序，同一档内再按每 100 克含量从高到低排列，最后按名称排序。" +
+    "每种营养素的食物列表先按“常见度”从高到低排序，同一档内再按含量从高到低排列，最后按名称排序。" +
+    "同一档内，食物按每 100 克含量比较，但调味料、香辛料、食用油和干货（例如大蒜、干木耳、芝麻酱）例外：它们每次吃得很少，按每 10 克比较和标示。" +
     "常见度分为 1–5 档（4 档和 5 档的食物卡片上标有“常见”徽章），由 AI 模型（DeepSeek）参考《中国居民膳食指南》和中国家常烹饪的实际情况估算，" +
     "并经过人工复核；它只是帮助我们优先看到日常食物的参考，并非官方分级，也不是营养价值的评价。",
 });

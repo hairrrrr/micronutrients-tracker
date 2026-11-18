@@ -244,3 +244,47 @@ test("no docs JS or HTML file contains a reason_zh string", async () => {
     }
   }
 });
+
+// ---------------------------------------------------------------------------
+// P19b: amountBasisG on every food
+// ---------------------------------------------------------------------------
+
+const smallPortionPath = new URL("../../data-src/small_portion_foods.csv", import.meta.url);
+
+test("every food has amountBasisG in {10, 100} and flagged foods are exactly 10", async () => {
+  const csv = parseCsv(await readFile(smallPortionPath, "utf8"));
+  assert.ok(csv.length > 40, `small_portion_foods.csv has only ${csv.length} rows`);
+  const flagged = new Set(csv.map((row) => row.food_id));
+
+  assert.equal(flagged.size, csv.length, "small_portion_foods.csv repeats a food_id");
+  for (const row of csv) {
+    assert.equal(Number(row.basis_g), 10, `${row.food_id}: basis_g ${row.basis_g}`);
+    assert.ok(foodsById.has(row.food_id), `small_portion_foods.csv lists an unknown id ${row.food_id}`);
+  }
+
+  let small = 0;
+  for (const food of data.foods) {
+    assert.ok(
+      food.amountBasisG === 10 || food.amountBasisG === 100,
+      `${food.id}: amountBasisG ${food.amountBasisG} is not 10 or 100`,
+    );
+    if (flagged.has(food.id)) {
+      assert.equal(food.amountBasisG, 10, `${food.id}: flagged food must be 10 g`);
+      small += 1;
+    } else {
+      assert.equal(food.amountBasisG, 100, `${food.id}: unflagged food must be 100 g`);
+    }
+  }
+  assert.equal(small, flagged.size, "not every flagged food is in foods.json");
+  // The flagged set is a small minority, as the supervisor's list intends.
+  assert.ok(small < data.foods.length / 4, `${small} of ${data.foods.length} foods are per 10 g`);
+});
+
+test("the flagged foods include the reviewed garlic and dried goods", () => {
+  for (const id of ["fdc:169230", "fdc:168581", "fdc:170189", "fdc:171016"]) {
+    assert.equal(food(id).amountBasisG, 10, `${id} should be compared per 10 g`);
+  }
+  // A fresh vegetable and a staple keep the per-100 g basis.
+  assert.equal(food("fdc:170393").amountBasisG, 100);
+  assert.equal(food("fdc:168878").amountBasisG, 100);
+});

@@ -1,8 +1,15 @@
 // Food list for the active nutrient: one card per food in `order.js` order
 // (pinned selections in confirmation order, then commonness first and the
-// highest amount per 100 g within a tier), with a "show more" button that
+// richest comparison portion within a tier), with a "show more" button that
 // raises the limit by 60 and a search box (PLAN.md 1.7 and 1.8 item 5, phases
-// P11a, P11b, P17 and P18b).
+// P11a, P11b, P17, P18b and P19b).
+//
+// Amounts (P19b): an ordinary card shows the per-100 g value labelled 每 100 g.
+// Condiments, spices, cooking oils and dried goods carry `amountBasisG` 10 in
+// foods.json because they are eaten by the spoonful; their card divides the
+// per-100 g value by 10 and labels it 每 10 g. The editor always computes the
+// contribution from grams x per100g / 100, so the basis only changes how the
+// card compares and describes the food, never the intake maths.
 //
 // Rendering only: ordering, the limit, the search text and the selections all
 // come from the pure modules (`core/order.js`, `core/measures.js`,
@@ -46,11 +53,20 @@ import {
   stepCount,
 } from "../core/measures.js";
 import { MET_COLORS, nameZhOf, unitOf } from "../core/nutrients.js";
-import { DEFAULT_LIMIT, LIMIT_STEP, commonnessOf, foodsForNutrient, nextLimit, valueOf } from "../core/order.js";
+import { DEFAULT_LIMIT, LIMIT_STEP, amountBasisGOf, commonnessOf, foodsForNutrient, nextLimit, valueOf } from "../core/order.js";
 import { FALLBACK_GRAMS } from "../core/state.js";
 
-/** Label above the grid, e.g. "维生素A · 每 100 克含量". */
-export const UNIT_HINT_PREFIX = "每 100 克";
+/**
+ * Ordering hint of the meta line, e.g. "维生素A · 按常见度排序".
+ *
+ * P19b: the meta line no longer claims a per-100 g basis, because condiments
+ * and dried goods are shown per 10 g; every card carries its own label.
+ */
+export const ORDER_HINT = "按常见度排序";
+/** Amount basis label of an ordinary food card (per 100 g). */
+export const BASIS_100_LABEL = "每 100 g";
+/** Amount basis label of a small-portion food card (P19b, per 10 g). */
+export const BASIS_10_LABEL = "每 10 g";
 /** Badge text on a composite (recipe estimate) food card. */
 export const ESTIMATE_BADGE = "估算";
 /**
@@ -162,6 +178,36 @@ export function per100gText(food, nutrientId, unit) {
 }
 
 /**
+ * Amount text of one food on its comparison basis (P19b).
+ *
+ * Ordinary foods are shown per 100 g, exactly like `per100gText`. Condiments,
+ * spices, cooking oils and dried goods have `amountBasisG` 10: their per-100 g
+ * value is divided by 10 so the card shows what a spoonful actually supplies.
+ * The nutrients themselves are never changed, only the displayed portion.
+ *
+ * @param {object} food foods.json food
+ * @param {string} nutrientId
+ * @param {string} unit e.g. "ug RAE"
+ * @returns {string} e.g. "18.1 mg"
+ */
+export function amountText(food, nutrientId, unit) {
+  const value = valueOf(food, nutrientId);
+  if (value === null) return "无数据";
+  return formatAmount((value * amountBasisGOf(food)) / 100, unit);
+}
+
+/**
+ * Small basis label under the amount: "每 10 g" for a small-portion food,
+ * "每 100 g" otherwise (P19b).
+ *
+ * @param {object} food foods.json food
+ * @returns {string}
+ */
+export function basisLabel(food) {
+  return amountBasisGOf(food) === 10 ? BASIS_10_LABEL : BASIS_100_LABEL;
+}
+
+/**
  * Quantity editor model of one food (PLAN.md 1.8 item 5).
  *
  * `measures.js` owns the maths: the model only picks the option list (the
@@ -233,8 +279,10 @@ export function buildFoodCards(ctx) {
     const selection = selections[food.id];
     const selected = Boolean(selection);
     const expanded = expandedId === food.id;
-    const amountText = per100gText(food, nutrientId, unit);
-    const base = `${food.nameZh}：每 100 克 ${amountText}`;
+    const cardAmount = amountText(food, nutrientId, unit);
+    const basis = basisLabel(food);
+    const amountBasisG = amountBasisGOf(food);
+    const base = `${food.nameZh}：${basis} ${cardAmount}`;
     const title = food.estimate === true
       ? `${base}（按食谱估算）· 点击${selected ? "修改份量" : "选择"}`
       : `${base} · 点击${selected ? "修改份量" : "选择"}`;
@@ -244,7 +292,10 @@ export function buildFoodCards(ctx) {
       id: food.id,
       nameZh: String(food.nameZh ?? ""),
       nameEn: String(food.nameEn ?? ""),
-      amountText,
+      amountText: cardAmount,
+      amountBasisG,
+      basisLabel: basis,
+      smallPortion: amountBasisG === 10,
       estimate: food.estimate === true,
       commonness,
       commonBadge: COMMON_BADGES[commonness] ?? "",
@@ -259,7 +310,8 @@ export function buildFoodCards(ctx) {
 
 /**
  * Markup of the head of a food card: name, estimate badge, English name and the
- * per-100 g amount. Shared by the compact card and the expanded tile.
+ * amount on the card's basis (per 100 g, or per 10 g for small-portion foods).
+ * Shared by the compact card and the expanded tile.
  *
  * @param {object} card card model from `buildFoodCards`
  * @returns {string} HTML
@@ -276,12 +328,18 @@ function cardBodyHtml(card) {
         title="${esc(COMMON_BADGE_TITLE)}">${esc(card.commonBadge)}</span>`
     : "";
   const english = card.nameEn ? `<span class="food-card__en">${esc(card.nameEn)}</span>` : "";
+  // The basis label stays visible on every card (P19b): a spoonful of sesame
+  // paste must not read like a 100 g portion.
+  const basis = card.basisLabel
+    ? `<span class="food-card__basis">${esc(card.basisLabel)}</span>`
+    : "";
   return `<span class="food-card__head">
       <span class="food-card__name">${esc(card.nameZh)}</span>
       ${badge}${common}
     </span>
     ${english}
-    <span class="food-card__amount">${esc(card.amountText)}</span>`;
+    <span class="food-card__amount">${esc(card.amountText)}</span>
+    ${basis}`;
 }
 
 /** Inline custom properties of the single "met" green (selected card). */
@@ -424,14 +482,18 @@ export function foodCellHtml(card) {
 }
 
 /**
- * Heading text of the list: the active nutrient and the "per 100 g" hint.
+ * Heading text of the list: the active nutrient and the ordering hint.
+ *
+ * The meta line no longer claims a single per-100 g basis (P19b): most cards
+ * are per 100 g but condiments and dried goods are per 10 g, and each card
+ * carries its own label.
  *
  * @param {{nutrients: object, state: object}} ctx
  * @returns {string}
  */
 export function foodsHeading(ctx) {
   const name = nameZhOf(ctx?.nutrients, ctx?.state?.activeNutrient, ctx?.state?.activeNutrient ?? "");
-  return `${name} · ${UNIT_HINT_PREFIX}含量`;
+  return `${name} · ${ORDER_HINT}`;
 }
 
 /**
@@ -480,7 +542,7 @@ export function foodsBodyHtml(cards, ctx) {
 export function foodsHtml(cards, ctx) {
   const search = typeof ctx?.search === "string" ? ctx.search : "";
   return `<div class="foods__head">
-      <h2 class="foods__title">食物含量排行</h2>
+      <h2 class="foods__title">常见食物</h2>
       <p class="foods__hint">${esc(foodsHeading(ctx ?? {}))}</p>
     </div>
     <div class="foods__search">
@@ -490,7 +552,7 @@ export function foodsHtml(cards, ctx) {
         value="${esc(search)}">
     </div>
     <div class="foods__body" data-food-body>${foodsBodyHtml(cards, ctx)}</div>
-    <p class="foods__note">点击卡片就地展开，确认后才会加入已选；已选食物按确认顺序排在列表最前；其余食物按常见度优先、再按每 100 克含量排序；本列表只显示含有该营养素的食物；家庭计量为估算值。</p>`;
+    <p class="foods__note">点击卡片就地展开，确认后才会加入已选；已选食物按确认顺序排在列表最前；其余食物按常见度优先、同一档内再按含量排序（调味料、香辛料、食用油和干货按每 10 g 计，其余按每 100 g 计）；本列表只显示含有该营养素的食物；家庭计量为估算值。</p>`;
 }
 
 /**
@@ -947,7 +1009,9 @@ export function renderFoods(container, ctx) {
 }
 
 export default {
-  UNIT_HINT_PREFIX,
+  ORDER_HINT,
+  BASIS_100_LABEL,
+  BASIS_10_LABEL,
   ESTIMATE_BADGE,
   SEARCH_PLACEHOLDER,
   MEASURE_NOTE,
@@ -959,6 +1023,8 @@ export default {
   foodArray,
   foodById,
   per100gText,
+  amountText,
+  basisLabel,
   draftQuantity,
   editorModel,
   buildFoodCards,

@@ -14,6 +14,8 @@
 // docs/data/foods.json (data, never a site module) and apply the ordering rule
 // of order.js, so a test can compute the expected first card instead of
 // hard-coding a food that the new commonness-first rule may have moved.
+// P19b: the same helpers apply the per-10 g comparison basis of condiments,
+// spices, cooking oils and dried goods.
 
 import { expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
@@ -220,13 +222,14 @@ export async function measureOverflow(page) {
 
 /**
  * Expected ranking of the unpinned cards of one nutrient, computed from
- * docs/data/foods.json with the same rule as order.js (P18b): commonness
- * descending (missing = 0), then per100g descending, then nameZh. Foods with
- * no value or a zero value for the nutrient are not listed (P16).
+ * docs/data/foods.json with the same rule as order.js (P18b, P19b): commonness
+ * descending (missing = 0), then richness on the comparison basis descending
+ * (per100g * amountBasisG / 100, amountBasisG defaulting to 100), then nameZh.
+ * Foods with no value or a zero value for the nutrient are not listed (P16).
  *
  * @param {string} nutrientId
  * @returns {Promise<Array<{id: string, nameZh: string, commonness: number,
- *   amount: number|null}>>>}
+ *   amount: number|null, amountBasisG: number, richness: number}>>>}
  */
 export async function expectedRanking(nutrientId) {
   const path = new URL("../../docs/data/foods.json", import.meta.url);
@@ -234,14 +237,21 @@ export async function expectedRanking(nutrientId) {
   return payload.foods
     .filter((food) => typeof food.per100g?.[nutrientId] === "number" && food.per100g[nutrientId] > 0)
     .sort((a, b) => ((b.commonness ?? 0) - (a.commonness ?? 0))
-      || (b.per100g[nutrientId] - a.per100g[nutrientId])
+      || (richnessOf(b, nutrientId) - richnessOf(a, nutrientId))
       || (a.nameZh < b.nameZh ? -1 : a.nameZh > b.nameZh ? 1 : 0))
     .map((food) => ({
       id: food.id,
       nameZh: food.nameZh,
       commonness: food.commonness ?? 0,
       amount: food.per100g[nutrientId],
+      amountBasisG: food.amountBasisG ?? 100,
+      richness: richnessOf(food, nutrientId),
     }));
+}
+
+/** Richness on the comparison basis: per100g * amountBasisG / 100 (P19b). */
+function richnessOf(food, nutrientId) {
+  return (food.per100g[nutrientId] * (food.amountBasisG ?? 100)) / 100;
 }
 
 /**
