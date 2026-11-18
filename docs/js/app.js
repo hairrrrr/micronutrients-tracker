@@ -106,7 +106,15 @@ async function main() {
   };
 
   /**
-   * Apply a reducer, persist and re-render every section.
+   * Actions that only change the selections: the totals and the food list must
+   * follow, while the profile panel, the tabs and the About text cannot change
+   * from them. Keeping their DOM alone also means a confirm or a deselect never
+   * rebuilds an unrelated input under the user's finger (P17).
+   */
+  const SELECTION_ACTIONS = new Set(["toggleFood", "confirmFood", "removeFood", "setQuantity"]);
+
+  /**
+   * Apply a reducer, persist and re-render.
    *
    * One path for every change, so the profile panel, the target cards and the
    * stored state can never disagree.
@@ -117,7 +125,12 @@ async function main() {
   function update(action, payload) {
     app.state = reduce(app.state, action, payload);
     save(app.state, store);
-    renderAll();
+    if (SELECTION_ACTIONS.has(action)) {
+      renderTargets(targetsSection, context);
+      renderFoods(foodsSection, context);
+    } else {
+      renderAll();
+    }
   }
 
   /** Re-render every section from the current state. */

@@ -1,28 +1,35 @@
 // Food list for the active nutrient: one card per food in `order.js` order
-// (pinned selections first, then the highest amount per 100 g), with a "show
-// more" button that raises the limit by 60 and a search box (PLAN.md 1.7 and
-// 1.8 item 5, phases P11a and P11b).
+// (pinned selections in confirmation order, then the highest amount per 100 g),
+// with a "show more" button that raises the limit by 60 and a search box
+// (PLAN.md 1.7 and 1.8 item 5, phases P11a, P11b and P17).
 //
 // Rendering only: ordering, the limit, the search text and the selections all
 // come from the pure modules (`core/order.js`, `core/measures.js`,
 // `core/state.js` values passed in by `app.js`). This module never touches
-// localStorage and never mutates state: a tap reports a reducer call through
-// `ctx.onChange`, `app.js` applies it, saves and re-renders everything.
+// localStorage and never mutates state: a control reports a reducer call
+// through `ctx.onChange`, `app.js` applies it, saves and re-renders everything.
 //
-// A card shows the Chinese name, the English name small under it, the amount
-// of the active nutrient per 100 g with its unit, and a 估算 badge for a
-// composite dish (values are recipe estimates, not measured food). Cards are
-// 2 columns at the 390 px design width and 4 from 760 px.
+// Expand-in-place editing (P17). A tap on a card does not select anything: the
+// card expands at its own grid position into a full-row editing tile (the grid
+// cell spans every column, so the cards before and after stay in normal flow
+// and the tapped food keeps its index). The tile shows the food name, the
+// per-100 g amount, the quantity editor (household measure select + count
+// stepper, or a gram input), a round check-mark button at its top right, a 确认
+// button and 取消. Only 确认 selects the food (with the chosen quantity) and
+// collapses the tile; the food then joins the BOTTOM of the pinned group
+// because the pinned order is the confirmation order stored in `state.order`.
+// 取消 collapses without selecting. Tapping an already selected (pinned) card
+// reopens the same tile with the current quantity and adds 取消选择 (deselect);
+// 确认 there saves the quantity and keeps the pinned position.
 //
-// Selection (P11b): tapping a card toggles the food in `state.selections`
-// (`toggleFood`, default measure x 1). A selected card is green and gets a
-// quantity editor with the household measures plus "克", a 0.5-step count
-// stepper (or a gram input) and the computed weight ("约 28 g"). The editor is
-// a SIBLING of the card button, never a child of it, so no click inside it can
-// toggle the card; the click handler also skips anything inside it. Selection
-// is global, so the same food is pinned and green in every nutrient tab that
-// the food actually contains (P16: a food with 0 or no value for a nutrient is
-// not listed in that tab at all) while the target cards update live.
+// The open tile, its draft quantity and the search/limit are UI-only: they are
+// kept on the section DOM node, never in the persisted state, so an unconfirmed
+// draft contributes nothing to the totals.
+//
+// The select never triggers a re-render of itself: a measure change only
+// updates the draft and the quantity block below it (P17c, the measure picker
+// used to pop up a second time because the change handler re-rendered the whole
+// list and refocused the new <select>).
 //
 // Card density and the 2/4-column grid follow the food-card grids of common
 // nutrition trackers (see "Credits" in README.md); the markup and CSS are
@@ -33,11 +40,13 @@ import {
   GRAMS_MEASURE_ID,
   formatGrams,
   measureOptions,
+  measuresOf,
   normalizeSelection,
   stepCount,
 } from "../core/measures.js";
 import { MET_COLORS, nameZhOf, unitOf } from "../core/nutrients.js";
 import { DEFAULT_LIMIT, LIMIT_STEP, foodsForNutrient, nextLimit, valueOf } from "../core/order.js";
+import { FALLBACK_GRAMS } from "../core/state.js";
 
 /** Label above the grid, e.g. "维生素A · 每 100 克含量". */
 export const UNIT_HINT_PREFIX = "每 100 克";
@@ -49,15 +58,29 @@ export const SEARCH_PLACEHOLDER = "搜索食物（中文或英文名）";
 export const MEASURE_NOTE = "家庭计量为估算值";
 /** Shown when a search matches nothing. */
 export const NO_MATCH_TEXT = "没有匹配的食物。";
+/** Confirm control of an expanded tile (the round check mark and the button). */
+export const CONFIRM_LABEL = "确认";
+/** Cancel control of an expanded tile: collapse without selecting. */
+export const CANCEL_LABEL = "取消";
+/** Deselect control of an expanded tile of an already selected food. */
+export const DESELECT_LABEL = "取消选择";
 
-/** Focus targets inside one card cell, used after a re-render. */
-const FOCUS_SELECTORS = Object.freeze({
-  card: ".food-card",
-  measure: "[data-measure]",
-  minus: '[data-step="-1"]',
-  plus: '[data-step="1"]',
-  grams: "[data-grams]",
-});
+/**
+ * Draft quantity of a tile that is about to be opened: the current selection
+ * when the food is pinned, otherwise the food's default measure x 1 (100 g for
+ * a food without a measure row).
+ *
+ * @param {{id?: string, measures?: Array<object>}} food
+ * @param {{measureId?: string, count?: number, grams?: number}|null} [selection]
+ * @returns {{measureId: string, count: number, grams: number}}
+ */
+export function draftQuantity(food, selection) {
+  if (selection && typeof selection === "object") return normalizeSelection(food, selection);
+  if (measuresOf(food).length === 0) {
+    return { measureId: GRAMS_MEASURE_ID, count: 0, grams: FALLBACK_GRAMS };
+  }
+  return normalizeSelection(food, undefined);
+}
 
 /**
  * Escape text for HTML text and quoted attribute values.
@@ -129,7 +152,7 @@ export function per100gText(food, nutrientId, unit) {
 }
 
 /**
- * Quantity editor model of one selected food (PLAN.md 1.8 item 5).
+ * Quantity editor model of one food (PLAN.md 1.8 item 5).
  *
  * `measures.js` owns the maths: the model only picks the option list (the
  * food's household measures in data order plus the manual "克" entry), the
@@ -171,9 +194,11 @@ export function editorModel(food, selection) {
  * Card models for one nutrient in display order.
  *
  * @param {{foods: object, nutrients: object, state: object,
- *   limit?: number, search?: string}} ctx
+ *   limit?: number, search?: string, expandedId?: string|null,
+ *   quantity?: object|null}} ctx
  *   `limit` is the number of unpinned cards (default 60); `search` filters by
- *   nameZh / nameEn / aliases and keeps the pinned foods on top (`order.js`)
+ *   nameZh / nameEn / aliases and keeps the pinned foods on top; `expandedId`
+ *   and `quantity` are the UI-only open tile and its draft (P17)
  * @returns {Array<object>} card models
  */
 export function buildFoodCards(ctx) {
@@ -188,14 +213,22 @@ export function buildFoodCards(ctx) {
     : DEFAULT_LIMIT;
   const search = typeof ctx.search === "string" ? ctx.search : "";
   const selections = state.selections && typeof state.selections === "object" ? state.selections : {};
+  const order = Array.isArray(state.order) ? state.order : [];
+  const expandedId = typeof ctx.expandedId === "string" ? ctx.expandedId : null;
+  const draft = ctx.quantity && typeof ctx.quantity === "object" ? ctx.quantity : null;
 
-  const list = foodsForNutrient(foodArray(ctx.foods), nutrientId, selections, { limit, search });
+  const list = foodsForNutrient(foodArray(ctx.foods), nutrientId, selections, { limit, search, order });
 
   return list.map((food) => {
     const selection = selections[food.id];
     const selected = Boolean(selection);
+    const expanded = expandedId === food.id;
     const amountText = per100gText(food, nutrientId, unit);
     const base = `${food.nameZh}：每 100 克 ${amountText}`;
+    const title = food.estimate === true
+      ? `${base}（按食谱估算）· 点击${selected ? "修改份量" : "选择"}`
+      : `${base} · 点击${selected ? "修改份量" : "选择"}`;
+    const quantity = expanded ? (draft ?? selection ?? draftQuantity(food, null)) : null;
     return {
       id: food.id,
       nameZh: String(food.nameZh ?? ""),
@@ -204,17 +237,43 @@ export function buildFoodCards(ctx) {
       estimate: food.estimate === true,
       selected,
       pinned: selected,
-      title: food.estimate === true
-        ? `${base}（按食谱估算）· 点击${selected ? "取消选择" : "选择"}`
-        : `${base} · 点击${selected ? "取消选择" : "选择"}`,
-      editor: selected ? editorModel(food, selection) : null,
+      expanded,
+      title,
+      editor: quantity ? editorModel(food, quantity) : null,
     };
   });
 }
 
 /**
- * Markup of one food card. A `<button>` with `aria-pressed` so the card is
- * keyboard reachable and its selected state is announced (PLAN.md 1.8
+ * Markup of the head of a food card: name, estimate badge, English name and the
+ * per-100 g amount. Shared by the compact card and the expanded tile.
+ *
+ * @param {object} card card model from `buildFoodCards`
+ * @returns {string} HTML
+ */
+function cardBodyHtml(card) {
+  const badge = card.estimate
+    ? `<span class="food-card__badge">${ESTIMATE_BADGE}</span>`
+    : "";
+  const english = card.nameEn ? `<span class="food-card__en">${esc(card.nameEn)}</span>` : "";
+  return `<span class="food-card__head">
+      <span class="food-card__name">${esc(card.nameZh)}</span>
+      ${badge}
+    </span>
+    ${english}
+    <span class="food-card__amount">${esc(card.amountText)}</span>`;
+}
+
+/** Inline custom properties of the single "met" green (selected card). */
+function metStyle(card) {
+  return card.pinned
+    ? ` style="--food-bg:${MET_COLORS.background};--food-border:${MET_COLORS.border};--food-text:${MET_COLORS.text}"`
+    : "";
+}
+
+/**
+ * Markup of one compact food card. A `<button>` with `aria-pressed` so the card
+ * is keyboard reachable and its selected state is announced (PLAN.md 1.8
  * accessibility).
  *
  * @param {object} card card model from `buildFoodCards`
@@ -225,31 +284,43 @@ export function foodCardHtml(card) {
     "food-card",
     card.pinned ? "is-selected" : "",
   ].filter(Boolean).join(" ");
-  const badge = card.estimate
-    ? `<span class="food-card__badge">${ESTIMATE_BADGE}</span>`
-    : "";
-  const english = card.nameEn ? `<span class="food-card__en">${esc(card.nameEn)}</span>` : "";
-  const colors = card.pinned
-    ? ` style="--food-bg:${MET_COLORS.background};--food-border:${MET_COLORS.border};--food-text:${MET_COLORS.text}"`
-    : "";
 
-  return `<button type="button" class="${classes}" data-food="${esc(card.id)}"${colors}
+  return `<button type="button" class="${classes}" data-food="${esc(card.id)}"${metStyle(card)}
     aria-pressed="${card.selected ? "true" : "false"}" title="${esc(card.title)}">
-    <span class="food-card__head">
-      <span class="food-card__name">${esc(card.nameZh)}</span>
-      ${badge}
-    </span>
-    ${english}
-    <span class="food-card__amount">${esc(card.amountText)}</span>
+    ${cardBodyHtml(card)}
   </button>`;
 }
 
 /**
- * Markup of the quantity editor of a selected card.
+ * Markup of the quantity block (stepper or gram input) of the editor.
  *
- * Deliberately a sibling of the card `<button>`, never nested inside it: a
- * `<select>`/`<input>` inside a button is invalid HTML and a label click would
- * toggle the card (PLAN.md 1.8 item 5).
+ * Kept separate so a measure change can refresh only this block and the weight
+ * text: the `<select>` node itself is never replaced or refocused (P17c).
+ *
+ * @param {object} editor editor model from `editorModel`
+ * @returns {string} HTML
+ */
+export function quantityHtml(editor) {
+  if (editor.manual) {
+    return `<div class="food-editor__row">
+        <input class="food-editor__grams-input" type="number" inputmode="decimal" min="0"
+          step="1" value="${esc(shortNumber(editor.grams))}" data-grams
+          aria-label="克数">
+        <span class="food-editor__unit">克</span>
+      </div>`;
+  }
+  return `<div class="food-editor__qty">
+        <button type="button" class="food-editor__step" data-step="-1" aria-label="减少半份">−</button>
+        <output class="food-editor__count" data-count>${esc(editor.countText)}</output>
+        <button type="button" class="food-editor__step" data-step="1" aria-label="增加半份">+</button>
+      </div>`;
+}
+
+/**
+ * Markup of the quantity editor of an open tile (PLAN.md 1.8 item 5, P17).
+ *
+ * Deliberately not nested inside the card `<button>`: a `<select>`/`<input>`
+ * inside a button is invalid HTML and a label click would toggle the card.
  *
  * @param {object} card card model with an `editor`
  * @returns {string} HTML
@@ -262,22 +333,9 @@ export function editorHtml(card) {
     `<option value="${esc(option.id)}"${option.selected ? " selected" : ""}>${esc(option.label)}</option>`,
   ).join("");
 
-  const quantity = editor.manual
-    ? `<div class="food-editor__row">
-        <input class="food-editor__grams-input" type="number" inputmode="decimal" min="0"
-          step="1" value="${esc(shortNumber(editor.grams))}" data-grams
-          aria-label="克数">
-        <span class="food-editor__unit">克</span>
-      </div>`
-    : `<div class="food-editor__qty">
-        <button type="button" class="food-editor__step" data-step="-1" aria-label="减少半份">−</button>
-        <output class="food-editor__count">${esc(editor.countText)}</output>
-        <button type="button" class="food-editor__step" data-step="1" aria-label="增加半份">+</button>
-      </div>`;
-
   const weight = editor.manual
     ? ""
-    : `<p class="food-editor__weight">${esc(editor.gramsText)}</p>`;
+    : esc(editor.gramsText);
 
   return `<div class="food-editor" data-food-editor="${esc(card.id)}"
     style="--food-border:${MET_COLORS.border};--food-text:${MET_COLORS.text}">
@@ -285,21 +343,64 @@ export function editorHtml(card) {
       <span class="visually-hidden">计量单位</span>
       <select class="food-editor__select" data-measure>${options}</select>
     </label>
-    ${quantity}
-    ${weight}
-    ${editor.manual ? "" : `<p class="food-editor__note">${MEASURE_NOTE}</p>`}
+    <div class="food-editor__fields" data-qty>${quantityHtml(editor)}</div>
+    <p class="food-editor__weight" data-weight${editor.manual ? " hidden" : ""}>${weight}</p>
+    <p class="food-editor__note" data-note${editor.manual ? " hidden" : ""}>${editor.manual ? "" : MEASURE_NOTE}</p>
   </div>`;
 }
 
 /**
- * One grid cell: the card button plus, when selected, its quantity editor.
+ * Markup of an expanded tile: the same information as a card plus the quantity
+ * editor, the round check button and the 确认 / 取消选择 / 取消 row.
+ *
+ * The check and the buttons carry their food id in a `data-*` value, so a
+ * handler can look the food up without escaping ids into CSS selectors.
+ *
+ * @param {object} card card model with `expanded: true` and an `editor`
+ * @returns {string} HTML
+ */
+export function expandedTileHtml(card) {
+  const deselect = card.selected
+    ? `<button type="button" class="food-tile__btn food-tile__btn--danger"
+        data-deselect="${esc(card.id)}">${DESELECT_LABEL}</button>`
+    : "";
+
+  return `<div class="food-tile${card.selected ? " is-selected" : ""}"${metStyle(card)}
+    data-food-tile="${esc(card.id)}">
+    <button type="button" class="food-card food-card--expanded" data-food="${esc(card.id)}"
+      aria-pressed="${card.selected ? "true" : "false"}" aria-expanded="true"
+      title="${esc(card.title)}">
+      ${cardBodyHtml(card)}
+    </button>
+    <button type="button" class="food-tile__check" data-confirm="${esc(card.id)}"
+      aria-label="${CONFIRM_LABEL}" title="${CONFIRM_LABEL}">✓</button>
+    ${editorHtml(card)}
+    <div class="food-tile__actions">
+      <button type="button" class="food-tile__btn food-tile__btn--primary"
+        data-confirm="${esc(card.id)}">${CONFIRM_LABEL}</button>
+      ${deselect}
+      <button type="button" class="food-tile__btn" data-cancel="${esc(card.id)}">${CANCEL_LABEL}</button>
+    </div>
+  </div>`;
+}
+
+/**
+ * One grid cell: a compact card button, or the expanded tile at the same
+ * position (the cell spans the whole row through CSS, so the cards around it
+ * stay in normal flow and the food keeps its index).
  *
  * @param {object} card card model from `buildFoodCards`
  * @returns {string} HTML
  */
 export function foodCellHtml(card) {
-  const classes = ["food-cell", card.selected ? "food-cell--selected" : ""].filter(Boolean).join(" ");
-  return `<div class="${classes}" data-food-cell="${esc(card.id)}">${foodCardHtml(card)}${editorHtml(card)}</div>`;
+  const classes = [
+    "food-cell",
+    card.selected ? "food-cell--selected" : "",
+    card.expanded ? "food-cell--expanded" : "",
+  ].filter(Boolean).join(" ");
+  const content = card.expanded ? expandedTileHtml(card) : foodCardHtml(card);
+  const expandedAttr = card.expanded ? ' data-expanded="true"' : "";
+  return `<div class="${classes}" data-food-cell="${esc(card.id)}"${expandedAttr}>${content}</div>`;
 }
 
 /**
@@ -369,7 +470,7 @@ export function foodsHtml(cards, ctx) {
         value="${esc(search)}">
     </div>
     <div class="foods__body" data-food-body>${foodsBodyHtml(cards, ctx)}</div>
-    <p class="foods__note">点击卡片可选择或取消食物；本列表只显示含有该营养素的食物，已选食物固定在列表最前；家庭计量为估算值。</p>`;
+    <p class="foods__note">点击卡片就地展开，确认后才会加入已选；已选食物按确认顺序排在列表最前；本列表只显示含有该营养素的食物；家庭计量为估算值。</p>`;
 }
 
 /**
@@ -387,13 +488,22 @@ export function foodsHtml(cards, ctx) {
 export function hiddenCount(ctx, limit, search = "") {
   const nutrientId = ctx?.state?.activeNutrient;
   const selections = ctx?.state?.selections ?? {};
+  const order = Array.isArray(ctx?.state?.order) ? ctx.state.order : [];
   if (!nutrientId) return 0;
   const foods = foodArray(ctx?.foods);
-  const all = foodsForNutrient(foods, nutrientId, selections, { limit: Number.MAX_SAFE_INTEGER, search });
+  const all = foodsForNutrient(foods, nutrientId, selections, {
+    limit: Number.MAX_SAFE_INTEGER,
+    search,
+    order,
+  });
   const shownLimit = Number.isFinite(Number(limit)) && Number(limit) >= 0
     ? Math.floor(Number(limit))
     : DEFAULT_LIMIT;
-  const shown = foodsForNutrient(foods, nutrientId, selections, { limit: shownLimit, search });
+  const shown = foodsForNutrient(foods, nutrientId, selections, {
+    limit: shownLimit,
+    search,
+    order,
+  });
   return Math.max(0, all.length - shown.length);
 }
 
@@ -414,7 +524,44 @@ function viewOf(container) {
 }
 
 /**
- * Build body markup for the current state and view.
+ * The UI-only open tile of one section: the food id and its draft quantity
+ * (never part of the persisted state).
+ *
+ * @param {HTMLElement} container
+ * @returns {{expandedId: string|null, quantity: object|null}}
+ */
+function expandedOf(container) {
+  const draft = container._foodsDraft;
+  const expandedId = typeof container._foodsExpanded === "string" ? container._foodsExpanded : null;
+  return {
+    expandedId,
+    quantity: draft && draft.foodId === expandedId ? draft.quantity : null,
+  };
+}
+
+/**
+ * Build card models for the current state and view.
+ *
+ * @param {HTMLElement} container
+ * @param {object} ctx
+ * @returns {Array<object>}
+ */
+function cardsFor(container, ctx) {
+  const view = viewOf(container);
+  const open = expandedOf(container);
+  return buildFoodCards({
+    foods: ctx.foods,
+    nutrients: ctx.nutrients,
+    state: ctx.state,
+    limit: view.limit,
+    search: view.search,
+    expandedId: open.expandedId,
+    quantity: open.quantity,
+  });
+}
+
+/**
+ * Body markup for the current state and view.
  *
  * @param {HTMLElement} container
  * @param {object} ctx
@@ -422,18 +569,21 @@ function viewOf(container) {
  */
 function bodyHtmlFor(container, ctx) {
   const view = viewOf(container);
-  const shared = {
-    foods: ctx.foods,
-    nutrients: ctx.nutrients,
-    state: ctx.state,
-    limit: view.limit,
-    search: view.search,
-  };
-  const cards = buildFoodCards(shared);
+  let cards = cardsFor(container, ctx);
+  // A search that hides the open tile drops it, so a later reopen cannot
+  // revive a stale draft.
+  if (container._foodsExpanded && !cards.some((card) => card.id === container._foodsExpanded)) {
+    container._foodsExpanded = null;
+    container._foodsDraft = null;
+    cards = cardsFor(container, ctx);
+  }
   return foodsBodyHtml(cards, {
     nutrients: ctx.nutrients,
     state: ctx.state,
-    more: hiddenCount(shared, view.limit, view.search),
+    more: hiddenCount({
+      foods: ctx.foods,
+      state: ctx.state,
+    }, view.limit, view.search),
     search: view.search,
   });
 }
@@ -455,23 +605,134 @@ function cellFor(container, foodId) {
 }
 
 /**
- * Focus back on the control the user just used (the grid is rebuilt on every
- * state change, so the old element is gone).
+ * Put the focus back on a card button after a re-render. The `<select>` is
+ * never focused here: focusing a select on a touch browser opens the native
+ * picker again (P17c).
  *
  * @param {HTMLElement} container
+ * @param {string} foodId
  */
-function restoreFocus(container) {
-  const focus = container._foodsFocus;
-  container._foodsFocus = null;
-  if (!focus) return;
-  const cell = cellFor(container, focus.foodId);
+function focusCard(container, foodId) {
+  const cell = cellFor(container, foodId);
   if (!cell) return;
-  const element = cell.querySelector(FOCUS_SELECTORS[focus.part] ?? FOCUS_SELECTORS.card);
-  if (element) element.focus({ preventScroll: true });
+  const button = cell.querySelector(".food-card");
+  if (button) button.focus({ preventScroll: true });
 }
 
 /**
- * Click handler: "show more", or toggle a food.
+ * Update the quantity block and the weight text of the open tile after a draft
+ * change, without replacing the `<select>` or any other node that holds the
+ * focus (P17c).
+ *
+ * @param {HTMLElement} container
+ * @param {object} food
+ * @returns {void}
+ */
+function refreshEditor(container, food) {
+  const cell = cellFor(container, food.id);
+  if (!cell) return;
+  const editor = cell.querySelector("[data-food-editor]");
+  const draft = container._foodsDraft;
+  if (!editor || !draft || draft.foodId !== food.id) return;
+
+  const model = editorModel(food, draft.quantity);
+  const fields = editor.querySelector("[data-qty]");
+  if (fields) {
+    const gramsNow = fields.querySelector("[data-grams]");
+    if (Boolean(gramsNow) !== model.manual) {
+      // Mode change (household <-> grams): swap the whole block once.
+      fields.innerHTML = quantityHtml(model);
+    } else if (gramsNow) {
+      if (document.activeElement !== gramsNow) gramsNow.value = shortNumber(model.grams);
+    } else {
+      const count = fields.querySelector("[data-count]");
+      if (count) count.textContent = model.countText;
+    }
+  }
+
+  const weight = editor.querySelector("[data-weight]");
+  if (weight) {
+    weight.textContent = model.manual ? "" : model.gramsText;
+    weight.hidden = model.manual;
+  }
+  const note = editor.querySelector("[data-note]");
+  if (note) {
+    note.textContent = model.manual ? "" : MEASURE_NOTE;
+    note.hidden = model.manual;
+  }
+}
+
+/**
+ * Open the editing tile of one food at its current position, collapsing any
+ * other open tile. Duck-typed context keeps the handlers free of globals.
+ *
+ * @param {HTMLElement} container
+ * @param {object} ctx
+ * @param {object} food
+ */
+function openEditor(container, ctx, food) {
+  if (container._foodsExpanded === food.id) {
+    collapseEditor(container, ctx, food.id);
+    return;
+  }
+  const selection = ctx.state.selections?.[food.id] ?? null;
+  container._foodsExpanded = food.id;
+  container._foodsDraft = { foodId: food.id, quantity: draftQuantity(food, selection) };
+  renderFoods(container, ctx);
+  focusCard(container, food.id);
+}
+
+/**
+ * Collapse the open tile without touching the state (取消, or a tap on the open
+ * card).
+ *
+ * @param {HTMLElement} container
+ * @param {object} ctx
+ * @param {string} [foodId] only collapse when this tile is the open one
+ */
+function collapseEditor(container, ctx, foodId) {
+  if (foodId && container._foodsExpanded !== foodId) return;
+  const openId = container._foodsExpanded;
+  container._foodsExpanded = null;
+  container._foodsDraft = null;
+  renderFoods(container, ctx);
+  if (typeof openId === "string") focusCard(container, openId);
+}
+
+/**
+ * Confirm the open tile: select the food with the draft quantity (or update the
+ * quantity of an already selected food, which keeps its pinned position), then
+ * collapse.
+ *
+ * @param {HTMLElement} container
+ * @param {object} ctx
+ * @param {string} foodId
+ */
+function confirmEditor(container, ctx, foodId) {
+  const food = foodById(ctx.foods, foodId);
+  if (!food) return;
+  const draft = container._foodsDraft;
+  const quantity = draft && draft.foodId === foodId ? draft.quantity : undefined;
+  // The gram input commits on `change`, which a tap on the check button does
+  // fire (the input blurs first), but read the live value anyway so a confirm
+  // can never save a stale draft.
+  const live = cellFor(container, foodId)?.querySelector("[data-grams]");
+  let final = quantity;
+  if (live && quantity) {
+    const grams = Number(live.value);
+    final = normalizeSelection(food, {
+      measureId: GRAMS_MEASURE_ID,
+      grams: Number.isFinite(grams) && grams > 0 ? grams : 0,
+    });
+  }
+  container._foodsExpanded = null;
+  container._foodsDraft = null;
+  ctx.onChange("confirmFood", { food, quantity: final });
+}
+
+/**
+ * Click handler: "show more", the open tile's controls (confirm / cancel /
+ * deselect / step), or opening a card's editor.
  *
  * @param {Event} event
  */
@@ -487,23 +748,42 @@ function handleClick(event) {
     return;
   }
 
-  // The editor is a sibling of the card button; this guard keeps any future
-  // nested control from ever toggling the food (PLAN.md 1.8 item 5).
-  if (event.target.closest(".food-editor")) {
-    const step = event.target.closest("[data-step]");
-    if (!step) return;
+  const confirm = event.target.closest("[data-confirm]");
+  if (confirm && container.contains(confirm)) {
+    confirmEditor(container, ctx, confirm.dataset.confirm);
+    return;
+  }
+
+  const cancel = event.target.closest("[data-cancel]");
+  if (cancel && container.contains(cancel)) {
+    collapseEditor(container, ctx, cancel.dataset.cancel);
+    return;
+  }
+
+  const deselect = event.target.closest("[data-deselect]");
+  if (deselect && container.contains(deselect)) {
+    const foodId = deselect.dataset.deselect;
+    container._foodsExpanded = null;
+    container._foodsDraft = null;
+    ctx.onChange("removeFood", { foodId });
+    return;
+  }
+
+  // The stepper edits the UI-only draft: nothing is selected until 确认.
+  const step = event.target.closest("[data-step]");
+  if (step) {
     const editor = step.closest("[data-food-editor]");
     if (!editor) return;
     const foodId = editor.dataset.foodEditor;
     const food = foodById(ctx.foods, foodId);
-    const selection = ctx.state.selections?.[foodId];
-    if (!food || !selection) return;
-    if (selection.measureId === GRAMS_MEASURE_ID) return;
+    const draft = container._foodsDraft;
+    if (!food || !draft || draft.foodId !== foodId) return;
+    if (draft.quantity.measureId === GRAMS_MEASURE_ID) return;
 
     const steps = Number(step.dataset.step);
-    const count = stepCount(selection.count, Number.isFinite(steps) ? steps : 0);
-    container._foodsFocus = { foodId, part: steps < 0 ? "minus" : "plus" };
-    ctx.onChange("setQuantity", { foodId, quantity: { measureId: selection.measureId, count }, food });
+    const count = stepCount(draft.quantity.count, Number.isFinite(steps) ? steps : 0);
+    draft.quantity = normalizeSelection(food, { measureId: draft.quantity.measureId, count });
+    refreshEditor(container, food);
     return;
   }
 
@@ -512,12 +792,15 @@ function handleClick(event) {
   const food = foodById(ctx.foods, button.dataset.food);
   if (!food) return;
 
-  container._foodsFocus = { foodId: food.id, part: "card" };
-  ctx.onChange("toggleFood", food);
+  openEditor(container, ctx, food);
 }
 
 /**
- * Change handler for the quantity editor: measure select or gram input.
+ * Change handler of the open tile: measure select or gram input.
+ *
+ * Both only update the UI-only draft (quantityHtml/refreshEditor); the whole
+ * list is not re-rendered and the `<select>` is not refocused, so the native
+ * picker does not pop up a second time (P17c).
  *
  * @param {Event} event
  */
@@ -530,32 +813,29 @@ function handleChange(event) {
 
   const foodId = editor.dataset.foodEditor;
   const food = foodById(ctx.foods, foodId);
-  if (!food) return;
-  const selection = ctx.state.selections?.[foodId];
-  if (!selection) return;
+  const draft = container._foodsDraft;
+  if (!food || !draft || draft.foodId !== foodId) return;
 
   const target = event.target;
   if (target.matches("[data-measure]")) {
     const measureId = target.value;
-    const current = normalizeSelection(food, selection);
     // Switching to "克" keeps the current weight; a household measure starts at
     // one unit (the user can then step it up or down in 0.5 steps).
     const quantity = measureId === GRAMS_MEASURE_ID
-      ? { measureId: GRAMS_MEASURE_ID, grams: current.grams }
+      ? { measureId: GRAMS_MEASURE_ID, grams: draft.quantity.grams }
       : { measureId, count: 1 };
-    container._foodsFocus = { foodId, part: "measure" };
-    ctx.onChange("setQuantity", { foodId, quantity, food });
+    draft.quantity = normalizeSelection(food, quantity);
+    refreshEditor(container, food);
     return;
   }
 
   if (target.matches("[data-grams]")) {
     const grams = Number(target.value);
-    container._foodsFocus = { foodId, part: "grams" };
-    ctx.onChange("setQuantity", {
-      foodId,
-      quantity: { measureId: GRAMS_MEASURE_ID, grams: Number.isFinite(grams) && grams > 0 ? grams : 0 },
-      food,
+    draft.quantity = normalizeSelection(food, {
+      measureId: GRAMS_MEASURE_ID,
+      grams: Number.isFinite(grams) && grams > 0 ? grams : 0,
     });
+    refreshEditor(container, food);
   }
 }
 
@@ -592,26 +872,38 @@ export function renderFoods(container, ctx) {
   const nutrientId = ctx.state.activeNutrient;
 
   // A different nutrient is a different ranking: start at the default limit
-  // again instead of carrying a raised limit across tabs.
+  // again instead of carrying a raised limit across tabs, and close an open
+  // tile (its food may not even be listed in the new tab).
   if (container._foodsNutrient !== nutrientId) {
     container._foodsNutrient = nutrientId;
     container._foodsLimit = DEFAULT_LIMIT;
+    container._foodsExpanded = null;
+    container._foodsDraft = null;
   }
 
   const view = viewOf(container);
-  const shared = {
+  const open = expandedOf(container);
+  const cards = buildFoodCards({
     foods: ctx.foods,
     nutrients: ctx.nutrients,
     state: ctx.state,
     limit: view.limit,
     search: view.search,
-  };
-  const cards = buildFoodCards(shared);
+    expandedId: open.expandedId,
+    quantity: open.quantity,
+  });
+
+  // A search or a tab switch can hide the open tile: drop it so reopening the
+  // card does not revive an old draft.
+  if (container._foodsExpanded && !cards.some((card) => card.id === container._foodsExpanded)) {
+    container._foodsExpanded = null;
+    container._foodsDraft = null;
+  }
 
   container.innerHTML = foodsHtml(cards, {
     nutrients: ctx.nutrients,
     state: ctx.state,
-    more: hiddenCount(shared, view.limit, view.search),
+    more: hiddenCount({ foods: ctx.foods, state: ctx.state }, view.limit, view.search),
     search: view.search,
   });
   container.classList.add("panel", "panel--foods");
@@ -624,8 +916,6 @@ export function renderFoods(container, ctx) {
     container.addEventListener("change", handleChange);
     container.addEventListener("input", handleInput);
   }
-
-  restoreFocus(container);
 
   // "Show more" rebuilds the grid, but the button stays in place; return the
   // focus to it so a keyboard user can keep pressing it.
@@ -642,14 +932,20 @@ export default {
   SEARCH_PLACEHOLDER,
   MEASURE_NOTE,
   NO_MATCH_TEXT,
+  CONFIRM_LABEL,
+  CANCEL_LABEL,
+  DESELECT_LABEL,
   shortNumber,
   foodArray,
   foodById,
   per100gText,
+  draftQuantity,
   editorModel,
   buildFoodCards,
   foodCardHtml,
+  quantityHtml,
   editorHtml,
+  expandedTileHtml,
   foodCellHtml,
   foodsHeading,
   foodsBodyHtml,

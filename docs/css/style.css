@@ -744,18 +744,27 @@ select.input {
   gap: 6px;
 }
 
-/* One grid cell = the card button + (when selected) its quantity editor. The
- * editor is a sibling of the button, so nothing inside it can toggle the card.
- * A selected cell spans two columns, which keeps the stepper/select usable at
- * 390 px while the card itself stays a normal card. */
+/* One grid cell = one food: a compact card button, or (P17) the expanded
+ * editing tile in the same position. The editor is never nested inside the
+ * card button, so nothing inside it can toggle the card. */
 .food-cell {
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
+/* A selected (pinned) cell keeps its normal single-column width: the pinned
+ * group is a list of cards in confirmation order, not a group of editors. */
 .food-cell--selected {
-  grid-column: span 2;
+  grid-column: span 1;
+}
+
+/* The expanded tile spans the whole grid row at its current position, so the
+ * cards before and after it stay in normal flow and the food keeps its index
+ * (P17a). `min-width: 0` keeps a long name from widening the grid at 360 px. */
+.food-cell--expanded {
+  grid-column: 1 / -1;
+  min-width: 0;
 }
 
 .food-cell .food-card {
@@ -842,30 +851,140 @@ select.input {
 }
 
 /* ---------------------------------------------------------------------------
- * Quantity editor of a selected food (PLAN.md 1.8 item 5, phase P11b)
+ * Expanded editing tile (P17)
  *
- * Lives under its card inside the same cell, tinted with the same green border
- * as the card. One row: measure select, then either the 0.5-step stepper or the
- * gram input; the computed weight ("约 28 g") and the "household measures are
- * estimates" note follow. All controls are at least 34 px tall so they stay
- * tappable at 390 px.
+ * A tap on a card expands it in place: the cell spans the whole grid row and
+ * the tile shows the food name, the per-100 g amount, the quantity editor, a
+ * round check-mark button at its top right and the 确认 / 取消选择 / 取消 row.
+ * Nothing is selected until 确认. The tile is a plain block inside the cell, so
+ * it can never widen the grid: every row keeps `min-width: 0` and long names
+ * wrap (no horizontal overflow at 360/390 px).
+ * ------------------------------------------------------------------------ */
+.food-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 2px solid var(--food-border, var(--accent));
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.food-tile.is-selected {
+  background: var(--food-bg, var(--surface));
+}
+
+/* The card inside the tile is the tile's head, not a separate button skin. */
+.food-tile .food-card--expanded {
+  min-height: 0;
+  padding: 8px 46px 4px 10px; /* room for the round check at the top right */
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.food-tile .food-card--expanded .food-card__name {
+  font-size: 0.9375rem;
+}
+
+.food-tile .food-card--expanded .food-card__amount {
+  margin-top: 2px;
+  padding-top: 0;
+  font-size: 0.8125rem;
+}
+
+/* Round check-mark confirm button, top right of the tile. */
+.food-tile__check {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--food-border, var(--accent));
+  border-radius: 50%;
+  background: var(--food-border, var(--accent));
+  color: #ffffff;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.food-tile__check:hover {
+  filter: brightness(1.08);
+}
+
+.food-tile__check:focus-visible,
+.food-tile__btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.food-tile__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px 10px;
+}
+
+.food-tile__btn {
+  flex: 1 1 88px;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.food-tile__btn--primary {
+  border-color: var(--food-border, var(--accent));
+  background: var(--food-border, var(--accent));
+  color: #ffffff;
+}
+
+.food-tile__btn--danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.food-tile__btn:hover {
+  filter: brightness(0.97);
+}
+
+.food-tile__btn--primary:hover {
+  filter: brightness(1.08);
+}
+
+/* ---------------------------------------------------------------------------
+ * Quantity editor of an expanded tile (PLAN.md 1.8 item 5, phases P11b/P17)
+ *
+ * Inside the tile below the head: measure select, then either the 0.5-step
+ * stepper or the gram input; the computed weight ("约 28 g") and the
+ * "household measures are estimates" note follow. All controls are at least
+ * 38 px tall so they stay tappable at 360 px.
  * ------------------------------------------------------------------------ */
 .food-editor {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  margin-top: -1px;
-  padding: 7px 8px 8px;
-  border: 1px solid var(--food-border, var(--border-strong));
-  border-top-style: dashed;
-  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-  background: var(--surface);
+  min-width: 0;
+  padding: 2px 10px 8px;
   color: var(--text);
-}
-
-.food-cell--selected .food-card {
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
 .food-editor__label {
@@ -892,6 +1011,12 @@ select.input {
 .food-editor__grams-input:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
+}
+
+.food-editor__fields {
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .food-editor__qty {
@@ -1013,7 +1138,7 @@ select.input {
 
 /* The weight text carries the selection colour; keep the note readable on the
  * white editor background. */
-.food-cell--selected .food-editor__weight {
+.food-cell--expanded .food-editor__weight {
   color: var(--food-text, var(--text));
 }
 

@@ -1,4 +1,5 @@
-// Per-nutrient ordering with pinned selections (PLAN.md 1.7, phase P8).
+// Per-nutrient ordering with pinned selections (PLAN.md 1.7, phase P8;
+// confirmation order since P17).
 //
 // Small in-test fixtures: five foods with different per100g values, one food
 // without data for the nutrient under test, one with a zero value and one with
@@ -10,6 +11,7 @@ import {
   DEFAULT_LIMIT,
   LIMIT_STEP,
   valueOf,
+  selectionOrder,
   contribution,
   partitionFoods,
   foodsForNutrient,
@@ -57,20 +59,36 @@ test("without selections foods are sorted by per100g descending, no zeros", () =
   assert.equal(list.some((food) => food.id === "fdc:salt"), false);
 });
 
-test("selected foods are pinned first, ordered by actual contribution", () => {
-  // 200 g of carrot (1670) beats 100 g of spinach (469) although its per100g
-  // value is lower than liver's: pinned order uses contribution, not density.
+test("selected foods are pinned first, in confirmation order (not by contribution)", () => {
+  // `order` is the confirmation order: spinach was confirmed first, so it stays
+  // above the carrot although the carrot contributes far more (200 g = 1670 ug
+  // vs 100 g = 469 ug). A newly confirmed food joins the bottom (P17).
   const selections = {
     "fdc:carrot": { grams: 200 },
     "fdc:spinach": { grams: 100 },
   };
-  const list = foodsForNutrient(FOODS, "vitA", selections);
-  assert.deepEqual(list.slice(0, 2).map((food) => food.id), ["fdc:carrot", "fdc:spinach"]);
+  const list = foodsForNutrient(FOODS, "vitA", selections, { order: ["fdc:spinach", "fdc:carrot"] });
+  assert.deepEqual(list.slice(0, 2).map((food) => food.id), ["fdc:spinach", "fdc:carrot"]);
   assert.equal(list[0].selected, true);
-  assert.equal(list[0].contribution, 1670);
-  assert.equal(list[1].contribution, 469);
+  // The contribution is still reported (it describes the portion, not the rank).
+  assert.equal(list[0].contribution, 469);
+  assert.equal(list[1].contribution, 1670);
   // The rest is still density-sorted.
   assert.deepEqual(list.slice(2).map((food) => food.id), ["fdc:liver", "fdc:sweetpotato"]);
+
+  // Without a stored order the key order of `selections` is used, which is how
+  // state saved before P17 was written (migration path).
+  const legacy = foodsForNutrient(FOODS, "vitA", { "fdc:carrot": { grams: 200 }, "fdc:spinach": { grams: 100 } });
+  assert.deepEqual(legacy.slice(0, 2).map((food) => food.id), ["fdc:carrot", "fdc:spinach"]);
+
+  // An id in `order` that is no longer selected is ignored, a selected id that
+  // is missing from `order` is appended at the end.
+  const drifted = foodsForNutrient(FOODS, "vitA", selections, { order: ["fdc:spinach", "fdc:gone"] });
+  assert.deepEqual(drifted.slice(0, 2).map((food) => food.id), ["fdc:spinach", "fdc:carrot"]);
+  assert.deepEqual(selectionOrder(selections, ["fdc:spinach", "fdc:gone", "fdc:spinach"]),
+    ["fdc:spinach", "fdc:carrot"]);
+  assert.deepEqual(selectionOrder(selections, "nope"), ["fdc:carrot", "fdc:spinach"]);
+  assert.deepEqual(selectionOrder(null, ["x"]), []);
 });
 
 test("a selected food with a null or missing value is not listed", () => {

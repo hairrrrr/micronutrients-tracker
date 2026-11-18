@@ -9,7 +9,7 @@
 // state is freshly cleared for every shot, so the images are reproducible.
 
 import { expect, test } from "@playwright/test";
-import { LIVER_ID, resetApp, selectFood, setGrams, watchErrors } from "./helpers.mjs";
+import { LIVER_ID, openTile, resetApp, selectFood, setGrams, watchErrors } from "./helpers.mjs";
 
 /** Folder of the images, relative to the repo root (Playwright's cwd). */
 const SHOTS = "shots";
@@ -49,6 +49,9 @@ test("mobile 390 px screenshot with a selected food", async ({ page }) => {
   await selectFood(page, "猪肝", LIVER_ID);
   await setGrams(page, 100);
   await page.locator("[data-food-search]").fill("");
+  // P17: the selected card is compact again after the confirm; reopen its tile
+  // so the shot shows the expanded editor at the pinned food's position.
+  await openTile(page, LIVER_ID);
   await expect(page.locator(`[data-food-editor="${LIVER_ID}"]`)).toBeVisible();
   // 60 unpinned cards of the default limit plus the pinned selection.
   await expect(page.locator(".food-card")).toHaveCount(61);

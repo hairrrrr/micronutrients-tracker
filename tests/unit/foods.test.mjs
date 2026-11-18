@@ -14,8 +14,13 @@ import assert from "node:assert/strict";
 import { DEFAULT_LIMIT, LIMIT_STEP } from "../../docs/js/core/order.js";
 import { reduce } from "../../docs/js/core/state.js";
 import {
+  CANCEL_LABEL,
+  CONFIRM_LABEL,
+  DESELECT_LABEL,
   ESTIMATE_BADGE,
   buildFoodCards,
+  draftQuantity,
+  expandedTileHtml,
   editorHtml,
   editorModel,
   foodArray,
@@ -27,6 +32,7 @@ import {
   foodsHtml,
   hiddenCount,
   per100gText,
+  quantityHtml,
   shortNumber,
 } from "../../docs/js/ui/foods.js";
 
@@ -334,17 +340,47 @@ function selCtx(overrides = {}, ctxOverrides = {}) {
   };
 }
 
-test("selected cards carry an editor model, unselected ones do not", () => {
+test("only the expanded card carries an editor model (P17)", () => {
   const plain = buildFoodCards(selCtx());
   assert.equal(plain.every((card) => card.editor === null), true);
+  assert.equal(plain.every((card) => card.expanded === false), true);
 
-  const cards = buildFoodCards(selCtx({ selections: { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } } }));
+  // A pinned (selected) card is compact until it is tapped open.
+  const pinnedCards = buildFoodCards(selCtx({ selections: { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } } }));
+  const pinned = pinnedCards.find((card) => card.id === "fdc:liver");
+  assert.equal(pinned.selected, true);
+  assert.equal(pinned.expanded, false);
+  assert.equal(pinned.editor, null);
+
+  // The open tile shows the current quantity of a selected food...
+  const cards = buildFoodCards(selCtx(
+    { selections: { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } } },
+    { expandedId: "fdc:liver" },
+  ));
   const liver = cards.find((card) => card.id === "fdc:liver");
   assert.equal(liver.selected, true);
+  assert.equal(liver.expanded, true);
   assert.equal(liver.editor.measureId, "palm");
   assert.equal(liver.editor.count, 1);
   assert.equal(liver.editor.grams, 100);
   assert.equal(liver.editor.manual, false);
+
+  // ... and the draft quantity of an unselected one, without marking it selected.
+  const draft = buildFoodCards(selCtx({}, { expandedId: "fdc:liver", quantity: { measureId: "slice", count: 2 } }));
+  const opened = draft.find((card) => card.id === "fdc:liver");
+  assert.equal(opened.selected, false);
+  assert.equal(opened.expanded, true);
+  assert.equal(opened.editor.grams, 88);
+});
+
+test("draftQuantity starts at the default measure x1 or the saved quantity", () => {
+  assert.deepEqual(draftQuantity(SELECTION_FOODS[0], null), { measureId: "palm", count: 1, grams: 100 });
+  assert.deepEqual(
+    draftQuantity(SELECTION_FOODS[0], { measureId: "slice", count: 0.5, grams: 22 }),
+    { measureId: "slice", count: 0.5, grams: 22 },
+  );
+  // A food without a measure row starts at 100 g.
+  assert.deepEqual(draftQuantity({ id: "x", measures: [] }, null), { measureId: "grams", count: 0, grams: 100 });
 });
 
 test("editor model lists household measures plus 克, with per-unit weights", () => {
@@ -379,8 +415,10 @@ test("editor model tolerates a missing selection and a food without measures", (
 });
 
 test("the editor markup has a select, a stepper and 克, and never nests in the button", () => {
-  const card = buildFoodCards(selCtx({ selections: { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } } }))
-    .find((entry) => entry.id === "fdc:liver");
+  const card = buildFoodCards(selCtx(
+    { selections: { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } } },
+    { expandedId: "fdc:liver" },
+  )).find((entry) => entry.id === "fdc:liver");
   const editor = editorHtml(card);
   assert.match(editor, /<select[^>]*data-measure/);
   assert.match(editor, /data-step="-1"/);
@@ -389,8 +427,9 @@ test("the editor markup has a select, a stepper and 克, and never nests in the 
   assert.match(editor, /家庭计量为估算值/);
   assert.match(editor, /<option value="grams"/);
 
-  // The cell keeps the editor outside the <button>, so no click inside it can
-  // bubble to the card (PLAN.md 1.8 item 5).
+  // The cell keeps the editor outside the card <button>, so no click inside it
+  // can toggle the card (PLAN.md 1.8 item 5) and the tile's check/confirm
+  // buttons are not nested in it either.
   const cell = foodCellHtml(card);
   const buttonEnd = cell.indexOf("</button>");
   assert.ok(buttonEnd > 0, "the card is a button");
@@ -398,14 +437,56 @@ test("the editor markup has a select, a stepper and 克, and never nests in the 
   assert.equal(/<button[^>]*>[^]*data-measure/.test(cell.slice(cell.indexOf("<button"), buttonEnd)), false);
 
   // A manual gram amount swaps the stepper for a gram input.
-  const manualCard = buildFoodCards(selCtx({ selections: { "fdc:liver": { measureId: "grams", count: 0, grams: 28 } } }))
-    .find((entry) => entry.id === "fdc:liver");
+  const manualCard = buildFoodCards(selCtx(
+    { selections: { "fdc:liver": { measureId: "grams", count: 0, grams: 28 } } },
+    { expandedId: "fdc:liver" },
+  )).find((entry) => entry.id === "fdc:liver");
   const manualHtml = editorHtml(manualCard);
   assert.match(manualHtml, /type="number"/);
   assert.match(manualHtml, /data-grams/);
   assert.equal(manualHtml.includes("data-step"), false);
   // The note about household measures only makes sense with a household measure.
   assert.equal(manualHtml.includes("家庭计量为估算值"), false);
+});
+
+test("an expanded tile has the round check, 确认, 取消 and a deselect for a pinned food", () => {
+  const context = selCtx(
+    { selections: { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } } },
+    { expandedId: "fdc:liver" },
+  );
+  const card = buildFoodCards(context).find((entry) => entry.id === "fdc:liver");
+  const html = expandedTileHtml(card);
+  assert.match(html, /class="food-tile__check"[^>]*data-confirm="fdc:liver"[^>]*aria-label="确认"/);
+  assert.match(html, /✓/);
+  assert.match(html, new RegExp(`data-confirm="fdc:liver"[^>]*>${CONFIRM_LABEL}`));
+  assert.match(html, new RegExp(`>${DESELECT_LABEL}<`));
+  assert.match(html, new RegExp(`data-cancel="fdc:liver">${CANCEL_LABEL}<`));
+  assert.match(html, /猪肝（生）/);
+  assert.match(html, /6502 ug RAE/);
+  assert.match(html, /is-selected/);
+
+  // An unselected tile confirms from the draft and has no deselect control.
+  const draft = buildFoodCards(selCtx({}, { expandedId: "fdc:liver" }))
+    .find((entry) => entry.id === "fdc:liver");
+  const draftHtml = expandedTileHtml(draft);
+  assert.match(draftHtml, new RegExp(`data-confirm="fdc:liver"[^>]*>${CONFIRM_LABEL}`));
+  assert.equal(draftHtml.includes("data-deselect"), false);
+  // It is not green yet: nothing is selected before the confirm.
+  assert.equal(draftHtml.includes("is-selected"), false);
+
+  // The cell of the expanded tile spans the row through CSS and is marked.
+  const cell = foodCellHtml(draft);
+  assert.match(cell, /class="food-cell food-cell--expanded"/);
+  assert.match(cell, /data-expanded="true"/);
+});
+
+test("quantityHtml renders the stepper or the gram input", () => {
+  const stepper = quantityHtml(editorModel(SELECTION_FOODS[0], { measureId: "palm", count: 1.5 }));
+  assert.match(stepper, /data-step="-1"/);
+  assert.match(stepper, /data-count>1.5</);
+  const grams = quantityHtml(editorModel(SELECTION_FOODS[0], { measureId: "grams", grams: 28 }));
+  assert.match(grams, /data-grams/);
+  assert.match(grams, /value="28"/);
 });
 
 test("editorHtml returns nothing for an unselected card", () => {
@@ -419,37 +500,48 @@ test("selected foods stay pinned across nutrient tabs (cross-tab sync)", () => {
     const cards = buildFoodCards(selCtx({ activeNutrient: nutrientId, selections }));
     assert.equal(cards[0].id, "fdc:liver", nutrientId);
     assert.equal(cards[0].selected, true);
-    assert.equal(cards[0].editor.grams, 100);
+    // Compact via the shared card, and showing the saved quantity when opened.
+    const opened = buildFoodCards({
+      ...selCtx({ activeNutrient: nutrientId, selections }, { expandedId: "fdc:liver" }),
+    });
+    assert.equal(opened[0].editor.grams, 100);
   }
 });
 
 test("selection state flows through state.js and changes the contributions", () => {
   let state = { ...selCtx().state };
-  state = reduce(state, "toggleFood", SELECTION_FOODS[0]);
+  state = reduce(state, "confirmFood", { food: SELECTION_FOODS[0] });
   assert.deepEqual(state.selections["fdc:liver"], { measureId: "palm", count: 1, grams: 100 });
+  assert.deepEqual(state.order, ["fdc:liver"]);
 
   const cards = buildFoodCards({ ...selCtx(), state });
   assert.equal(cards[0].id, "fdc:liver");
 
-  // A quantity change re-renders the editor and re-pins by contribution.
-  state = reduce(state, "setQuantity", { foodId: "fdc:liver", quantity: { measureId: "slice", count: 2 }, food: SELECTION_FOODS[0] });
+  // A quantity change re-renders the editor; the pinned position is kept.
+  state = reduce(state, "confirmFood", {
+    food: SELECTION_FOODS[0],
+    quantity: { measureId: "slice", count: 2 },
+  });
   assert.deepEqual(state.selections["fdc:liver"], { measureId: "slice", count: 2, grams: 88 });
-  const updated = buildFoodCards({ ...selCtx(), state });
+  assert.deepEqual(state.order, ["fdc:liver"]);
+  const updated = buildFoodCards({ ...selCtx(), state, expandedId: "fdc:liver" });
   assert.equal(updated[0].editor.grams, 88);
   assert.equal(updated[0].editor.gramsText, "约 88 g");
 
-  // Toggling the same food again removes it and its editor.
-  state = reduce(state, "toggleFood", SELECTION_FOODS[0]);
+  // 取消选择 removes it and its editor.
+  state = reduce(state, "removeFood", { foodId: "fdc:liver" });
   assert.deepEqual(state.selections, {});
+  assert.deepEqual(state.order, []);
   assert.equal(buildFoodCards({ ...selCtx(), state }).some((card) => card.editor), false);
 });
 
-test("pinned foods are sorted by contribution, then the rest by per 100 g", () => {
-  const selections = {
-    "fdc:liver": { measureId: "palm", count: 0.1, grams: 10 },   // 650.2
-    "composite:fanqie": { measureId: "plate", count: 1, grams: 250 }, // 167.4
-  };
-  const cards = buildFoodCards(selCtx({ selections }));
+test("a newly confirmed food is the last pinned card (confirmation order)", () => {
+  // Confirm the liver first, then the composite dish: the composite joins the
+  // bottom of the pinned group although the liver contributes far more.
+  let state = reduce(selCtx().state, "confirmFood", { food: SELECTION_FOODS[0] });
+  state = reduce(state, "confirmFood", { food: SELECTION_FOODS[1] });
+  assert.deepEqual(state.order, ["fdc:liver", "composite:fanqie"]);
+  const cards = buildFoodCards({ ...selCtx(), state });
   assert.deepEqual(cards.map((card) => card.id), ["fdc:liver", "composite:fanqie"]);
   assert.equal(cards.every((card) => card.pinned), true);
 });
@@ -492,14 +584,22 @@ test("hiddenCount follows the search filter", () => {
   assert.equal(hiddenCount(shared, 1000, "肝脏"), 0);
 });
 
-test("the section renders a search box and the editor for a selected food", () => {
-  const ctxSelected = selCtx({ selections: { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } } });
-  const html = foodsHtml(buildFoodCards(ctxSelected), { ...ctxSelected, more: 0 });
+test("the section renders a search box and the open tile's editor for a tapped food", () => {
+  const selected = selCtx(
+    { selections: { "fdc:liver": { measureId: "palm", count: 1, grams: 100 } } },
+    { expandedId: "fdc:liver" },
+  );
+  const html = foodsHtml(buildFoodCards(selected), { ...selected, more: 0 });
   assert.match(html, /data-food-search/);
   assert.match(html, /搜索食物/);
   assert.match(html, /data-food-body/);
+  assert.match(html, /data-food-tile="fdc:liver"/);
   assert.match(html, /data-food-editor="fdc:liver"/);
   assert.match(html, /--food-border:#145c2a/);
+  // A pinned card that is not open stays a compact card with no editor.
+  const closed = foodsHtml(buildFoodCards(selCtx({ selections: { "fdc:liver": { grams: 100 } } })), { more: 0 });
+  assert.equal(closed.includes("data-food-editor"), false);
+  assert.match(closed, /food-cell food-cell--selected/);
 });
 
 test("shortNumber drops trailing float noise", () => {

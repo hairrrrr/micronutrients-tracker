@@ -12,10 +12,13 @@ import {
   sanitizeSex,
   sanitizeStandard,
   sanitizeSelection,
+  sanitizeOrder,
   normalizeState,
   isSelected,
   selectedFoodIds,
   toggleFood,
+  confirmFood,
+  removeFood,
   setQuantity,
   setProfile,
   setStandard,
@@ -71,22 +74,25 @@ test("default state is female, 30, cn2023, vitA and empty", () => {
     standard: "cn2023",
     activeNutrient: "vitA",
     selections: {},
+    order: [],
   });
   assert.equal(VERSION, 1);
   assert.equal(STORAGE_KEY, "mnt.state.v1");
 });
 
-test("toggleFood adds the default measure x1", () => {
+test("toggleFood adds the default measure x1 and appends to the order", () => {
   const state = toggleFood(defaultState(), EGG);
   assert.deepEqual(state.selections["fdc:egg"], { measureId: "piece", count: 1, grams: 50 });
   assert.equal(isSelected(state, "fdc:egg"), true);
   assert.deepEqual(selectedFoodIds(state), ["fdc:egg"]);
+  assert.deepEqual(state.order, ["fdc:egg"]);
 });
 
-test("toggling the same food a second time removes it", () => {
+test("toggling the same food a second time removes it from the order too", () => {
   const added = toggleFood(defaultState(), EGG);
   const removed = toggleFood(added, EGG);
   assert.deepEqual(removed.selections, {});
+  assert.deepEqual(removed.order, []);
   assert.equal(isSelected(removed, "fdc:egg"), false);
   // The input state is never mutated (reducers are pure).
   assert.deepEqual(added.selections["fdc:egg"], { measureId: "piece", count: 1, grams: 50 });
@@ -170,8 +176,152 @@ test("clearAll removes selections but keeps profile and standard", () => {
   state = toggleFood(state, EGG);
   const cleared = clearAll(state);
   assert.deepEqual(cleared.selections, {});
+  assert.deepEqual(cleared.order, []);
   assert.deepEqual(cleared.profile, { sex: "male", age: 50, lifeStage: "none" });
   assert.equal(cleared.standard, "us");
+});
+
+// ---------------------------------------------------------------------------
+// P17: confirmation-order pinning
+// ---------------------------------------------------------------------------
+
+const RICE = { id: "fdc:rice", nameZh: "米饭", measures: [{ id: "bowl", labelZh: "一碗", grams: 150, default: true }] };
+
+test("confirmFood selects with a quantity and appends a new food to the order", () => {
+  const state = confirmFood(defaultState(), EGG, { measureId: "piece", count: 2 });
+  assert.deepEqual(state.selections["fdc:egg"], { measureId: "piece", count: 2, grams: 100 });
+  assert.deepEqual(state.order, ["fdc:egg"]);
+
+  // A second confirm joins the bottom of the pinned group.
+  const two = confirmFood(state, LIVER, { measureId: "usda1", count: 1 });
+  assert.deepEqual(two.order, ["fdc:egg", "fdc:liver"]);
+  assert.deepEqual(selectedFoodIds(two), ["fdc:egg", "fdc:liver"]);
+  assert.notEqual(two, state);
+  assert.notEqual(two.selections, state.selections);
+
+  // Without a quantity a new food starts at the default measure x1.
+  const plain = confirmFood(defaultState(), EGG);
+  assert.deepEqual(plain.selections["fdc:egg"], { measureId: "piece", count: 1, grams: 50 });
+  // Broken input leaves the state untouched (same object back).
+  const base = defaultState();
+  assert.equal(confirmFood(base, null), base);
+  assert.deepEqual(confirmFood(defaultState(), {}).selections, {});
+});
+
+test("editing a pinned food keeps its position in the confirmation order", () => {
+  let state = confirmFood(defaultState(), EGG, { measureId: "piece", count: 1 });
+  state = confirmFood(state, LIVER, { measureId: "usda1", count: 1 });
+  state = confirmFood(state, RICE, { measureId: "bowl", count: 1 });
+  assert.deepEqual(state.order, ["fdc:egg", "fdc:liver", "fdc:rice"]);
+
+  // Re-confirm the first food with a new quantity: the order must not change.
+  const edited = confirmFood(state, EGG, { measureId: "cup", count: 2 });
+  assert.deepEqual(edited.order, ["fdc:egg", "fdc:liver", "fdc:rice"]);
+  assert.deepEqual(edited.selections["fdc:egg"], { measureId: "cup", count: 2, grams: 486 });
+  // A confirm without a quantity on a pinned food keeps its quantity too.
+  const kept = confirmFood(edited, EGG);
+  assert.deepEqual(kept.selections["fdc:egg"], edited.selections["fdc:egg"]);
+  assert.deepEqual(kept.order, edited.order);
+});
+
+test("a re-confirmed food after a deselect is appended at the bottom again", () => {
+  let state = confirmFood(defaultState(), EGG);
+  state = confirmFood(state, LIVER);
+  state = removeFood(state, "fdc:egg");
+  assert.deepEqual(state.order, ["fdc:liver"]);
+  assert.deepEqual(Object.keys(state.selections), ["fdc:liver"]);
+  state = confirmFood(state, EGG);
+  assert.deepEqual(state.order, ["fdc:liver", "fdc:egg"]);
+});
+
+test("removeFood deselects one food and is a no-op for an unknown id", () => {
+  let state = confirmFood(defaultState(), EGG);
+  state = confirmFood(state, LIVER);
+  const removed = removeFood(state, "fdc:egg");
+  assert.deepEqual(Object.keys(removed.selections), ["fdc:liver"]);
+  assert.deepEqual(removed.order, ["fdc:liver"]);
+  // Unknown or empty ids return the same content, never throw.
+  assert.deepEqual(removeFood(removed, "fdc:nope"), removed);
+  assert.deepEqual(removeFood(removed, ""), removed);
+  assert.deepEqual(removeFood(removed, null), removed);
+});
+
+test("cancel selects nothing: a draft quantity is never part of the state", () => {
+  // The P17 editor keeps its open tile and draft on the DOM node only, so the
+  // state after a cancel is exactly the state before opening the tile.
+  const before = defaultState();
+  const openTile = { foodId: "fdc:egg", quantity: { measureId: "piece", count: 3 } };
+  assert.deepEqual(before.selections, {});
+  assert.deepEqual(before.order, []);
+  // Only confirmFood writes a selection; reduce("confirmFood") is the one action
+  // the confirm button uses.
+  const confirmed = reduce(before, "confirmFood", { food: EGG, quantity: openTile.quantity });
+  assert.deepEqual(confirmed.order, ["fdc:egg"]);
+  assert.deepEqual(reduce(confirmed, "removeFood", { foodId: "fdc:egg" }).order, []);
+});
+
+test("state saved before P17 is migrated from the key order of selections", () => {
+  // Old shape: no `order` key. The key order was the confirmation order.
+  const legacy = {
+    version: 1,
+    profile: { sex: "male", age: 40, lifeStage: "none" },
+    standard: "us",
+    activeNutrient: "iron",
+    selections: {
+      "fdc:rice": { measureId: "bowl", count: 1, grams: 150 },
+      "fdc:egg": { measureId: "piece", count: 2, grams: 100 },
+    },
+  };
+  const state = normalizeState(legacy);
+  assert.deepEqual(state.order, ["fdc:rice", "fdc:egg"]);
+  assert.deepEqual(selectedFoodIds(state), ["fdc:rice", "fdc:egg"]);
+
+  // Through load() and a round trip the migrated order is persisted.
+  const storage = fakeStorage({ [STORAGE_KEY]: JSON.stringify(legacy) });
+  const loaded = load(storage);
+  assert.deepEqual(loaded.order, ["fdc:rice", "fdc:egg"]);
+  save(loaded, storage);
+  const stored = JSON.parse(storage.getItem(STORAGE_KEY));
+  assert.deepEqual(stored.order, ["fdc:rice", "fdc:egg"]);
+  assert.deepEqual(load(storage).order, ["fdc:rice", "fdc:egg"]);
+});
+
+test("sanitizeOrder reconciles a stored order with the selections", () => {
+  const selections = { a: {}, b: {}, c: {} };
+  // Unknown ids dropped, missing ids appended in key order, duplicates removed.
+  assert.deepEqual(sanitizeOrder(["b", "gone", "b", "a"], selections), ["b", "a", "c"]);
+  assert.deepEqual(sanitizeOrder([], selections), ["a", "b", "c"]);
+  assert.deepEqual(sanitizeOrder(undefined, selections), ["a", "b", "c"]);
+  assert.deepEqual(sanitizeOrder("nope", selections), ["a", "b", "c"]);
+  assert.deepEqual(sanitizeOrder(["a", "b", "c"], selections), ["a", "b", "c"]);
+  // Nothing selected -> empty order, even with a stale stored order.
+  assert.deepEqual(sanitizeOrder(["a"], {}), []);
+  assert.deepEqual(sanitizeOrder(["a"], null), []);
+  assert.deepEqual(sanitizeOrder([1, null, "a"], { a: {} }), ["a"]);
+});
+
+test("a stored order that disagrees with the selections is repaired on load", () => {
+  const storage = fakeStorage({
+    [STORAGE_KEY]: JSON.stringify({
+      version: 1,
+      selections: { "fdc:egg": { grams: 50 }, "fdc:liver": { grams: 30 } },
+      order: ["fdc:liver", "fdc:removed"],
+    }),
+  });
+  const state = load(storage);
+  // The known id keeps its stored position; the selected id missing from the
+  // order is appended.
+  assert.deepEqual(state.order, ["fdc:liver", "fdc:egg"]);
+});
+
+test("setQuantity keeps the confirmation order and removes it on null", () => {
+  let state = confirmFood(defaultState(), RICE);
+  state = confirmFood(state, EGG);
+  const edited = setQuantity(state, "fdc:rice", { measureId: "bowl", count: 2 });
+  assert.deepEqual(edited.order, ["fdc:rice", "fdc:egg"]);
+  const removed = setQuantity(edited, "fdc:rice", null);
+  assert.deepEqual(removed.order, ["fdc:egg"]);
+  assert.deepEqual(Object.keys(removed.selections), ["fdc:egg"]);
 });
 
 test("save/load round trip through a fake storage", () => {

@@ -1,9 +1,14 @@
-// Shared helpers for the Playwright smoke and screenshot specs (phase P13).
+// Shared helpers for the Playwright smoke and screenshot specs (phase P13;
+// expand-in-place editor since P17).
 //
 // Everything here talks to the real page in the real browser: no module is
 // imported from docs/, so a broken module in the site cannot make a test pass
 // by accident. All flows go through the UI (click / fill / select); only the
 // "reset" step touches localStorage directly.
+//
+// P17: a tap on a card only expands the editing tile at that position. A food
+// becomes selected only after 确认 (the round check or the 确认 button), so
+// `selectFood` and `setGrams` open the tile, set the quantity and confirm.
 
 import { expect } from "@playwright/test";
 
@@ -30,7 +35,13 @@ export const SEL = Object.freeze({
   cardTarget: (nutrient) => `.target-card[data-nutrient="${nutrient}"] .target-card__target`,
   tab: (nutrient) => `.tab[data-nutrient="${nutrient}"]`,
   foodCard: (id) => `.food-card[data-food="${id}"]`,
+  cell: (id) => `.food-cell[data-food-cell="${id}"]`,
+  tile: (id) => `[data-food-tile="${id}"]`,
   editor: (id) => `[data-food-editor="${id}"]`,
+  check: (id) => `[data-food-tile="${id}"] .food-tile__check`,
+  confirmButton: (id) => `[data-food-tile="${id}"] .food-tile__btn--primary`,
+  cancel: (id) => `[data-food-tile="${id}"] [data-cancel]`,
+  deselect: (id) => `[data-food-tile="${id}"] [data-deselect]`,
   search: "[data-food-search]",
 });
 
@@ -66,7 +77,45 @@ export async function resetApp(page, url = "./") {
 }
 
 /**
- * Select one food in the current nutrient tab through the search box.
+ * Tap a food card to expand its editing tile in place (no selection yet).
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {string} id
+ */
+export async function openTile(page, id) {
+  const card = page.locator(SEL.foodCard(id));
+  await expect(card).toBeVisible();
+  await card.click();
+  await expect(page.locator(SEL.tile(id))).toBeVisible();
+  await expect(page.locator(SEL.editor(id))).toBeVisible();
+}
+
+/**
+ * Confirm the open tile through the round check-mark button.
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {string} id
+ */
+export async function confirmTile(page, id, useButton = false) {
+  const control = useButton ? page.locator(SEL.confirmButton(id)).last() : page.locator(SEL.check(id));
+  await control.click();
+  await expect(page.locator(SEL.tile(id))).toHaveCount(0);
+}
+
+/**
+ * Cancel the open tile (no selection).
+ *
+ * @param {import('@playwright/test}.Page} page
+ * @param {string} id
+ */
+export async function cancelTile(page, id) {
+  await page.locator(SEL.cancel(id)).click();
+  await expect(page.locator(SEL.tile(id))).toHaveCount(0);
+}
+
+/**
+ * Select one food in the current nutrient tab through the search box: open its
+ * tile and confirm it.
  *
  * @param {import('@playwright/test').Page} page
  * @param {string} query search text, e.g. "猪肝"
@@ -74,28 +123,29 @@ export async function resetApp(page, url = "./") {
  */
 export async function selectFood(page, query, id = LIVER_ID) {
   await page.locator(SEL.search).fill(query);
-  const card = page.locator(SEL.foodCard(id));
-  await expect(card).toBeVisible();
-  await card.click();
-  await expect(card).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator(SEL.editor(id))).toBeVisible();
+  await openTile(page, id);
+  await confirmTile(page, id);
+  await expect(page.locator(SEL.foodCard(id))).toHaveAttribute("aria-pressed", "true");
 }
 
 /**
- * Set a selected food to an exact weight through the "克" option and the gram
- * input of its quantity editor.
+ * Set a selected food to an exact weight: reopen its tile, choose "克", fill the
+ * gram input and confirm.
  *
  * @param {import('@playwright/test').Page} page
  * @param {number} grams
  * @param {string} [id]
+ * @param {boolean} [open] false when the tile is already open (default true)
  */
-export async function setGrams(page, grams, id = LIVER_ID) {
+export async function setGrams(page, grams, id = LIVER_ID, open = true) {
+  if (open) await openTile(page, id);
   await page.locator(SEL.editor(id)).locator("[data-measure]").selectOption("grams");
   const input = page.locator(`${SEL.editor(id)} [data-grams]`);
   await expect(input).toBeVisible();
   await input.fill(String(grams));
   await input.blur();
   await expect(page.locator(`${SEL.editor(id)} [data-grams]`)).toHaveValue(String(grams));
+  if (open) await confirmTile(page, id);
 }
 
 /**

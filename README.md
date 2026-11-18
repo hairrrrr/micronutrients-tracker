@@ -90,6 +90,21 @@ under `docs/` (no CDN, no runtime dependency), as noted per item.
   quantity stepper in half steps, and the resolved weight in grams. The markup
   is written from scratch; the editor is a sibling of the card button so no
   click inside it can toggle the card.
+- **Pico CSS v2** - https://picocss.com - MIT License, Copyright (c) 2019-2024
+  Pico. The P17 expand-in-place editor in `docs/js/ui/foods.js` and
+  `docs/css/style.css` reuses the same hand-written Pico form-field and button
+  ideas already used elsewhere in this project (a 38 px control height, a plain
+  native `<select>` with our own skin, flat bordered buttons) for its measure
+  select and its 确认 / 取消选择 / 取消 row. The expand-in-place tile itself -
+  full-row grid span, round check button at the top right, draft state that is
+  only committed on confirm - is written from scratch for this project; no file
+  is vendored or fetched for it beyond `docs/vendor/pico-segmented.css`
+  credited above.
+- **WAI-ARIA Authoring Practices (APG), disclosure and button patterns** -
+  https://www.w3.org/WAI/ARIA/apg/ - W3C document (not code), used as a design
+  reference for the `aria-expanded` / `aria-pressed` pair and the focus handling
+  of the expandable food tile in `docs/js/ui/foods.js`; the markup and
+  behaviour are our own.
 
 - **Pico CSS v2 / Open Props (mobile polish)** - https://picocss.com and
   https://open-props.style - MIT License. The phone pass in `docs/css/style.css`

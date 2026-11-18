@@ -1,10 +1,14 @@
-// Per-nutrient food ordering with pinned selections (PLAN.md 1.7, phase P8).
+// Per-nutrient food ordering with pinned selections (PLAN.md 1.7, phase P8;
+// confirmation order since P17).
 //
 // Pure ES module: no DOM access. It imports only `selectionGrams` from
 // calc.js, so node --test can load it directly. Ordering is:
-//   1. pinned: selected foods with per100g[n] > 0, sorted by their actual
-//      contribution (per100g * grams / 100) descending (ties keep food-name
-//      order);
+//   1. pinned: selected foods with per100g[n] > 0, in confirmation order
+//      (oldest first) from `state.order` - the pinned group is a list of what
+//      the user confirmed, so a newly confirmed food joins the BOTTOM and
+//      editing a portion never reshuffles it. A selection missing from `order`
+//      (older saved state) falls back to the key order of `selections`, which
+//      older versions wrote in confirmation order;
 //   2. unpinned: every other food with per100g[n] > 0, sorted by per100g[n]
 //      descending, ties broken by nameZh;
 //   3. `limit` (default 60) applies to the unpinned part only, so a user's
@@ -54,7 +58,34 @@ function desc(a, b) {
 }
 
 /**
+ * Confirmation order of the selections: `order` sanitised against the keys of
+ * `selections` (unknown ids dropped, missing ids appended in key order).
+ *
+ * @param {Record<string, object>} selections
+ * @param {Array<string>} [order]
+ * @returns {Array<string>}
+ */
+export function selectionOrder(selections, order) {
+  const picked = selections && typeof selections === "object" ? selections : {};
+  const result = [];
+  const seen = new Set();
+  const add = (foodId) => {
+    if (typeof foodId !== "string" || !foodId) return;
+    if (!Object.prototype.hasOwnProperty.call(picked, foodId)) return;
+    if (seen.has(foodId)) return;
+    seen.add(foodId);
+    result.push(foodId);
+  };
+  if (Array.isArray(order)) order.forEach(add);
+  Object.keys(picked).forEach(add);
+  return result;
+}
+
+/**
  * Contribution of a selection in grams of the nutrient.
+ *
+ * Kept for the card models (an estimate of how much a portion adds); it no
+ * longer decides the pinned order, which follows the confirmation order.
  *
  * @param {{per100g?: Record<string, number|null>}} food
  * @param {string} nutrientId
@@ -73,47 +104,58 @@ export function contribution(food, nutrientId, selection) {
  * Only foods that contain the nutrient are considered: a food whose per100g
  * value is 0, null or missing is neither pinned nor listed (P16).
  *
+ * The pinned group follows the confirmation order (`order`, falling back to
+ * the key order of `selections`) and only then drops the foods that lack the
+ * nutrient, so the relative order of the remaining pinned cards is unchanged
+ * from tab to tab.
+ *
  * Exposed separately because the UI needs the total count for its "show more"
  * button without building the whole list.
  *
  * @param {Array<object>} foods foods.json `foods` array
  * @param {string} nutrientId
  * @param {Record<string, {grams?: number}>} [selections] keyed by food id
+ * @param {Array<string>} [order] confirmation order of the selected food ids
  * @returns {{pinned: Array<object>, unpinned: Array<object>}}
  *   both arrays sorted; `pinned` entries carry `contribution` (grams of the
  *   nutrient) and `selected: true`
  */
-export function partitionFoods(foods, nutrientId, selections) {
+export function partitionFoods(foods, nutrientId, selections, order) {
   const list = Array.isArray(foods) ? foods.filter(Boolean) : [];
   const picked = selections && typeof selections === "object" ? selections : {};
+  const byId = new Map();
+  for (const food of list) {
+    if (food && typeof food.id === "string" && !byId.has(food.id)) byId.set(food.id, food);
+  }
 
   const pinned = [];
   const unpinned = [];
 
-  for (const food of list) {
+  for (const foodId of selectionOrder(picked, order)) {
+    const food = byId.get(foodId);
+    if (!food) continue;
     const per100g = valueOf(food, nutrientId);
     // 0, null and missing all mean "this food does not contain the nutrient":
     // not listed in this tab at all, selected or not (P16).
     if (per100g === null || per100g <= 0) continue;
-
-    const selection = picked[food.id];
-    if (selection) {
-      pinned.push({
-        ...food,
-        selected: true,
-        contribution: (per100g * selectionGrams(selection)) / 100,
-      });
-      continue;
-    }
-    unpinned.push(food);
+    pinned.push({
+      ...food,
+      selected: true,
+      contribution: (per100g * selectionGrams(picked[foodId])) / 100,
+    });
   }
 
-  pinned.sort((a, b) => {
-    const diff = desc(a.contribution, b.contribution);
-    if (diff !== 0) return diff;
-    const byValue = desc(valueOf(a, nutrientId) ?? 0, valueOf(b, nutrientId) ?? 0);
-    return byValue !== 0 ? byValue : byName(a, b);
-  });
+  const isPinned = new Set(pinned.map((food) => food.id));
+  for (const food of list) {
+    const per100g = valueOf(food, nutrientId);
+    if (per100g === null || per100g <= 0) continue;
+    if (isPinned.has(food.id)) continue;
+    // A food selected but not listed under this nutrient is still selected; it
+    // simply has no card here, so it must not reappear as an unpinned card
+    // either.
+    if (picked[food.id]) continue;
+    unpinned.push(food);
+  }
 
   unpinned.sort((a, b) => {
     const byValue = desc(valueOf(a, nutrientId) ?? 0, valueOf(b, nutrientId) ?? 0);
@@ -124,20 +166,21 @@ export function partitionFoods(foods, nutrientId, selections) {
 }
 
 /**
- * Foods to show for one nutrient: pinned first, then the unpinned ones up to
- * `limit` (default 60). Raised by `LIMIT_STEP` on "show more".
+ * Foods to show for one nutrient: pinned first (confirmation order), then the
+ * unpinned ones up to `limit` (default 60). Raised by `LIMIT_STEP` on
+ * "show more".
  *
  * @param {Array<object>} foods foods.json `foods` array
  * @param {string} nutrientId
  * @param {Record<string, {grams?: number}>} [selections]
- * @param {{limit?: number, search?: string}} [options]
+ * @param {{limit?: number, search?: string, order?: Array<string>}} [options]
  *   `limit` applies to the unpinned part only; `search` is optional (P11b) and
- *   keeps pinned foods on top
+ *   keeps pinned foods on top; `order` is the persisted confirmation order
  * @returns {Array<object>} cards in display order; pinned foods have
  *   `selected: true` and `contribution`
  */
 export function foodsForNutrient(foods, nutrientId, selections, options = {}) {
-  const { pinned, unpinned } = partitionFoods(foods, nutrientId, selections);
+  const { pinned, unpinned } = partitionFoods(foods, nutrientId, selections, options?.order);
 
   const rawLimit = Number(options?.limit);
   const limit = Number.isFinite(rawLimit) && rawLimit >= 0 ? Math.floor(rawLimit) : DEFAULT_LIMIT;
@@ -180,8 +223,8 @@ export function nextLimit(limit, step = LIMIT_STEP) {
  * @param {number} [limit] current limit
  * @returns {boolean} true when more unpinned cards exist
  */
-export function hasMore(foods, nutrientId, selections, limit = DEFAULT_LIMIT) {
-  const { unpinned } = partitionFoods(foods, nutrientId, selections);
+export function hasMore(foods, nutrientId, selections, limit = DEFAULT_LIMIT, order) {
+  const { unpinned } = partitionFoods(foods, nutrientId, selections, order);
   const shown = Number.isFinite(Number(limit)) && Number(limit) >= 0 ? Math.floor(Number(limit)) : DEFAULT_LIMIT;
   return unpinned.length > shown;
 }
@@ -190,6 +233,7 @@ export default {
   DEFAULT_LIMIT,
   LIMIT_STEP,
   valueOf,
+  selectionOrder,
   contribution,
   partitionFoods,
   foodsForNutrient,

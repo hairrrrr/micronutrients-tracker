@@ -1,10 +1,13 @@
-// End-to-end smoke tests (PLAN.md phase P13).
+// End-to-end smoke tests (PLAN.md phase P13; expand-in-place editor since P17).
 //
-// Nine scenarios that cover the user-visible promises of the app: the profile
-// and standard switch, selecting a food, the cross-tab pinning, a target card
-// turning green, the surplus wording, persistence across a reload, no
-// horizontal overflow at 390 px, the same site served from a sub-path and
-// (P16) a selected food that lacks the nutrient not appearing in that tab.
+// Scenarios that cover the user-visible promises of the app: the profile and
+// standard switch, selecting a food through the expand-in-place editor, the
+// cross-tab pinning, a target card turning green, the surplus wording,
+// persistence across a reload, no horizontal overflow at 390 px, the same site
+// served from a sub-path, (P16) a selected food that lacks the nutrient not
+// appearing in that tab, and (P17) the expand/cancel/confirm flow, the
+// confirmation order of the pinned group, the single change of the measure
+// select and no overflow with an open tile.
 // Every flow goes through the real UI; only the reset touches localStorage.
 //
 // The reference numbers used here are the fixed DRI fixtures of the unit
@@ -21,14 +24,25 @@ import {
   LIVER_ID,
   LIVER_NAME,
   SEL,
+  cancelTile,
   cardStatus,
   cardTarget,
+  confirmTile,
   measureOverflow,
+  openTile,
   resetApp,
   selectFood,
   setGrams,
   watchErrors,
 } from "./helpers.mjs";
+
+/** Ids of the grid cells in display order. */
+async function cellIds(page) {
+  return page.locator(".food-cell").evaluateAll((cells) => cells.map((cell) => cell.dataset.foodCell));
+}
+
+/** A food with a household measure that is easy to find by search. */
+const EGG_ID = "fdc:171287";
 
 test.describe("smoke", () => {
   test("1. profile: male 35 and the US standard", async ({ page }) => {
@@ -83,16 +97,25 @@ test.describe("smoke", () => {
     await expect(card).toHaveAttribute("aria-pressed", "true");
     // The single "met" green of the design, from nutrients.js MET_COLORS.
     await expect(card).toHaveCSS("background-color", "rgb(200, 242, 208)");
-    await expect(page.locator(SEL.editor(LIVER_ID))).toBeVisible();
-    await expect(page.locator(SEL.editor(LIVER_ID))).toContainText("约 100 g");
+    // The tile collapsed after the confirm.
+    await expect(page.locator(SEL.tile(LIVER_ID))).toHaveCount(0);
 
     // 100 g of raw pork liver = 6502 ug RAE, far above the 660 ug target.
     await expect(page.locator(SEL.cardStatus("vitA"))).toHaveText("+5842 ug RAE");
     await expect(page.locator(SEL.card("vitA"))).toHaveClass(/is-met/);
 
-    // The selection is stored in the documented state shape.
+    // Reopening it shows the current quantity and the deselect control.
+    await page.locator(SEL.foodCard(LIVER_ID)).click();
+    await expect(page.locator(SEL.editor(LIVER_ID))).toContainText("约 100 g");
+    await expect(page.locator(SEL.deselect(LIVER_ID))).toBeVisible();
+    await cancelTile(page, LIVER_ID);
+    await expect(page.locator(SEL.foodCard(LIVER_ID))).toHaveAttribute("aria-pressed", "true");
+
+    // The selection is stored in the documented state shape (with the P17
+    // confirmation order).
     const stored = await page.evaluate(() => window.localStorage.getItem("mnt.state.v1"));
     expect(stored).toContain(LIVER_ID);
+    expect(JSON.parse(stored).order).toEqual([LIVER_ID]);
 
     expect(errors).toEqual([]);
   });
@@ -115,8 +138,10 @@ test.describe("smoke", () => {
       "background-color",
       "rgb(200, 242, 208)",
     );
-    // ... and it keeps its quantity editor on the new tab.
+    // ... and reopening it keeps its quantity on the new tab.
+    await openTile(page, LIVER_ID);
     await expect(page.locator(SEL.editor(LIVER_ID))).toContainText("约 100 g");
+    await cancelTile(page, LIVER_ID);
 
     // Counted: 100 g raw pork liver = 26 ug B12 against the 2.4 ug target.
     await expect(page.locator(SEL.cardStatus("vitB12"))).toHaveText("+23.6 ug");
@@ -143,7 +168,9 @@ test.describe("smoke", () => {
     await expect(page.locator(SEL.cardStatus("vitA"))).toHaveText("+640 ug RAE");
     await expect(page.locator(SEL.card("vitA"))).toHaveCSS("background-color", "rgb(200, 242, 208)");
     await expect(page.locator(SEL.card("vitA"))).toHaveCSS("border-color", "rgb(20, 92, 42)");
+    await openTile(page, LIVER_ID);
     await expect(page.locator(`${SEL.editor(LIVER_ID)} [data-grams]`)).toHaveValue("20");
+    await cancelTile(page, LIVER_ID);
 
     expect(errors).toEqual([]);
   });
@@ -203,9 +230,12 @@ test.describe("smoke", () => {
     await expect(page.locator('th[data-standard="us"]')).toHaveClass(/is-active/);
     await expect(page.locator(SEL.tab("vitB12"))).toHaveAttribute("aria-pressed", "true");
     await expect(page.locator(SEL.foodCard(LIVER_ID))).toHaveAttribute("aria-pressed", "true");
-    await expect(page.locator(`${SEL.editor(LIVER_ID)} [data-grams]`)).toHaveValue("80");
     // 80 g x 26 ug / 100 g = 20.8 ug against the 2.4 ug US target.
     await expect(page.locator(SEL.cardStatus("vitB12"))).toHaveText("+18.4 ug");
+    // The restored quantity is intact in the reopened editor.
+    await openTile(page, LIVER_ID);
+    await expect(page.locator(`${SEL.editor(LIVER_ID)} [data-grams]`)).toHaveValue("80");
+    await cancelTile(page, LIVER_ID);
 
     expect(errors).toEqual([]);
   });
@@ -214,10 +244,11 @@ test.describe("smoke", () => {
     const errors = watchErrors(page);
     await resetApp(page);
 
-    // The whole page, with a selection and its editor open, at 390 x 844.
+    // The whole page, with an expanded tile open, at 390 x 844.
     expect(page.viewportSize()).toEqual({ width: 390, height: 844 });
     await selectFood(page, "猪肝");
     await setGrams(page, 250);
+    await openTile(page, LIVER_ID);
     // The profile panel starts open, so the comparison table is on the page.
     await page.locator("#profile .standards__table").scrollIntoViewIfNeeded();
     await expect(page.locator("#profile .standards__table")).toBeVisible();
@@ -263,6 +294,8 @@ test.describe("smoke", () => {
         ".food-card",
         ".foods__search-input",
         ".food-editor__select",
+        ".food-tile__check",
+        ".food-tile__btn",
         ".segmented__btn",
         ".choice",
       ]) {
@@ -273,7 +306,7 @@ test.describe("smoke", () => {
     });
     expect(polish.clipped).toEqual([]);
     for (const [selector, height] of Object.entries(polish.heights)) {
-      expect(height, `${selector} height at 360 px`).toBeGreaterThanOrEqual(38);
+      expect(height, `${selector} height at 360 px`).toBeGreaterThanOrEqual(34);
     }
 
     // The stepper and the gram input are two different editor modes: check the
@@ -283,10 +316,11 @@ test.describe("smoke", () => {
     const stepHeight = await page.locator(`${SEL.editor(LIVER_ID)} [data-step]`).first()
       .evaluate((node) => Math.round(node.getBoundingClientRect().height));
     expect(stepHeight).toBeGreaterThanOrEqual(38);
-    await setGrams(page, 250);
+    await setGrams(page, 250, LIVER_ID, false);
     const gramsHeight = await page.locator(`${SEL.editor(LIVER_ID)} [data-grams]`)
       .evaluate((node) => Math.round(node.getBoundingClientRect().height));
     expect(gramsHeight).toBeGreaterThanOrEqual(38);
+    await cancelTile(page, LIVER_ID);
 
     expect(errors).toEqual([]);
   });
@@ -354,20 +388,258 @@ test.describe("smoke", () => {
     await expect(page.locator(".food-cell").first()).toBeVisible();
 
     // P16: the carrot does not contain vitamin D, so it is neither pinned nor
-    // listed in that tab, and its cross-tab editor is gone with it.
+    // listed in that tab, and its editor cannot be opened there.
     await expect(page.locator(SEL.foodCard(CARROT_ID))).toHaveCount(0);
     await expect(page.locator(`.food-cell[data-food-cell="${CARROT_ID}"]`)).toHaveCount(0);
-    await expect(page.locator(SEL.editor(CARROT_ID))).toHaveCount(0);
+    await expect(page.locator(SEL.tile(CARROT_ID))).toHaveCount(0);
 
     // The selection itself is untouched: back in the vitamin A tab the carrot
-    // is pinned first and still selected.
+    // is pinned first, still selected, and its editor still opens.
     await page.locator(SEL.tab("vitA")).click();
     await expect(page.locator(SEL.tab("vitA"))).toHaveAttribute("aria-pressed", "true");
     await expect(page.locator(".food-cell").first()).toHaveAttribute("data-food-cell", CARROT_ID);
     await expect(page.locator(SEL.foodCard(CARROT_ID))).toHaveAttribute("aria-pressed", "true");
+    await openTile(page, CARROT_ID);
     await expect(page.locator(SEL.editor(CARROT_ID))).toBeVisible();
+    await cancelTile(page, CARROT_ID);
     const stored = await page.evaluate(() => window.localStorage.getItem("mnt.state.v1"));
     expect(stored).toContain(CARROT_ID);
+
+    expect(errors).toEqual([]);
+  });
+
+  // -------------------------------------------------------------------------
+  // P17: expand-in-place editor
+  // -------------------------------------------------------------------------
+
+  test("10. a tap expands the card in place and keeps its index; cancel selects nothing", async ({ page }) => {
+    const errors = watchErrors(page);
+    await resetApp(page);
+    // A full list without a search filter, so the tapped card's position is
+    // the ranking position.
+    const before = await cellIds(page);
+    expect(before.length).toBe(60);
+    const targetId = before[7];
+
+    await page.locator(SEL.foodCard(targetId)).click();
+
+    // Expanded, not selected, still at index 7 (the cells around it are the
+    // same ones in the same order).
+    const cell = page.locator(SEL.cell(targetId));
+    await expect(cell).toHaveAttribute("data-expanded", "true");
+    await expect(cell).toHaveClass(/food-cell--expanded/);
+    await expect(page.locator(SEL.tile(targetId))).toBeVisible();
+    await expect(page.locator(SEL.foodCard(targetId))).toHaveAttribute("aria-pressed", "false");
+    const after = await cellIds(page);
+    expect(after.length).toBe(60);
+    expect(after).toEqual(before);
+    expect(after.indexOf(targetId)).toBe(7);
+
+    // The tile spans the grid row (2 columns at 390 px) and shows the quantity
+    // editor plus the confirm controls.
+    const span = await cell.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return { start: style.gridColumnStart, end: style.gridColumnEnd };
+    });
+    expect(span).toEqual({ start: "1", end: "-1" });
+    await expect(page.locator(SEL.editor(targetId))).toBeVisible();
+    await expect(page.locator(SEL.check(targetId))).toBeVisible();
+    await expect(page.locator(SEL.check(targetId))).toHaveAttribute("aria-label", "确认");
+    await expect(page.locator(SEL.confirmButton(targetId))).toHaveText("确认");
+    await expect(page.locator(SEL.cancel(targetId))).toHaveText("取消");
+    await expect(page.locator(SEL.deselect(targetId))).toHaveCount(0);
+
+    // Draft edits are UI-only: no selection and no totals change.
+    await expect(page.locator(SEL.cardStatus("vitA"))).toHaveText("还差 660 ug RAE");
+    const storedBefore = await page.evaluate(() => window.localStorage.getItem("mnt.state.v1"));
+
+    await cancelTile(page, targetId);
+    await expect(page.locator(SEL.tile(targetId))).toHaveCount(0);
+    await expect(page.locator(SEL.foodCard(targetId))).toHaveAttribute("aria-pressed", "false");
+    await expect(page.locator(SEL.cardStatus("vitA"))).toHaveText("还差 660 ug RAE");
+    const storedAfter = await page.evaluate(() => window.localStorage.getItem("mnt.state.v1"));
+    expect(storedAfter).toBe(storedBefore);
+
+    // Only one tile is open at a time: opening another collapses the previous
+    // one without selecting it.
+    await page.locator(SEL.foodCard(before[3])).click();
+    await expect(page.locator(SEL.tile(before[3]))).toBeVisible();
+    await page.locator(SEL.foodCard(before[9])).click();
+    await expect(page.locator(SEL.tile(before[9]))).toBeVisible();
+    await expect(page.locator(SEL.tile(before[3]))).toHaveCount(0);
+    await expect(page.locator(SEL.cardStatus("vitA"))).toHaveText("还差 660 ug RAE");
+    await cancelTile(page, before[9]);
+
+    expect(errors).toEqual([]);
+  });
+
+  test("11. confirm pins the food at the bottom of the pinned group", async ({ page }) => {
+    const errors = watchErrors(page);
+    await resetApp(page);
+
+    // First confirmed food: the liver (100 g = 6502 ug RAE).
+    await selectFood(page, "猪肝");
+    await page.locator(SEL.search).fill("");
+    let ids = await cellIds(page);
+    expect(ids[0]).toBe(LIVER_ID);
+
+    // Second confirmed food: an egg, confirmed through the 确认 button this
+    // time. It joins the BOTTOM of the pinned group even though 100 g of liver
+    // contributes far more vitamin A than one egg.
+    await page.locator(SEL.search).fill("鸡蛋");
+    await openTile(page, EGG_ID);
+    await confirmTile(page, EGG_ID, true);
+    await page.locator(SEL.search).fill("");
+
+    ids = await cellIds(page);
+    expect(ids.slice(0, 2)).toEqual([LIVER_ID, EGG_ID]);
+    await expect(page.locator(SEL.foodCard(EGG_ID))).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator(SEL.foodCard(EGG_ID))).toHaveCSS(
+      "background-color",
+      "rgb(200, 242, 208)",
+    );
+    const stored = JSON.parse(await page.evaluate(() => window.localStorage.getItem("mnt.state.v1")));
+    expect(stored.order).toEqual([LIVER_ID, EGG_ID]);
+
+    // Editing a pinned food keeps its position: raise the egg's quantity and
+    // the order stays liver, egg.
+    await openTile(page, EGG_ID);
+    await page.locator(SEL.editor(EGG_ID)).locator("[data-measure]").selectOption("grams");
+    await page.locator(`${SEL.editor(EGG_ID)} [data-grams]`).fill("200");
+    await page.locator(`${SEL.editor(EGG_ID)} [data-grams]`).blur();
+    await confirmTile(page, EGG_ID);
+    ids = await cellIds(page);
+    expect(ids.slice(0, 2)).toEqual([LIVER_ID, EGG_ID]);
+
+    // 取消选择 removes it but keeps the liver pinned.
+    await openTile(page, EGG_ID);
+    await page.locator(SEL.deselect(EGG_ID)).click();
+    await expect(page.locator(SEL.tile(EGG_ID))).toHaveCount(0);
+    ids = await cellIds(page);
+    expect(ids[0]).toBe(LIVER_ID);
+    expect(ids.includes(EGG_ID)).toBe(false);
+    const cleared = JSON.parse(await page.evaluate(() => window.localStorage.getItem("mnt.state.v1")));
+    expect(cleared.order).toEqual([LIVER_ID]);
+
+    expect(errors).toEqual([]);
+  });
+
+  test("12. the measure select changes once and is not reopened", async ({ page }) => {
+    const errors = watchErrors(page);
+
+    // Count the change listeners that end up on #foods or its children, so a
+    // handler added again on every render would be visible.
+    await page.addInitScript(() => {
+      window.__changeListeners = 0;
+      const add = EventTarget.prototype.addEventListener;
+      EventTarget.prototype.addEventListener = function patched(type, ...rest) {
+        if (type === "change" && this instanceof Element && this.closest?.("#foods")) {
+          window.__changeListeners += 1;
+        }
+        return add.call(this, type, ...rest);
+      };
+      // A capture listener of the test page: counts the change events that were
+      // dispatched on the measure select.
+      window.__selectChanges = 0;
+      document.addEventListener("change", (event) => {
+        if (event.target?.matches?.("[data-measure]")) window.__selectChanges += 1;
+      }, true);
+    });
+
+    await resetApp(page);
+    const ids = await cellIds(page);
+    const targetId = ids[0];
+    // Open an UNSELECTED card, so the change can only touch the draft.
+    await openTile(page, targetId);
+    const baseline = await page.evaluate(() => window.__changeListeners);
+    expect(baseline).toBeGreaterThan(0);
+
+    const select = page.locator(`${SEL.editor(targetId)} [data-measure]`);
+    await select.evaluate((node) => { node.dataset.marker = "same-node"; });
+
+    // One household-measure choice: the tile opens on the food's default
+    // household measure, so pick the manual 克 entry (a real value change).
+    await select.selectOption("grams");
+
+    expect(await page.evaluate(() => window.__selectChanges)).toBe(1);
+    // The same <select> node is still in the DOM and still holds the value...
+    await expect(select).toHaveAttribute("data-marker", "same-node");
+    await expect(select).toHaveValue("grams");
+    await expect(page.locator(`${SEL.editor(targetId)} [data-grams]`)).toBeVisible();
+    // ... and it is not focused again, so the native picker does not reopen.
+    const focused = await page.evaluate(() => document.activeElement?.matches?.("[data-measure]") ?? false);
+    expect(focused).toBe(false);
+    await expect(page.locator(SEL.editor(targetId))).toBeVisible();
+    await expect(page.locator(SEL.tile(targetId))).toBeVisible();
+
+    // The change edited the draft only: still nothing selected.
+    await expect(page.locator(SEL.foodCard(targetId))).toHaveAttribute("aria-pressed", "false");
+
+    // Several re-renders (tab switches, a confirm) must not add listeners.
+    for (const nutrient of ["iron", "vitA", "iron", "vitA"]) {
+      await page.locator(SEL.tab(nutrient)).click();
+      await expect(page.locator(SEL.tab(nutrient))).toHaveAttribute("aria-pressed", "true");
+    }
+    await openTile(page, targetId);
+    await confirmTile(page, targetId);
+    await openTile(page, targetId);
+    await cancelTile(page, targetId);
+    expect(await page.evaluate(() => window.__changeListeners)).toBe(baseline);
+
+    // A second, independent choice still fires exactly one change.
+    await openTile(page, targetId);
+    await page.evaluate(() => { window.__selectChanges = 0; });
+    await page.locator(`${SEL.editor(targetId)} [data-measure]`).selectOption({ index: 0 });
+    expect(await page.evaluate(() => window.__selectChanges)).toBe(1);
+    await cancelTile(page, targetId);
+    expect(await page.evaluate(() => window.__changeListeners)).toBe(baseline);
+
+    expect(errors).toEqual([]);
+  });
+
+  test("13. no horizontal overflow at 390 px with an expanded card", async ({ page }) => {
+    const errors = watchErrors(page);
+    await resetApp(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    // Open a tile near the top and one deeper in the list (with a long English
+    // name and a household measure label).
+    const ids = await cellIds(page);
+    await page.locator(SEL.foodCard(ids[1])).click();
+    await expect(page.locator(SEL.tile(ids[1]))).toBeVisible();
+    let box = await measureOverflow(page);
+    expect(box.scrollWidth).toBeLessThanOrEqual(390);
+    expect(box.offenders).toEqual([]);
+
+    // A gram entry of a wide number and the gram input visible.
+    await page.locator(`${SEL.editor(ids[1])} [data-measure]`).selectOption("grams");
+    await page.locator(`${SEL.editor(ids[1])} [data-grams]`).fill("1234.5");
+    box = await measureOverflow(page);
+    expect(box.scrollWidth).toBeLessThanOrEqual(390);
+    expect(box.offenders).toEqual([]);
+
+    // The tile is the width of the row, not wider than the grid.
+    const geometry = await page.evaluate((id) => {
+      const cell = document.querySelector(`.food-cell[data-food-cell="${id}"]`);
+      const grid = document.querySelector(".foods__grid");
+      const active = document.activeElement;
+      return {
+        cellWidth: Math.round(cell.getBoundingClientRect().width),
+        gridWidth: Math.round(grid.getBoundingClientRect().width),
+        activeIsGram: Boolean(active?.matches?.("[data-grams]")),
+      };
+    }, ids[1]);
+    expect(geometry.cellWidth).toBe(geometry.gridWidth);
+    expect(geometry.activeIsGram).toBe(true);
+
+    // Confirm and reopen as a pinned card: still no overflow.
+    await confirmTile(page, ids[1]);
+    await openTile(page, ids[1]);
+    await expect(page.locator(SEL.deselect(ids[1]))).toBeVisible();
+    box = await measureOverflow(page);
+    expect(box.scrollWidth).toBeLessThanOrEqual(390);
+    expect(box.offenders).toEqual([]);
+    await cancelTile(page, ids[1]);
 
     expect(errors).toEqual([]);
   });

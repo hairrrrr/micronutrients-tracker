@@ -11,7 +11,14 @@
 //     standard: "cn2023"|"us",
 //     activeNutrient: "vitA",
 //     selections: { "fdc:167862": { measureId: "piece", count: 0.5,
-//                                    grams: 50 } } }
+//                                    grams: 50 } },
+//     order: ["fdc:167862"] }
+//
+// `order` is the confirmation order of the selected foods (oldest first): the
+// pinned group is shown in this order, not by contribution, so a newly
+// confirmed food joins the bottom of the group (P17). It is persisted with the
+// selections; a stored state without it is migrated from the key order of
+// `selections` (which older versions wrote in confirmation order).
 //
 // Every reducer returns a new state object and never mutates its input.
 // `selections` is global (keyed by food id, not by nutrient group), which is
@@ -51,6 +58,7 @@ export function defaultState() {
     standard: "cn2023",
     activeNutrient: "vitA",
     selections: {},
+    order: [],
   };
 }
 
@@ -118,6 +126,38 @@ export function sanitizeSelections(selections) {
 }
 
 /**
+ * Sanitise the confirmation order of the selections.
+ *
+ * The result always lists exactly the ids of `selections`, oldest first:
+ * entries of a stored order that are no longer selected are dropped, ids that
+ * are selected but missing from the stored order are appended in the key order
+ * of `selections` (this is the migration path for state saved before P17, when
+ * the key order was the confirmation order), and duplicates are removed.
+ *
+ * @param {*} order stored order array
+ * @param {Record<string, object>} selections sanitised selections
+ * @returns {Array<string>}
+ */
+export function sanitizeOrder(order, selections) {
+  const picked = selections && typeof selections === "object" ? selections : {};
+  const selected = Object.keys(picked);
+  const result = [];
+  const seen = new Set();
+
+  const add = (foodId) => {
+    if (typeof foodId !== "string" || !foodId) return;
+    if (!Object.prototype.hasOwnProperty.call(picked, foodId)) return;
+    if (seen.has(foodId)) return;
+    seen.add(foodId);
+    result.push(foodId);
+  };
+
+  if (Array.isArray(order)) order.forEach(add);
+  selected.forEach(add);
+  return result;
+}
+
+/**
  * Turn any candidate object into a valid state.
  *
  * Used by `load` and by the reducers so a corrupt or partial object can never
@@ -135,6 +175,7 @@ export function normalizeState(candidate) {
   const activeNutrient = typeof candidate.activeNutrient === "string" && candidate.activeNutrient
     ? candidate.activeNutrient
     : base.activeNutrient;
+  const selections = sanitizeSelections(candidate.selections);
 
   return {
     version: VERSION,
@@ -147,7 +188,8 @@ export function normalizeState(candidate) {
     },
     standard: sanitizeStandard(candidate.standard, base.standard),
     activeNutrient,
-    selections: sanitizeSelections(candidate.selections),
+    selections,
+    order: sanitizeOrder(candidate.order, selections),
   };
 }
 
@@ -163,18 +205,37 @@ export function isSelected(state, foodId) {
 }
 
 /**
- * Selected food ids in insertion order.
+ * Selected food ids in confirmation order (oldest first).
  *
  * @param {object} state
  * @returns {string[]}
  */
 export function selectedFoodIds(state) {
-  return state?.selections ? Object.keys(state.selections) : [];
+  if (!state?.selections) return [];
+  return sanitizeOrder(state.order, state.selections);
+}
+
+/**
+ * Append a food id to the confirmation order if it is not there yet.
+ *
+ * A food that is already selected keeps its position (editing a pinned food
+ * must not move it).
+ *
+ * @param {Array<string>} order
+ * @param {string} foodId
+ * @returns {Array<string>} new array
+ */
+function withOrder(order, foodId) {
+  return order.includes(foodId) ? order : [...order, foodId];
 }
 
 /**
  * Add a food with its default measure x1, or remove it when already selected
  * (PLAN.md 1.5). A food without any measure row is added as 100 g.
+ *
+ * New selections are appended to `order`, so the pinned group stays in
+ * confirmation order. This is the plain toggle; the P17 editor selects through
+ * `confirmFood` instead, which also takes a quantity.
  *
  * @param {object} state
  * @param {{id: string, measures?: Array<object>}} food
@@ -188,13 +249,73 @@ export function toggleFood(state, food) {
   const selections = { ...current.selections };
   if (selections[foodId]) {
     delete selections[foodId];
-  } else {
+    return {
+      ...current,
+      selections,
+      order: current.order.filter((id) => id !== foodId),
+    };
+  }
+
+  const measure = defaultMeasure(food);
+  selections[foodId] = measure
+    ? { measureId: measure.id, count: 1, grams: roundGrams(measure.grams) }
+    : { measureId: GRAMS_MEASURE_ID, count: 0, grams: FALLBACK_GRAMS };
+  return { ...current, selections, order: withOrder(current.order, foodId) };
+}
+
+/**
+ * Confirm a food with a quantity: select it (or update its quantity) and put it
+ * at the bottom of the pinned group when it is new (P17).
+ *
+ * Editing an already selected food keeps its position in the order, so a user
+ * who only changes the amount does not reshuffle the list.
+ *
+ * @param {object} state
+ * @param {{id?: string, measures?: Array<object>}} food
+ * @param {{measureId?: string, count?: number, grams?: number}|undefined} quantity
+ *   omitted = the food's default measure x1
+ * @returns {object} new state
+ */
+export function confirmFood(state, food, quantity) {
+  const current = normalizeState(state);
+  const foodId = food && typeof food === "object" ? food.id : null;
+  if (typeof foodId !== "string" || !foodId) return state;
+
+  const selections = { ...current.selections };
+  if (!selections[foodId]) {
     const measure = defaultMeasure(food);
-    selections[foodId] = measure
-      ? { measureId: measure.id, count: 1, grams: roundGrams(measure.grams) }
-      : { measureId: GRAMS_MEASURE_ID, count: 0, grams: FALLBACK_GRAMS };
+    selections[foodId] = quantity && typeof quantity === "object"
+      ? normalizeSelection(food, quantity)
+      : (measure
+        ? { measureId: measure.id, count: 1, grams: roundGrams(measure.grams) }
+        : { measureId: GRAMS_MEASURE_ID, count: 0, grams: FALLBACK_GRAMS });
+    return { ...current, selections, order: withOrder(current.order, foodId) };
+  }
+
+  // Already pinned: replace the quantity when one is given, keep the position.
+  if (quantity && typeof quantity === "object") {
+    selections[foodId] = normalizeSelection(food, quantity);
   }
   return { ...current, selections };
+}
+
+/**
+ * Deselect one food (取消选择 in the P17 editor).
+ *
+ * @param {object} state
+ * @param {string} foodId
+ * @returns {object} new state
+ */
+export function removeFood(state, foodId) {
+  const current = normalizeState(state);
+  if (typeof foodId !== "string" || !foodId || !current.selections[foodId]) return current;
+  const selections = { ...current.selections };
+  delete selections[foodId];
+  return {
+    ...current,
+    selections,
+    order: current.order.filter((id) => id !== foodId),
+  };
 }
 
 /**
@@ -225,7 +346,7 @@ export function setQuantity(state, foodId, quantity, food) {
 
   if (quantity === null || quantity === undefined) {
     delete selections[foodId];
-    return { ...current, selections };
+    return { ...current, selections, order: current.order.filter((id) => id !== foodId) };
   }
   if (typeof quantity !== "object") return state;
 
@@ -233,7 +354,7 @@ export function setQuantity(state, foodId, quantity, food) {
 
   if (food && typeof food === "object") {
     selections[foodId] = normalizeSelection(food, quantity);
-    return { ...current, selections };
+    return { ...current, selections, order: withOrder(current.order, foodId) };
   }
 
   const measureId = typeof quantity.measureId === "string" && quantity.measureId
@@ -258,7 +379,7 @@ export function setQuantity(state, foodId, quantity, food) {
   }
 
   selections[foodId] = { measureId, count, grams };
-  return { ...current, selections };
+  return { ...current, selections, order: withOrder(current.order, foodId) };
 }
 
 /**
@@ -322,7 +443,7 @@ export function setActiveNutrient(state, nutrientId) {
  */
 export function clearAll(state) {
   const current = normalizeState(state);
-  return { ...current, selections: {} };
+  return { ...current, selections: {}, order: [] };
 }
 
 /**
@@ -338,6 +459,10 @@ export function reduce(state, action, payload) {
   switch (action) {
     case "toggleFood":
       return toggleFood(state, payload);
+    case "confirmFood":
+      return confirmFood(state, payload?.food, payload?.quantity);
+    case "removeFood":
+      return removeFood(state, payload?.foodId);
     case "setQuantity":
       return setQuantity(state, payload?.foodId, payload?.quantity, payload?.food);
     case "setProfile":
@@ -426,10 +551,13 @@ export default {
   sanitizeStandard,
   sanitizeSelection,
   sanitizeSelections,
+  sanitizeOrder,
   normalizeState,
   isSelected,
   selectedFoodIds,
   toggleFood,
+  confirmFood,
+  removeFood,
   setQuantity,
   setProfile,
   setStandard,
