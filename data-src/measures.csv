@@ -1136,3 +1136,7 @@ food_key,measure_id,label_zh,grams,basis,is_default
 173905,usda93458,四分之三杯,175,usda_portion:93458,0
 173905,bowl,一碗,300,"estimate:one Chinese bowl of porridge or soup, about 300 g",1
 170283,usda86366,一杯,184,usda_portion:86366,1
+169303,usda84625,一杯,35,usda_portion:84625,1
+169303,usda84626,一片（叶）,16,usda_portion:84626,0
+169990,usda85833,一片（叶）,8,usda_portion:85833,0
+169990,stalk,一根,300,"estimate:one celtuce stem, about 300 g",1

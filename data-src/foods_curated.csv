@@ -92,8 +92,8 @@ fdc_id,name_zh,name_en,category_zh,aliases_zh
 169302,空心菜（煮，不加盐）,Water convolvulus cooked boiled drained without salt,叶菜类,熟空心菜
 168491,茼蒿（生）,Chrysanthemum leaves raw,叶菜类,皇帝菜|蓬蒿
 170405,茼蒿（煮，不加盐）,Chrysanthemum garland cooked boiled drained without salt,叶菜类,熟茼蒿
-170390,小白菜（生）,Cabbage chinese pak-choi raw,叶菜类,青菜|上海青|小油菜
-170391,小白菜（煮，不加盐）,Cabbage chinese pak-choi cooked boiled drained without salt,叶菜类,熟小白菜
+170390,小白菜/上海青（生）,Cabbage chinese pak-choi raw,叶菜类,青菜|上海青|小油菜
+170391,小白菜/上海青（煮，不加盐）,Cabbage chinese pak-choi cooked boiled drained without salt,叶菜类,熟小白菜
 169979,大白菜（生）,Cabbage chinese pe-tsai raw,叶菜类,白菜|结球白菜
 169980,大白菜（煮，不加盐）,Cabbage chinese pe-tsai cooked boiled drained without salt,叶菜类,熟大白菜
 169975,卷心菜（生）,Cabbage raw,叶菜类,圆白菜|包菜|洋白菜
@@ -615,3 +615,5 @@ fdc_id,name_zh,name_en,category_zh,aliases_zh
 168884,黑麦（整粒，生）,Rye grain,谷物与面食,黑麦粒|黑麦仁
 173905,燕麦粥（燕麦片加水煮，不加盐）,Cereals oats regular and quick unenriched cooked with water without salt,谷物与面食,燕麦粥|麦片粥
 170283,大麦（去壳整粒，生）,Barley hulled,谷物与面食,大麦仁|大麦米
+169303,红薯叶（生）,Sweet potato leaves raw,叶菜类,地瓜叶|番薯叶|红薯尖
+169990,莴笋（生）,Celtuce raw,叶菜类,莴苣笋|青笋

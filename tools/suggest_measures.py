@@ -398,6 +398,7 @@ DRIED_NUT_CATEGORIES = {"坚果类", "种子类"}
 # Only these use a hand-set gram value outside the category rules below.
 FOOD_OVERRIDES = {
     169404: [("bunch", "一捆", 250, "one bunch of Chinese broccoli, about 250 g")],
+    169990: [("stalk", "一根", 300, "one celtuce stem, about 300 g")],
     168151: [("piece", "一颗", 20, "one fresh jujube, about 20 g")],
     168152: [("piece", "一颗", 8, "one dried red date, about 8 g")],
     171314: [("spoon", "一勺", 13, "one tablespoon of ghee, about 13 g")],
@@ -547,7 +548,7 @@ CATEGORY_DEFAULT_PREFIXES = {
     "贝类": ["一掌心大小", "一个"],
     "内脏类": ["一掌心大小", "一块"],
     "加工肉制品": ["一掌心大小", "一片"],
-    "叶菜类": ["一杯", "半杯", "一颗", "一片（叶）"],
+    "叶菜类": ["一杯", "半杯", "一颗", "一根", "一片（叶）"],
     "根茎类": ["一杯", "半杯", "一根"],
     "薯类与根茎": ["一杯", "一个（中）"],
     "茄果瓜类": ["一杯", "一个"],

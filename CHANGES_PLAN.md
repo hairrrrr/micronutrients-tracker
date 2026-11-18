@@ -90,3 +90,20 @@ AC:
 - unit tests for the edible-gram conversion
 - e2e: no dish names, and the spare-rib card shows the with-bone note
 - all tests pass
+
+## P21 - More raw leafy greens and a food detail view (user requests after v1.1)
+- **P21a (supervisor data, done):**
+  - Already present raw: 空心菜 169301 (Water convolvulus, raw), 茼蒿 168491 (Chrysanthemum leaves, raw), pak-choi 170390.
+  - 小油菜 / 上海青 are pak-choi; SR Legacy has one pak-choi entry, so 170390/170391 are renamed 小白菜/上海青 (aliases keep 小油菜, 青菜).
+  - Added: 红薯叶（生） 169303 (Sweet potato leaves, raw), 莴笋（生） 169990 (Celtuce, raw), commonness 3 and 4 from the hms API scorer.
+  - Not in SR Legacy: 莴笋尖 (celtuce leaf tips) has no own entry; the celtuce row (with a USDA 一片（叶） portion) and the leaf lettuces are the closest.
+  - Measures: USDA portions plus an estimate 一根 300 g for celtuce (default).
+- **P21b (hms): pure core `docs/js/core/detail.js`**
+  - `detailRows(food, targets, nutrients, grams)` returns all 22 nutrients: per-100 g amount, % of the daily target per 100 g, and, when grams is given, the amount and % for that quantity (edible grams for bone-in foods).
+  - Order: nutrients with a value > 0 and a target by % descending; then value > 0 without a target (by amount); then value 0 (label 不含); then null/missing (label 无数据).
+  - Unit tests. Commit: `feat(core): add food detail ranking`
+- **P21c (hms): UI**
+  - In the expanded tile, a 「查看详情」 button next to the title opens a native `<dialog>` (bottom sheet at <= 600 px, centered dialog wider), title = food name, the basis note (每 100 g; 每 10 g foods also show the per-10 g amount), and one row per nutrient: name, per-100 g amount + unit, % bar, and the chosen-quantity amount and %.
+  - Esc, 关闭 button and backdrop click close it; focus returns to the button. No horizontal overflow at 360/390 px.
+  - e2e: open, first row = highest % computed from foods.json + dri.json, 22 rows, Esc closes, focus returns.
+  - Commit: `feat(ui): add food detail sheet`

@@ -9,13 +9,13 @@
   "buildDate": "2026-11-18",
   "generator": "tools/build_foods.py",
   "counts": {
-    "foods": 616,
-    "srLegacyFoods": 616,
+    "foods": 618,
+    "srLegacyFoods": 618,
     "boneInFoods": 15,
     "nutrients": 22
   },
   "measures": {
-    "curatedFoods": 616,
+    "curatedFoods": 618,
     "defaultGramsOnly": 0
   },
   "notes": [
