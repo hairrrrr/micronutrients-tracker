@@ -118,3 +118,12 @@ AC:
   Commit: `refactor(data): keep raw eggs only`
 
 AC: validator exit 0, check_values 50/50, npm test and Playwright pass, no cooked egg name on the site.
+
+## P23 - Detail view lists only nutrients the food contains (user request after v1.2)
+- `detailRows` (docs/js/core/detail.js) drops rows whose value is 0 (不含) or null/missing (无数据); the order of the remaining rows is unchanged (with a target by % desc, then without a target by amount desc).
+- The 查看详情 dialog renders no 不含 / 无数据 rows; a food without any nutrient value shows 暂无营养素数据.
+- Unit tests updated; e2e test 19 computes the expected row count from foods.json and checks that a food with no vitamin D has no vitD row (row count < 22).
+
+  Commit: `feat(ui): list only nutrients the food contains in the detail view`
+
+AC: npm test and Playwright pass.
