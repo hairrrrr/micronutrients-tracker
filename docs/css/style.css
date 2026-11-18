@@ -843,6 +843,22 @@ select.input {
   background: rgba(20, 92, 42, 0.14);
 }
 
+/* Package-label badge (P25b: the user's own branded foods). A subtle outline
+ * pill, so it reads next to the commonness badge without competing with it. */
+.food-card__badge--label {
+  border-color: rgba(31, 35, 40, 0.35);
+  border-radius: 999px;
+  background: transparent;
+  font-weight: 650;
+  opacity: 1;
+  white-space: nowrap;
+}
+
+.food-card.is-selected .food-card__badge--label,
+.food-tile.is-selected .food-card__badge--label {
+  border-color: currentColor;
+}
+
 .food-card__en {
   color: var(--text-muted);
   font-size: 0.625rem;
@@ -1567,6 +1583,18 @@ select.input {
 .detail__note {
   margin-bottom: 8px;
   color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+/* One-line origin note of a package-label food (P25b): the badge plus the
+ * "calcium from the label, the rest estimated" sentence. */
+.detail__label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-bottom: 6px;
   font-size: 0.75rem;
   line-height: 1.45;
 }

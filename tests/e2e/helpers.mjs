@@ -230,6 +230,9 @@ export async function measureOverflow(page) {
  * (per100g * amountBasisG / 100, amountBasisG defaulting to 100), then nameZh.
  * Foods with no value or a zero value for the nutrient are not listed (P16).
  *
+ * Since P25b the foods whose `pinTop` contains the nutrient are not part of this
+ * ranking: they lead the tab in foods.json order (see `expectedLeadingIds`).
+ *
  * @param {string} nutrientId
  * @returns {Promise<Array<{id: string, nameZh: string, commonness: number,
  *   amount: number|null, amountBasisG: number, richness: number}>>>}
@@ -239,6 +242,7 @@ export async function expectedRanking(nutrientId) {
   const payload = JSON.parse(await readFile(path, "utf8"));
   return payload.foods
     .filter((food) => typeof food.per100g?.[nutrientId] === "number" && food.per100g[nutrientId] > 0)
+    .filter((food) => !(Array.isArray(food.pinTop) && food.pinTop.includes(nutrientId)))
     .sort((a, b) => ((b.commonness ?? 0) - (a.commonness ?? 0))
       || (richnessOf(b, nutrientId) - richnessOf(a, nutrientId))
       || (a.nameZh < b.nameZh ? -1 : a.nameZh > b.nameZh ? 1 : 0))
@@ -250,6 +254,31 @@ export async function expectedRanking(nutrientId) {
       amountBasisG: food.amountBasisG ?? 100,
       richness: richnessOf(food, nutrientId),
     }));
+}
+
+/**
+ * Ids of the unselected foods that lead a tab through `pinTop` (P25b), in
+ * foods.json order, read from docs/data/foods.json.
+ *
+ * @param {string} nutrientId
+ * @returns {Promise<Array<{id: string, nameZh: string}>>}
+ */
+export async function expectedLeading(nutrientId) {
+  const path = new URL("../../docs/data/foods.json", import.meta.url);
+  const payload = JSON.parse(await readFile(path, "utf8"));
+  return payload.foods
+    .filter((food) => Array.isArray(food.pinTop) && food.pinTop.includes(nutrientId))
+    .map((food) => ({ id: food.id, nameZh: food.nameZh }));
+}
+
+/**
+ * Ids that lead a tab: the `pinTop` foods of the nutrient (P25b).
+ *
+ * @param {string} nutrientId
+ * @returns {Promise<Array<string>>}
+ */
+export async function expectedLeadingIds(nutrientId) {
+  return (await expectedLeading(nutrientId)).map((entry) => entry.id);
 }
 
 /** Richness on the comparison basis: per100g * amountBasisG / 100 (P19b). */

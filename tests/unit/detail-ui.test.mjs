@@ -14,6 +14,8 @@ import {
   DETAIL_NO_TARGET_TEXT,
   DETAIL_NOTE,
   DETAIL_QUANTITY_LABEL,
+  LABEL_BADGE,
+  LABEL_NOTE,
   barWidth,
   basisAmountText,
   detailHtml,
@@ -156,4 +158,35 @@ test("the expanded tile has a 查看详情 button next to the name", () => {
   const cardStart = html.indexOf(`class="food-card food-card--expanded"`);
   assert.ok(cardStart > buttonEnd, "the detail button closes before the card button");
   assert.equal(DETAIL_CLOSE_LABEL, "关闭");
+});
+
+// ---------------------------------------------------------------------------
+// P25b: a package-label food says where its numbers come from
+// ---------------------------------------------------------------------------
+
+test("a package-label food gets the badge and the one-line origin note", () => {
+  const labelFood = {
+    id: "custom:powder",
+    nameZh: "德运脱脂奶粉",
+    nameEn: "Devondale skim milk powder",
+    source: { type: "package_label", baseFdcId: 170877, estimated: ["phosphorus"] },
+    per100g: { calcium: 1152 },
+  };
+  const html = detailHtml(labelFood, TARGETS, NUTRIENTS);
+  assert.match(html, /data-label-note/);
+  assert.match(html, /food-card__badge--label/);
+  assert.match(html, /包装标签/);
+  assert.match(html, new RegExp(LABEL_NOTE));
+  // The origin line comes before the ranking note and the rows.
+  assert.ok(html.indexOf("data-label-note") < html.indexOf("detail__note"));
+
+  // A USDA food keeps the plain note only.
+  const plain = detailHtml(FOOD, TARGETS, NUTRIENTS);
+  assert.equal(plain.includes("包装标签"), false);
+  assert.equal(plain.includes("data-label-note"), false);
+  assert.match(plain, /detail__note/);
+
+  // The note text is the one the CHANGES_PLAN asks for, word for word.
+  assert.equal(LABEL_NOTE, "钙为包装标签值，其余营养素参考 USDA 同类食品估算");
+  assert.equal(LABEL_BADGE, "包装标签");
 });

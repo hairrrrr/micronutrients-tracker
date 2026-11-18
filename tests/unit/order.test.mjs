@@ -15,6 +15,8 @@ import {
   commonnessOf,
   amountBasisGOf,
   richnessOf,
+  pinTopOf,
+  isPinTop,
   selectionOrder,
   contribution,
   partitionFoods,
@@ -256,8 +258,8 @@ test("partitionFoods exposes both sorted groups without truncation", () => {
   assert.deepEqual(pinned.map((food) => food.id), ["fdc:liver"]);
   assert.deepEqual(unpinned.map((food) => food.id), ["fdc:carrot", "fdc:sweetpotato", "fdc:spinach"]);
   // Broken inputs are handled, not thrown at.
-  assert.deepEqual(partitionFoods(null, "vitA", null), { pinned: [], unpinned: [] });
-  assert.deepEqual(partitionFoods(FOODS, "unknown"), { pinned: [], unpinned: [] });
+  assert.deepEqual(partitionFoods(null, "vitA", null), { pinned: [], leading: [], unpinned: [] });
+  assert.deepEqual(partitionFoods(FOODS, "unknown"), { pinned: [], leading: [], unpinned: [] });
 });
 
 test("optional search keeps pinned foods on top and matches nameZh/aliases/nameEn", () => {
@@ -357,4 +359,120 @@ test("the pinned group still follows the confirmation order with per-10 g foods"
   // The contribution is grams x per100g / 100, untouched by the basis.
   assert.equal(list[0].contribution, 9.05);
   assert.equal(list[1].contribution, 350);
+});
+
+// ---------------------------------------------------------------------------
+// P25b: the user's own branded milks lead the calcium tab
+// ---------------------------------------------------------------------------
+
+/** Fixture shaped like the 3 custom milks in foods.json (P25a). */
+const CUSTOM_MILKS = [
+  { id: "custom:powder", nameZh: "德运脱脂奶粉", commonness: 4, amountBasisG: 100, pinTop: ["calcium"], per100g: { calcium: 1152 } },
+  { id: "custom:partly", nameZh: "山姆部分脱脂牛奶", commonness: 4, amountBasisG: 100, pinTop: ["calcium"], per100g: { calcium: 126.2 } },
+  { id: "custom:zero", nameZh: "盒马零脂牛奶", commonness: 4, amountBasisG: 100, pinTop: ["calcium"], per100g: { calcium: 116.5 } },
+];
+
+test("pinTopOf reads the pinTop list and ignores unusable entries", () => {
+  assert.deepEqual(pinTopOf(CUSTOM_MILKS[0]), ["calcium"]);
+  assert.deepEqual(pinTopOf({ pinTop: [] }), []);
+  assert.deepEqual(pinTopOf({ pinTop: ["calcium", "", null, 3] }), ["calcium"]);
+  assert.deepEqual(pinTopOf({}), []);
+  assert.deepEqual(pinTopOf(null), []);
+  assert.equal(isPinTop(CUSTOM_MILKS[0], "calcium"), true);
+  assert.equal(isPinTop(CUSTOM_MILKS[0], "vitA"), false);
+  assert.equal(isPinTop(byId(FOODS, "fdc:liver"), "vitA"), false);
+});
+
+test("unselected pinTop foods lead the tab in foods.json order", () => {
+  // The milks come last in foods.json and are poorer in calcium than the liver
+  // fixture; the pinTop rule still puts them first, in data order.
+  const foods = [...FOODS, ...CUSTOM_MILKS];
+  const calcium = foodsForNutrient(foods, "calcium", {});
+  assert.deepEqual(calcium.map((food) => food.id), [
+    "custom:powder",
+    "custom:partly",
+    "custom:zero",
+  ]);
+  // Other nutrients treat the milks normally: they have no vitamin A at all, so
+  // they are not listed in the vitamin A tab (P16).
+  assert.deepEqual(
+    foodsForNutrient(foods, "vitA", {}).map((food) => food.id),
+    ["fdc:liver", "fdc:carrot", "fdc:sweetpotato", "fdc:spinach"],
+  );
+});
+
+test("the leading group keeps its data order whatever the richness is", () => {
+  const foods = [
+    { id: "custom:poorer", nameZh: "甲牛奶", commonness: 5, pinTop: ["calcium"], per100g: { calcium: 10 } },
+    { id: "fdc:rich", nameZh: "豆腐", commonness: 5, per100g: { calcium: 9999 } },
+    { id: "custom:richer", nameZh: "乙牛奶", commonness: 1, pinTop: ["calcium"], per100g: { calcium: 5000 } },
+  ];
+  assert.deepEqual(
+    foodsForNutrient(foods, "calcium", {}).map((food) => food.id),
+    ["custom:poorer", "custom:richer", "fdc:rich"],
+  );
+  // Searching keeps the leading foods on top of the ranked matches.
+  assert.deepEqual(
+    foodsForNutrient(foods, "calcium", {}, { search: "牛奶" }).map((food) => food.id),
+    ["custom:poorer", "custom:richer"],
+  );
+});
+
+test("a selected pinTop food is pinned above the leading group, and drops out of it", () => {
+  const foods = [...FOODS, ...CUSTOM_MILKS];
+  const selections = { "custom:zero": { grams: 100 } };
+  const list = foodsForNutrient(foods, "calcium", selections, { order: ["custom:zero"] });
+  assert.deepEqual(list.map((food) => food.id), [
+    "custom:zero",
+    "custom:powder",
+    "custom:partly",
+  ]);
+  assert.equal(list[0].selected, true);
+  // The unselected leading foods carry no selection flag.
+  assert.equal(list[1].selected, undefined);
+});
+
+test("confirming another calcium food pins it above the milks", () => {
+  const tofu = { id: "fdc:tofu", nameZh: "豆腐（常规）", commonness: 5, per100g: { calcium: 350 } };
+  const foods = [...FOODS, tofu, ...CUSTOM_MILKS];
+  const selections = {
+    "custom:zero": { grams: 100 },
+    "fdc:tofu": { grams: 100 },
+  };
+  const list = foodsForNutrient(foods, "calcium", selections, {
+    order: ["custom:zero", "fdc:tofu"],
+  });
+  // Confirmation order decides the pinned group; the remaining milks follow.
+  assert.deepEqual(list.slice(0, 4).map((food) => food.id), [
+    "custom:zero",
+    "fdc:tofu",
+    "custom:powder",
+    "custom:partly",
+  ]);
+});
+
+test("the limit applies to the ranked part only, never to the leading group", () => {
+  const foods = [
+    ...CUSTOM_MILKS,
+    { id: "fdc:a", nameZh: "甲", commonness: 5, per100g: { calcium: 300 } },
+    { id: "fdc:b", nameZh: "乙", commonness: 5, per100g: { calcium: 200 } },
+  ];
+  const list = foodsForNutrient(foods, "calcium", {}, { limit: 1 });
+  assert.deepEqual(list.map((food) => food.id), [
+    "custom:powder",
+    "custom:partly",
+    "custom:zero",
+    "fdc:a",
+  ]);
+  assert.equal(hasMore(foods, "calcium", {}, 1), true);
+  assert.equal(hasMore(foods, "calcium", {}, 2), false);
+});
+
+test("partitionFoods exposes the leading group separately", () => {
+  const foods = [...FOODS, ...CUSTOM_MILKS];
+  const { pinned, leading, unpinned } = partitionFoods(foods, "calcium", {});
+  assert.deepEqual(pinned, []);
+  assert.deepEqual(leading.map((food) => food.id), ["custom:powder", "custom:partly", "custom:zero"]);
+  assert.deepEqual(unpinned.map((food) => food.id), []);
+  assert.deepEqual(partitionFoods(null, "calcium", null), { pinned: [], leading: [], unpinned: [] });
 });

@@ -10,19 +10,24 @@
 //      editing a portion never reshuffles it. A selection missing from `order`
 //      (older saved state) falls back to the key order of `selections`, which
 //      older versions wrote in confirmation order;
-//   2. unpinned: every other food with per100g[n] > 0, sorted by commonness
+//   2. unselected leading foods (P25b): foods whose `pinTop` lists this
+//      nutrient - the user's own branded milks, which the calcium tab must show
+//      before everything else - keep their foods.json order and come before the
+//      ranked part. Selecting one moves it into the pinned group above, so the
+//      leading block only ever holds unselected foods;
+//   3. unpinned: every other food with per100g[n] > 0, sorted by commonness
 //      descending (the AI-estimated everyday-use tier, P18), then by richness
 //      within a tier, ties broken by nameZh. A food without a commonness tier
 //      counts as 0, so it sorts after every tiered food;
-//   3. richness (P19b) is the amount in the food's comparison portion:
+//   4. richness (P19b) is the amount in the food's comparison portion:
 //      per100g[n] * amountBasisG / 100. Condiments, spices, cooking oils and
 //      dried goods are eaten by the spoonful, so their `amountBasisG` is 10 and
 //      they are compared per 10 g; every other food keeps 100 g. A missing or
 //      unusable amountBasisG means 100, so old data and test fixtures behave as
 //      before. Note that the tier still decides first: a per-10 g food never
 //      jumps above a food of a higher tier;
-//   4. `limit` (default 60) applies to the unpinned part only, so a user's
-//      pinned foods never disappear behind "show more".
+//   5. `limit` (default 60) applies to the ranked part only, so a user's pinned
+//      foods and the leading `pinTop` foods never disappear behind "show more".
 //
 // Only foods that actually contain the nutrient are listed in a nutrient tab
 // (user review, P16): a food with per100g[n] = 0, null or no key at all is not
@@ -162,7 +167,49 @@ export function contribution(food, nutrientId, selection) {
 }
 
 /**
- * Split foods into pinned and unpinned groups for one nutrient.
+ * Nutrients for which a food wants to lead its tab, from its `pinTop` list.
+ *
+ * Since P25b the user's own branded milks carry `pinTop: ["calcium"]`: they are
+ * everyday foods the user owns, and the point of adding them was to see them
+ * at the top of the calcium tab rather than buried in the commonness ranking.
+ *
+ * @param {{pinTop?: Array<string>}|null|undefined} food
+ * @returns {Array<string>} nutrient ids, empty when the food has none
+ */
+export function pinTopOf(food) {
+  const list = Array.isArray(food?.pinTop) ? food.pinTop : [];
+  return list.filter((id) => typeof id === "string" && id);
+}
+
+/**
+ * Whether a food leads the tab of one nutrient (P25b).
+ *
+ * @param {{pinTop?: Array<string>}|null|undefined} food
+ * @param {string} nutrientId
+ * @returns {boolean}
+ */
+export function isPinTop(food, nutrientId) {
+  return Boolean(nutrientId) && pinTopOf(food).includes(nutrientId);
+}
+
+/**
+ * Whether a food's numbers come from a package label the user transcribed
+ * (P25b).
+ *
+ * foods.json marks such foods with `source.type === "package_label"`: the user's
+ * own branded milks, whose calcium is printed on the carton and whose other
+ * nutrients are estimated from a USDA food of the same kind. The UI badges
+ * them, so a card is never mistaken for USDA data.
+ *
+ * @param {{source?: {type?: string}}|null|undefined} food
+ * @returns {boolean}
+ */
+export function isPackageLabel(food) {
+  return food?.source?.type === "package_label";
+}
+
+/**
+ * Split foods into pinned, leading and ranked groups for one nutrient.
  *
  * Only foods that contain the nutrient are considered: a food whose per100g
  * value is 0, null or missing is neither pinned nor listed (P16).
@@ -172,6 +219,10 @@ export function contribution(food, nutrientId, selection) {
  * nutrient, so the relative order of the remaining pinned cards is unchanged
  * from tab to tab.
  *
+ * The leading group (P25b) is every unselected food whose `pinTop` lists this
+ * nutrient, in foods.json order: the user's own labelled foods lead their tab
+ * before the commonness ranking. The ranked group holds the rest.
+ *
  * Exposed separately because the UI needs the total count for its "show more"
  * button without building the whole list.
  *
@@ -179,8 +230,9 @@ export function contribution(food, nutrientId, selection) {
  * @param {string} nutrientId
  * @param {Record<string, {grams?: number}>} [selections] keyed by food id
  * @param {Array<string>} [order] confirmation order of the selected food ids
- * @returns {{pinned: Array<object>, unpinned: Array<object>}}
- *   both arrays sorted; `pinned` entries carry `contribution` (grams of the
+ * @returns {{pinned: Array<object>, leading: Array<object>,
+ *   unpinned: Array<object>}}
+ *   both sorted; `pinned` entries carry `contribution` (grams of the
  *   nutrient) and `selected: true`
  */
 export function partitionFoods(foods, nutrientId, selections, order) {
@@ -192,6 +244,7 @@ export function partitionFoods(foods, nutrientId, selections, order) {
   }
 
   const pinned = [];
+  const leading = [];
   const unpinned = [];
 
   for (const foodId of selectionOrder(picked, order)) {
@@ -217,6 +270,11 @@ export function partitionFoods(foods, nutrientId, selections, order) {
     // simply has no card here, so it must not reappear as an unpinned card
     // either.
     if (picked[food.id]) continue;
+    // P25b: an unselected pinTop food leads the tab, in foods.json order.
+    if (isPinTop(food, nutrientId)) {
+      leading.push(food);
+      continue;
+    }
     unpinned.push(food);
   }
 
@@ -231,31 +289,32 @@ export function partitionFoods(foods, nutrientId, selections, order) {
     return byRichness !== 0 ? byRichness : byName(a, b);
   });
 
-  return { pinned, unpinned };
+  return { pinned, leading, unpinned };
 }
 
 /**
  * Foods to show for one nutrient: pinned first (confirmation order), then the
- * unpinned ones up to `limit` (default 60). Raised by `LIMIT_STEP` on
- * "show more".
+ * leading `pinTop` foods (P25b), then the ranked ones up to `limit` (default
+ * 60). Raised by `LIMIT_STEP` on "show more".
  *
  * @param {Array<object>} foods foods.json `foods` array
  * @param {string} nutrientId
  * @param {Record<string, {grams?: number}>} [selections]
  * @param {{limit?: number, search?: string, order?: Array<string>}} [options]
- *   `limit` applies to the unpinned part only; `search` is optional (P11b) and
- *   keeps pinned foods on top; `order` is the persisted confirmation order
+ *   `limit` applies to the ranked part only; `search` is optional (P11b) and
+ *   keeps pinned and leading foods on top; `order` is the persisted
+ *   confirmation order
  * @returns {Array<object>} cards in display order; pinned foods have
  *   `selected: true` and `contribution`
  */
 export function foodsForNutrient(foods, nutrientId, selections, options = {}) {
-  const { pinned, unpinned } = partitionFoods(foods, nutrientId, selections, options?.order);
+  const { pinned, leading, unpinned } = partitionFoods(foods, nutrientId, selections, options?.order);
 
   const rawLimit = Number(options?.limit);
   const limit = Number.isFinite(rawLimit) && rawLimit >= 0 ? Math.floor(rawLimit) : DEFAULT_LIMIT;
 
   const query = typeof options?.search === "string" ? options.search.trim().toLowerCase() : "";
-  if (!query) return [...pinned, ...unpinned.slice(0, limit)];
+  if (!query) return [...pinned, ...leading, ...unpinned.slice(0, limit)];
 
   const matches = (food) => {
     const fields = [
@@ -266,7 +325,11 @@ export function foodsForNutrient(foods, nutrientId, selections, options = {}) {
     return fields.some((field) => typeof field === "string" && field.toLowerCase().includes(query));
   };
 
-  return [...pinned.filter(matches), ...unpinned.filter(matches).slice(0, limit)];
+  return [
+    ...pinned.filter(matches),
+    ...leading.filter(matches),
+    ...unpinned.filter(matches).slice(0, limit),
+  ];
 }
 
 /**
@@ -286,11 +349,14 @@ export function nextLimit(limit, step = LIMIT_STEP) {
 /**
  * Whether the "show more" button is needed.
  *
+ * The leading `pinTop` foods (P25b) are not limited, so only the ranked part
+ * counts against `limit`.
+ *
  * @param {Array<object>} foods full foods array
  * @param {string} nutrientId
  * @param {Record<string, {grams?: number}>} [selections]
  * @param {number} [limit] current limit
- * @returns {boolean} true when more unpinned cards exist
+ * @returns {boolean} true when more ranked cards exist
  */
 export function hasMore(foods, nutrientId, selections, limit = DEFAULT_LIMIT, order) {
   const { unpinned } = partitionFoods(foods, nutrientId, selections, order);
@@ -306,6 +372,9 @@ export default {
   commonnessOf,
   amountBasisGOf,
   richnessOf,
+  pinTopOf,
+  isPinTop,
+  isPackageLabel,
   selectionOrder,
   contribution,
   partitionFoods,

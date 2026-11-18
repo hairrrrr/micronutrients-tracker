@@ -7,6 +7,10 @@
 // `docs/js/core/detail.js` (`detailRows`); this module only turns the rows into
 // markup and owns the single shared native `<dialog>` element.
 //
+// P25b: a package-label food (the user's own branded milks) also shows a 包装标签
+// badge and one line saying that its calcium is the printed label value while
+// the other nutrients are estimated from a USDA food of the same kind.
+//
 // The dialog is created lazily once and reused for every food: `showModal()`
 // puts it in the top layer, Esc and a click on the backdrop close it natively
 // (`close`), and the `close` listener returns the focus to the 查看详情 button
@@ -23,12 +27,25 @@ import { detailRows, formatPct } from "../core/detail.js";
 import { targetsFor } from "../core/dri.js";
 import { WITH_BONE_LABEL, formatEdibleGrams, isBoneIn } from "../core/measures.js";
 import { FALLBACK_COLOR, colorOf } from "../core/nutrients.js";
-import { amountBasisGOf } from "../core/order.js";
+import { amountBasisGOf, isPackageLabel } from "../core/order.js";
 
 /** Button in an expanded tile that opens the detail sheet. */
 export const DETAIL_LABEL = "查看详情";
 /** Close control of the sheet header. */
 export const DETAIL_CLOSE_LABEL = "关闭";
+/**
+ * Small badge of a food whose numbers come from a package label (P25b): the
+ * user's own branded milks, whose calcium is printed on the carton.
+ */
+export const LABEL_BADGE = "包装标签";
+/** Title/screen-reader expansion of the package-label badge. */
+export const LABEL_BADGE_TITLE = "数值来自包装标签，不是 USDA 数据";
+/**
+ * One-line explanation under the heading of a package-label food (P25b): only
+ * the printed nutrient is a label value, the rest is estimated from the USDA
+ * food of the same kind.
+ */
+export const LABEL_NOTE = "钙为包装标签值，其余营养素参考 USDA 同类食品估算";
 /** One-line note under the heading. */
 export const DETAIL_NOTE = "所有营养素按占每日目标的百分比从高到低排序；目标随当前标准、性别和年龄变化";
 /** Shown instead of the list when the food has no nutrient value at all. */
@@ -178,8 +195,16 @@ export function detailHtml(food, targets, nutrients, grams) {
   const quantity = Number.isFinite(weighed) && weighed > 0 ? weighed : null;
   const boneIn = isBoneIn(food);
   const note = `<p class="detail__note">${esc(DETAIL_NOTE)}</p>`;
+  // P25b: a package-label food says where its numbers come from: the printed
+  // calcium, and the USDA estimate behind every other nutrient.
+  const label = isPackageLabel(food)
+    ? `<p class="detail__label" data-label-note>
+      <span class="food-card__badge food-card__badge--label" title="${esc(LABEL_BADGE_TITLE)}">${esc(LABEL_BADGE)}</span>
+      <span>${esc(LABEL_NOTE)}</span>
+    </p>`
+    : "";
   if (rows.length === 0) {
-    return `${note}
+    return `${label}${note}
     <p class="detail__empty">${esc(DETAIL_EMPTY_TEXT)}</p>`;
   }
   const items = rows.map((row) => detailRowHtml(row, {
@@ -189,7 +214,7 @@ export function detailHtml(food, targets, nutrients, grams) {
     boneIn,
     refusePct: food?.refusePct,
   })).join("");
-  return `${note}
+  return `${label}${note}
     <ul class="detail__list">${items}</ul>`;
 }
 
@@ -277,6 +302,9 @@ export default {
   DETAIL_PER_10G_LABEL,
   DETAIL_QUANTITY_LABEL,
   DETAIL_DIALOG_ID,
+  LABEL_BADGE,
+  LABEL_BADGE_TITLE,
+  LABEL_NOTE,
   pctLabel,
   barWidth,
   basisAmountText,

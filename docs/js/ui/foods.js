@@ -1,8 +1,15 @@
 // Food list for the active nutrient: one card per food in `order.js` order
-// (pinned selections in confirmation order, then commonness first and the
-// richest comparison portion within a tier), with a "show more" button that
-// raises the limit by 60 and a search box (PLAN.md 1.7 and 1.8 item 5, phases
-// P11a, P11b, P17, P18b and P19b).
+// (pinned selections in confirmation order, then the user's unselected
+// package-label foods whose `pinTop` lists the nutrient, then commonness first
+// and the richest comparison portion within a tier), with a "show more" button
+// that raises the limit by 60 and a search box (PLAN.md 1.7 and 1.8 item 5,
+// phases P11a, P11b, P17, P18b, P19b and P25b).
+//
+// Package-label foods (P25b): a food with `source.type === "package_label"` is
+// one the user added from a printed label (the branded milks). Its card and its
+// detail sheet carry a small 包装标签 badge, and the sheet states that the
+// printed calcium is a label value while the other nutrients are estimated from
+// a USDA food of the same kind.
 //
 // Amounts (P19b): an ordinary card shows the per-100 g value labelled 每 100 g.
 // Condiments, spices, cooking oils and dried goods carry `amountBasisG` 10 in
@@ -62,9 +69,9 @@ import {
   stepCount,
 } from "../core/measures.js";
 import { MET_COLORS, nameZhOf, unitOf } from "../core/nutrients.js";
-import { DEFAULT_LIMIT, LIMIT_STEP, amountBasisGOf, commonnessOf, foodsForNutrient, nextLimit, valueOf } from "../core/order.js";
+import { DEFAULT_LIMIT, LIMIT_STEP, amountBasisGOf, commonnessOf, foodsForNutrient, isPackageLabel, nextLimit, valueOf } from "../core/order.js";
 import { FALLBACK_GRAMS } from "../core/state.js";
-import { DETAIL_LABEL, openDetail } from "./detail.js";
+import { DETAIL_LABEL, LABEL_BADGE, LABEL_BADGE_TITLE, openDetail } from "./detail.js";
 
 /**
  * Ordering hint of the meta line, e.g. "维生素A · 按常见度排序".
@@ -344,6 +351,8 @@ export function buildFoodCards(ctx) {
       boneNote: String(food.refuseNote ?? ""),
       commonness,
       commonBadge: COMMON_BADGES[commonness] ?? "",
+      // P25b: the user's own package-label foods carry a badge on every card.
+      packageLabel: isPackageLabel(food),
       selected,
       pinned: selected,
       expanded,
@@ -367,6 +376,20 @@ function commonBadgeHtml(card) {
 }
 
 /**
+ * Package-label badge of a card (P25b): the user's own branded foods, whose
+ * calcium is printed on the package. Shared by the compact card, the expanded
+ * tile head and the tile's card body.
+ *
+ * @param {object} card card model from `buildFoodCards`
+ * @returns {string} HTML, empty for USDA foods
+ */
+function labelBadgeHtml(card) {
+  if (!card.packageLabel) return "";
+  return `<span class="food-card__badge food-card__badge--label"
+        title="${esc(LABEL_BADGE_TITLE)}">${esc(LABEL_BADGE)}</span>`;
+}
+
+/**
  * Markup of the head of a food card: name, commonness badge, English name and
  * the amount on the card's basis (per 100 g, or per 10 g for small-portion
  * foods). A bone-in food adds a short "带骨重量" note. Shared by the compact
@@ -380,6 +403,7 @@ function commonBadgeHtml(card) {
  */
 function cardBodyHtml(card, options = {}) {
   const common = commonBadgeHtml(card);
+  const label = labelBadgeHtml(card);
   const english = card.nameEn ? `<span class="food-card__en">${esc(card.nameEn)}</span>` : "";
   // The basis label stays visible on every card (P19b): a spoonful of sesame
   // paste must not read like a 100 g portion.
@@ -398,7 +422,7 @@ function cardBodyHtml(card, options = {}) {
     ? `<span class="visually-hidden">${esc(card.nameZh)}</span>`
     : `<span class="food-card__head">
       <span class="food-card__name">${esc(card.nameZh)}</span>
-      ${common}
+      ${common}${label}
     </span>`;
   return `${head}
     ${english}
@@ -521,7 +545,7 @@ export function expandedTileHtml(card) {
     data-food-tile="${esc(card.id)}">
     <div class="food-tile__head">
       <span class="food-tile__title">${esc(card.nameZh)}</span>
-      ${commonBadgeHtml(card)}
+      ${commonBadgeHtml(card)}${labelBadgeHtml(card)}
       <button type="button" class="food-tile__detail" data-detail="${esc(card.id)}"
         aria-haspopup="dialog">${DETAIL_LABEL}</button>
     </div>

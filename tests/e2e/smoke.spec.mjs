@@ -35,6 +35,8 @@ import {
   confirmTile,
   containedNutrientCount,
   expectedDetailRanking,
+  expectedLeading,
+  expectedLeadingIds,
   expectedRanking,
   expectedTopIds,
   measureOverflow,
@@ -673,8 +675,9 @@ test.describe("smoke", () => {
 
       // The expected order comes from foods.json with the P18b + P19b rule
       // (commonness desc, then per100g * amountBasisG / 100 desc, then nameZh),
-      // not from a fixture.
-      const expected = await expectedTopIds(nutrient, 60);
+      // after the unselected pinTop foods that lead the tab (P25b), not from a
+      // fixture.
+      const expected = [...(await expectedLeadingIds(nutrient)), ...(await expectedTopIds(nutrient, 60))];
       const shown = await cellIds(page);
       expect(shown).toEqual(expected);
 
@@ -684,12 +687,12 @@ test.describe("smoke", () => {
       // made of rare but very rich foods.
       expect(ranking.slice(0, 10).every((entry) => entry.commonness >= 4)).toBe(true);
 
-      // The first card is a common food and carries the 常见 badge while still
-      // showing an amount.
-      const first = page.locator(".food-cell").first();
-      const firstId = expected[0];
-      await expect(first).toHaveAttribute("data-food-cell", firstId);
-      const card = page.locator(SEL.foodCard(firstId));
+      // The first ranked card (after any pinTop leaders) is a common food and
+      // carries the 常见 badge while still showing an amount.
+      const leading = await expectedLeadingIds(nutrient);
+      const firstRankedId = ranking[0].id;
+      await expect(page.locator(".food-cell").nth(leading.length)).toHaveAttribute("data-food-cell", firstRankedId);
+      const card = page.locator(SEL.foodCard(firstRankedId));
       await expect(card.locator(".food-card__badge--common")).toHaveText("★常见");
       await expect(card.locator(".food-card__amount")).not.toHaveText("");
     }
@@ -757,13 +760,16 @@ test.describe("smoke", () => {
     expect(garlic.amountBasisG).toBe(10);
     expect(garlic.richness).toBeCloseTo(garlic.amount / 10, 6);
 
-    // The first card is the richest tier-5 unflagged food by per-100 g calcium,
-    // which is also the top of the new ranking.
+    // The first ranked card (after the pinTop milks of P25b) is the richest
+    // tier-5 unflagged food by per-100 g calcium, which is also the top of the
+    // new ranking.
+    const leading = await expectedLeadingIds("calcium");
+    expect(leading.length).toBeGreaterThan(0);
     const tier5Unflagged = ranking
       .filter((entry) => entry.commonness === 5 && entry.amountBasisG === 100)
       .sort((a, b) => b.amount - a.amount);
     expect(tier5Unflagged.length).toBeGreaterThan(0);
-    await expect(page.locator(".food-cell").first()).toHaveAttribute("data-food-cell", tier5Unflagged[0].id);
+    await expect(page.locator(".food-cell").nth(leading.length)).toHaveAttribute("data-food-cell", tier5Unflagged[0].id);
     expect(ranking[0].id).toBe(tier5Unflagged[0].id);
 
     const garlicRank = ranking.findIndex((entry) => entry.id === "fdc:169230");
@@ -1013,6 +1019,101 @@ test.describe("smoke", () => {
     await expect(dialog.locator('[data-nutrient="vitD"]')).toHaveCount(0);
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
+
+    expect(errors).toEqual([]);
+  });
+
+  // -------------------------------------------------------------------------
+  // P25b: the user's own branded milks lead the calcium tab
+  // -------------------------------------------------------------------------
+
+  test("20. the user's branded milks lead the calcium tab with a 包装标签 badge", async ({ page }) => {
+    const errors = watchErrors(page);
+    await resetApp(page);
+
+    // The three label foods, in the foods.json order the build wrote them.
+    const leading = await expectedLeading("calcium");
+    expect(leading.map((entry) => entry.nameZh)).toEqual([
+      "德运脱脂奶粉",
+      "山姆部分脱脂牛奶",
+      "盒马零脂牛奶",
+    ]);
+
+    // Vitamin A: none of the milks has a vitamin A value (unfortified label
+    // data), so the tab is not led by them and does not list them at all.
+    await expect(page.locator(SEL.tab("vitA"))).toHaveAttribute("aria-pressed", "true");
+    const vitAIds = await cellIds(page);
+    for (const entry of leading) expect(vitAIds).not.toContain(entry.id);
+    await expect(page.locator(".food-cell").first()).not.toHaveAttribute(
+      "data-food-cell",
+      leading[0].id,
+    );
+
+    // Calcium: the 3 milks are the first 3 cards, before the commonness
+    // ranking, each with the 包装标签 badge.
+    await page.locator(SEL.tab("calcium")).click();
+    const ids = await cellIds(page);
+    expect(ids.slice(0, 3)).toEqual(leading.map((entry) => entry.id));
+    for (const entry of leading) {
+      const card = page.locator(SEL.foodCard(entry.id));
+      await expect(card).toBeVisible();
+      await expect(card.locator(".food-card__badge--label")).toHaveText("包装标签");
+    }
+    // A USDA food carries no such badge.
+    await expect(page.locator(SEL.foodCard("fdc:172475")).locator(".food-card__badge--label")).toHaveCount(0);
+
+    // The powder's default measure is one label serving (25 g of powder, which
+    // makes 250 mL), and confirming it adds 288 mg of calcium: the printed
+    // 288 mg per serving (1152 mg per 100 g of powder).
+    const powder = leading[0].id;
+    await openTile(page, powder);
+    const editor = page.locator(SEL.editor(powder));
+    await expect(editor.locator("[data-measure]")).toHaveValue("cup");
+    await expect(editor.locator("[data-measure] option:checked")).toHaveText("一杯（25 g 奶粉冲 250 mL）（25 g）");
+    await expect(editor.locator("[data-weight]")).toContainText("25 g");
+
+    const before = Number((await cardStatus(page, "calcium")).match(/\d+(?:\.\d+)?/)[0]);
+    const target = Number((await cardTarget(page, "calcium")).match(/\d+(?:\.\d+)?/)[0]);
+    await confirmTile(page, powder);
+    const after = Number((await cardStatus(page, "calcium")).match(/\d+(?:\.\d+)?/)[0]);
+    // 800 - 288 = 512 mg left, so the remaining amount drops by about 288 mg.
+    expect(before - after).toBeGreaterThan(287);
+    expect(before - after).toBeLessThan(289);
+    expect(target - after).toBeCloseTo(288, 0);
+
+    // The detail view repeats the badge and explains where the numbers come
+    // from: the printed calcium, the USDA estimate for the rest.
+    await openTile(page, powder);
+    await page.locator(SEL.detailButton(powder)).click();
+    const dialog = page.locator(SEL.detailDialog);
+    await expect(dialog).toBeVisible();
+    await expect(dialog.locator(".detail__label .food-card__badge--label")).toHaveText("包装标签");
+    await expect(dialog.locator("[data-label-note]")).toContainText(
+      "钙为包装标签值，其余营养素参考 USDA 同类食品估算",
+    );
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await cancelTile(page, powder);
+
+    // Confirming another calcium food pins it above the milks: the pinned group
+    // keeps the confirmation order and only the unselected milks stay in the
+    // leading block.
+    await page.locator(SEL.search).fill("北豆腐");
+    await openTile(page, "fdc:172475");
+    await confirmTile(page, "fdc:172475");
+    await page.locator(SEL.search).fill("");
+    const pinnedOrder = await cellIds(page);
+    expect(pinnedOrder.slice(0, 4)).toEqual([powder, "fdc:172475", leading[1].id, leading[2].id]);
+
+    // The About section has one sentence about the user-added label foods.
+    const about = await page.locator(SEL.about).innerText();
+    expect(about).toContain("包装标签");
+    expect(about).toContain("用户自己添加");
+
+    // No horizontal overflow at 390 px with the cards and the brand names.
+    const box = await measureOverflow(page);
+    expect(box.scrollWidth).toBeLessThanOrEqual(390);
+    expect(box.offenders).toEqual([]);
 
     expect(errors).toEqual([]);
   });

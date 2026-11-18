@@ -782,3 +782,83 @@ test("foodById finds a food and tolerates junk", () => {
   assert.equal(foodById(null, "fdc:liver"), null);
   assert.equal(foodById(SELECTION_JSON, ""), null);
 });
+
+// ---------------------------------------------------------------------------
+// P25b: package-label foods lead the calcium tab and carry a badge
+// ---------------------------------------------------------------------------
+
+const MILKS = [
+  {
+    id: "custom:powder",
+    nameZh: "德运脱脂奶粉",
+    nameEn: "Devondale skim milk powder",
+    commonness: 4,
+    amountBasisG: 100,
+    pinTop: ["calcium"],
+    source: { type: "package_label", baseFdcId: 170877, estimated: ["phosphorus"] },
+    per100g: { calcium: 1152, vitA: null },
+  },
+  {
+    id: "custom:partly",
+    nameZh: "山姆部分脱脂牛奶",
+    nameEn: "Member's Mark partly skimmed milk",
+    commonness: 4,
+    amountBasisG: 100,
+    pinTop: ["calcium"],
+    source: { type: "package_label", baseFdcId: 173432, estimated: ["phosphorus"] },
+    per100g: { calcium: 126.2, vitA: null },
+  },
+];
+
+function calciumCtx(selections = {}) {
+  return {
+    nutrients: {
+      nutrients: [
+        { id: "calcium", nameZh: "钙", nameEn: "Calcium", unit: "mg", color: "#d7e8f7", kind: "mineral" },
+      ],
+    },
+    foods: {
+      foods: [
+        { id: "fdc:tofu", nameZh: "北豆腐", nameEn: "Firm tofu", commonness: 5, per100g: { calcium: 683 } },
+        ...MILKS,
+      ],
+    },
+    limit: DEFAULT_LIMIT,
+    state: {
+      profile: { sex: "female", age: 30, lifeStage: "none" },
+      standard: "cn2023",
+      activeNutrient: "calcium",
+      selections,
+      order: Object.keys(selections),
+    },
+  };
+}
+
+test("unselected package-label milks lead the calcium cards", () => {
+  const cards = buildFoodCards(calciumCtx());
+  assert.deepEqual(ids(cards), ["custom:powder", "custom:partly", "fdc:tofu"]);
+  assert.deepEqual(cards.map((card) => card.packageLabel), [true, true, false]);
+  assert.deepEqual(cards.map((card) => card.selected), [false, false, false]);
+});
+
+test("the package-label badge is on every card of such a food only", () => {
+  const cards = buildFoodCards(calciumCtx());
+  const milk = foodCardHtml(cards[0]);
+  assert.match(milk, /food-card__badge--label/);
+  assert.match(milk, /包装标签/);
+  const tofu = foodCardHtml(cards[2]);
+  assert.equal(tofu.includes("包装标签"), false);
+  assert.equal(tofu.includes("badge--label"), false);
+
+  // The expanded tile repeats it next to the title.
+  const tile = expandedTileHtml(cards[0]);
+  assert.match(tile, /food-card__badge--label/);
+  assert.match(tile, /包装标签/);
+});
+
+test("a selected milk leaves the leading block but keeps its badge", () => {
+  const cards = buildFoodCards(calciumCtx({ "custom:powder": { grams: 25 } }));
+  assert.deepEqual(ids(cards), ["custom:powder", "custom:partly", "fdc:tofu"]);
+  assert.equal(cards[0].selected, true);
+  assert.equal(cards[0].packageLabel, true);
+});

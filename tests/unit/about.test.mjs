@@ -149,6 +149,17 @@ test("about markup explains the bone-in handling and drops dish estimates", () =
   assert.match(html, /原料/);
 });
 
+test("about markup has one sentence about the user-added label foods (P25b)", () => {
+  const html = aboutHtml(ctx());
+  assert.match(html, /包装标签/);
+  assert.match(html, /用户自己添加/);
+  assert.match(html, /USDA 同类食品估算/);
+  // One sentence, in the measures section, next to the bone-in note.
+  const paragraph = html.match(/<p class="about__text">[^<]*包装标签[^<]*<\/p>/);
+  assert.ok(paragraph, "the label note is its own paragraph");
+  assert.ok(paragraph[0].split("。").length <= 3, "the label note is one short sentence");
+});
+
 test("clear button is disabled with no selection and enabled after one", () => {
   assert.equal(selectionCount(ctx()), 0);
   assert.match(clearButtonHtml(ctx()), /<button[^>]*disabled/);
