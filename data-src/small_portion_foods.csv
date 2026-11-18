@@ -1,0 +1,59 @@
+food_id,name_zh,basis_g,rule
+fdc:167702,亚麻籽油（冷榨）,10,"category 食用油脂 (cooking oil, ~10 g per dish portion)"
+fdc:168436,香菇（干）,10,explicit: dried mushroom: rehydrates several-fold
+fdc:168453,白萝卜干（脱水）,10,explicit: dehydrated radish: dried good
+fdc:168556,番茄沙司（番茄酱）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:168567,番茄干（晒干）,10,explicit: sun-dried tomato: dried good
+fdc:168581,黑木耳（干）,10,explicit: dried wood ear: rehydrates ~10x
+fdc:168820,糖蜜（黑糖浆）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:169230,大蒜（生）,10,"explicit: garlic: seasoning, a few cloves"
+fdc:169414,亚麻籽,10,explicit: flaxseed: spoonful amounts
+fdc:169593,可可粉（无糖）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:169994,细香葱（生）,10,explicit: chives: garnish
+fdc:170005,小葱（带叶和葱白，生）,10,explicit: scallion: garnish/seasoning
+fdc:170090,琼脂（干）,10,explicit: dried agar: used in grams
+fdc:170150,芝麻（整粒，干）,10,explicit: sesame: sprinkled as seasoning
+fdc:170151,芝麻（整粒，炒香）,10,explicit: sesame: sprinkled as seasoning
+fdc:170152,芝麻仁（去皮，炒香，无盐）,10,explicit: sesame: sprinkled as seasoning
+fdc:170189,芝麻酱（烤芝麻制，中东芝麻糊）,10,explicit: sesame paste: sauce by the spoonful
+fdc:170459,番茄膏（罐装，无盐）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:170495,螺旋藻（干）,10,explicit: dried spirulina: supplement-sized amounts
+fdc:170500,胡萝卜（脱水）,10,explicit: dehydrated carrot: dried good
+fdc:170554,奇亚籽（干）,10,explicit: chia: spoonful amounts
+fdc:170922,芫荽籽（香菜籽）,10,"category 香辛料 (spice, used by the pinch/spoonful)"
+fdc:170923,孜然（孜然籽）,10,"category 香辛料 (spice, used by the pinch/spoonful)"
+fdc:170926,姜粉,10,"category 香辛料 (spice, used by the pinch/spoonful)"
+fdc:170931,黑胡椒粉,10,"category 香辛料 (spice, used by the pinch/spoonful)"
+fdc:170932,辣椒粉（红辣椒，卡宴）,10,"category 香辛料 (spice, used by the pinch/spoonful)"
+fdc:171009,蛋黄酱（沙拉酱）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:171013,米糠油,10,"category 食用油脂 (cooking oil, ~10 g per dish portion)"
+fdc:171016,芝麻油（香油）,10,"category 食用油脂 (cooking oil, ~10 g per dish portion)"
+fdc:171017,葵花籽油,10,"category 食用油脂 (cooking oil, ~10 g per dish portion)"
+fdc:171029,玉米油,10,"category 食用油脂 (cooking oil, ~10 g per dish portion)"
+fdc:171319,辣椒粉（混合香料）,10,"category 香辛料 (spice, used by the pinch/spoonful)"
+fdc:171320,肉桂粉,10,"category 香辛料 (spice, used by the pinch/spoonful)"
+fdc:171321,丁香粉,10,"category 香辛料 (spice, used by the pinch/spoonful)"
+fdc:171325,蒜粉,10,"category 香辛料 (spice, used by the pinch/spoonful)"
+fdc:171328,牛至（干）,10,"category 香辛料 (spice, used by the pinch/spoonful)"
+fdc:171401,猪油,10,"category 食用油脂 (cooking oil, ~10 g per dish portion)"
+fdc:171410,花生油,10,"category 食用油脂 (cooking oil, ~10 g per dish portion)"
+fdc:171411,大豆油,10,"category 食用油脂 (cooking oil, ~10 g per dish portion)"
+fdc:171412,椰子油,10,"category 食用油脂 (cooking oil, ~10 g per dish portion)"
+fdc:171413,橄榄油,10,"category 食用油脂 (cooking oil, ~10 g per dish portion)"
+fdc:172231,姜黄粉,10,"category 香辛料 (spice, used by the pinch/spoonful)"
+fdc:172234,黄芥末酱（调制）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:172237,白醋（蒸馏醋）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:172241,意大利香醋（黑醋）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:172336,菜籽油,10,"category 食用油脂 (cooking oil, ~10 g per dish portion)"
+fdc:172450,冻豆腐（干燥）,10,explicit: dried tofu (koya-dofu): rehydrates several-fold
+fdc:172469,花生酱（颗粒型，无盐）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:172470,花生酱（细腻型，无盐）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:172473,酱油（黄豆小麦酿造，低钠）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:172879,梅子酱（苏梅酱）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:172886,海鲜酱,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:173472,辣根酱（调制）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:174277,酱油（黄豆小麦酿造）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:174278,酱油（日式溜酱油，仅用黄豆）,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:174529,蚝油,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:174531,鱼露,10,"category 调味料 (condiment, used by the spoonful)"
+fdc:175043,干酵母（活性干酵母）,10,"category 调味料 (condiment, used by the spoonful)"
