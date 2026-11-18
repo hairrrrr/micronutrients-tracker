@@ -248,7 +248,9 @@ function panelHtml(ctx) {
   const { state } = ctx;
   const { profile } = state;
   const open = ctx.open !== false;
-  const summaryMeta = `${sexLabel(profile.sex)} · ${profile.age} 岁 · ${columnOf(state.standard).toggle}`;
+  // The short standard name ("中国 2023" / "美国") fits on the summary line at
+  // 360 px, where the radio labels ("使用中国标准") would be truncated.
+  const summaryMeta = `${sexLabel(profile.sex)} · ${profile.age} 岁 · ${columnOf(state.standard).short}`;
 
   return `<details class="profile"${open ? " open" : ""}>
     <summary class="profile__summary">

@@ -85,7 +85,9 @@ p {
   max-width: 960px;
   margin: 0 auto;
   padding: var(--pad);
-  padding-bottom: 48px;
+  /* Clear the home indicator on a notched phone, with the old padding as the
+   * floor so a desktop browser is unaffected. */
+  padding-bottom: max(48px, calc(24px + env(safe-area-inset-bottom, 0px)));
 }
 
 .panel {
@@ -629,8 +631,8 @@ select.input {
   align-items: center;
   gap: 6px;
   flex: 0 0 auto;
-  min-height: 38px;
-  padding: 6px 12px;
+  min-height: 40px;
+  padding: 7px 12px;
   border: 1px solid var(--border-strong);
   border-radius: 999px;
   background: var(--surface);
@@ -723,7 +725,7 @@ select.input {
   background: var(--surface-muted);
   color: var(--text);
   font: inherit;
-  font-size: 0.875rem;
+  font-size: 1rem; /* 16px keeps iOS from zooming on focus */
 }
 
 .foods__search-input::placeholder {
@@ -874,15 +876,15 @@ select.input {
 
 .food-editor__select {
   width: 100%;
-  min-height: 34px;
+  min-height: 38px;
   margin: 0;
-  padding: 4px 6px;
+  padding: 5px 6px;
   border: 1px solid var(--border-strong);
   border-radius: 6px;
   background: var(--surface);
   color: var(--text);
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: 1rem; /* 16px keeps iOS from zooming on focus */
 }
 
 .food-editor__select:focus-visible,
@@ -902,8 +904,8 @@ select.input {
 }
 
 .food-editor__step {
-  width: 34px;
-  min-height: 34px;
+  width: 38px;
+  min-height: 38px;
   padding: 0;
   border: 0;
   background: var(--surface-muted);
@@ -924,7 +926,7 @@ select.input {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 34px;
+  min-width: 38px;
   padding: 0 2px;
   border-right: 1px solid var(--border-strong);
   border-left: 1px solid var(--border-strong);
@@ -945,15 +947,15 @@ select.input {
 .food-editor__grams-input {
   width: 100%;
   min-width: 0;
-  min-height: 34px;
+  min-height: 38px;
   margin: 0;
-  padding: 4px 8px;
+  padding: 5px 8px;
   border: 1px solid var(--border-strong);
   border-radius: 6px;
   background: var(--surface);
   color: var(--text);
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: 1rem;
   font-variant-numeric: tabular-nums;
 }
 
@@ -978,6 +980,35 @@ select.input {
   color: var(--text-muted);
   font-size: 0.6875rem;
   line-height: 1.4;
+}
+
+/* Below 420 px the household-measure label ("一掌心大小（100 g）") is wider
+ * than the space left next to the stepper: give the select its own row and put
+ * the stepper and the computed weight on the next one. Nothing is truncated at
+ * 360 px, and the editor keeps its two-row height everywhere on a phone. */
+@media (max-width: 419px) {
+  .food-editor__label {
+    flex: 1 1 100%;
+  }
+
+  .food-editor__qty {
+    order: 1;
+  }
+
+  .food-editor__row {
+    flex: 1 1 auto;
+    order: 1;
+  }
+
+  .food-editor__weight {
+    flex: 1 1 auto;
+    order: 2;
+    text-align: right;
+  }
+
+  .food-editor__note {
+    order: 3;
+  }
 }
 
 /* The weight text carries the selection colour; keep the note readable on the
@@ -1101,7 +1132,7 @@ select.input {
 
 .about__link {
   display: inline-block;
-  min-height: 32px;
+  min-height: 36px;
   margin-top: 4px;
   color: var(--accent);
   font-size: 0.8125rem;
@@ -1212,6 +1243,18 @@ select.input {
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.5;
+}
+
+/* Very narrow phones (below the 360 px floor the layout is designed for):
+ * let the value cells wrap instead of clipping "660 ug RAE". */
+@media (max-width: 359px) {
+  .standards__table {
+    font-size: 0.8125rem;
+  }
+
+  .standards__amount {
+    white-space: normal;
+  }
 }
 
 /* ---------------------------------------------------------------------------

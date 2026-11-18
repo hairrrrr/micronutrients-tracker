@@ -13,9 +13,17 @@ it with Chinese (CNS DRIs 2023) and US (NASEM/NIH ODS) reference intakes.
 
 ```sh
 npm test        # unit tests (node --test, no dependencies)
+npm run e2e     # Playwright smoke tests + screenshots (system Chrome, no browser download)
 npm run serve   # serve docs/ at http://localhost:8000/
 npm run validate  # data validation (Python 3 stdlib)
 ```
+
+The end-to-end tests run against the system Chrome (`use.channel = 'chrome'`), so
+`npx playwright install` is not needed. `npx playwright test` starts two throwaway
+static servers (`docs/` on :8123 and the repo root on :8125 for the sub-path check)
+and writes `shots/desktop-1440.png`, `shots/mobile-390.png` and
+`shots/mobile-390-selected.png`. Set `BASE_URL` to test an already-served copy
+(e.g. the deployed site) instead of starting local servers.
 
 Data pipeline scripts live in `tools/` (Python 3 standard library only) and are never shipped.
 
@@ -26,6 +34,7 @@ Data pipeline scripts live in `tools/` (Python 3 standard library only) and are 
 - `data-raw/` - downloaded USDA CSVs (not committed)
 - `tools/` - data pipeline
 - `tests/unit/` - unit tests
+- `tests/e2e/` - Playwright smoke tests and screenshots (`shots/` holds the images)
 
 ## Credits
 
@@ -81,6 +90,12 @@ under `docs/` (no CDN, no runtime dependency), as noted per item.
   quantity stepper in half steps, and the resolved weight in grams. The markup
   is written from scratch; the editor is a sibling of the card button so no
   click inside it can toggle the card.
+
+- **Pico CSS v2 / Open Props (mobile polish)** - https://picocss.com and
+  https://open-props.style - MIT License. The phone pass in `docs/css/style.css`
+  (38-40 px tap targets, 16 px inputs so iOS Safari does not zoom on focus, and
+  `max(48px, calc(24px + env(safe-area-inset-bottom)))` page padding) follows
+  the same hand-written utility ideas; no file is vendored or fetched for it.
 
 ## Disclaimer
 
