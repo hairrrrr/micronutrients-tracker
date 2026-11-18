@@ -9,9 +9,11 @@
     "serve": "python3 -m http.server 8000 -d docs",
     "build:data": "python3 tools/build_foods.py && python3 tools/build_dri.py",
     "validate": "python3 tools/validate_data.py",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "docs:diagrams": "node documentation/diagrams/build.mjs"
   },
   "devDependencies": {
-    "@playwright/test": "^1.65.1"
+    "@playwright/test": "^1.65.1",
+    "@viz-js/viz": "^3.31.0"
   }
 }
