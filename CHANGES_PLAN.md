@@ -177,3 +177,45 @@ Facts that must match the repo (check, don't copy blindly): 591 foods in docs/da
 - **D6 beginner explainer.** `documentation/EXPLAINED.md` (入门讲解): for someone who has never coded: what a micronutrient target is, how one tap on a food becomes numbers on the cards (worked example with real numbers from foods.json/dri.json, e.g. 25 g 德运脱脂奶粉 = 288 mg calcium vs the default target), why data is built offline, how the pages are served, how tests protect behaviour; uses the ordering + intake diagrams. AC: worked-example numbers recomputed from the JSON. Commit `docs: add beginner explainer`.
 - **D7 check + wrap-up.** `tools/check_docs.mjs` (no dependencies besides Node): every relative link/image in README.md and documentation/*.md resolves, every backticked repo path exists, no `documentation` file under docs/; npm script `docs:check`; run diagrams build (no diff) and fix any broken link. AC: `npm run docs:check` exit 0; npm test and Playwright still pass. Commit `docs: add documentation link check`.
 - **D5a (salvage, after D5 tries 1-2 timed out at 1800 s).** documentation/KEY_IMPLEMENTATION.md was left untracked but complete (sections 一-八, 11 code excerpts; supervisor checked all excerpts appear verbatim in the repo and all paths/functions exist). hms: read it once, fix only clear errors, run npm test, log, commit `docs: add key implementation notes`. Must finish in about 5 minutes.
+
+## D8 - Readability pass from two external readability reviews (user-approved)
+Audience rule: `README.md`, `documentation/README.md`, `documentation/GLOSSARY.md`, `documentation/EXPLAINED.md` are for non-coders: plain language first, the technical name in parentheses after. `documentation/ARCHITECTURE.md` and `documentation/KEY_IMPLEMENTATION.md` are for developers: KEEP every function name, formula, field table and code excerpt; only ADD one plain-language sentence before dense paragraphs/formulas. Unified wording everywhere for edible weight: plain phrase first 「先把骨头扣掉，只算肉的重量」, formula after. Unified wording for package-label milks at first mention in each doc: 「这是用户自己家的三种牛奶，钙直接用包装上的数字，其他营养素参考同类食品（USDA）估算」. Unified commonness wording: 「常见度（1–5 档，档位越高越常见）」 at first mention; later 「常见度档位」, not 「分层」 alone.
+Accuracy guards (supervisor): SR Legacy has 7793 foods (say 「七千多种」, not 「几万种」); 588 of them are on the site. The tiny-difference rule is `epsilon` in `docs/js/core/calc.js status()`: a difference smaller than it counts as exactly met; say that, do not claim more. Every number must stay true.
+
+- **D8a README.md + documentation/README.md.**
+  - README 原文「所有选择只存在这台设备的浏览器里（localStorage）。」 -> 「你的选择只存在这台设备的浏览器里，就像记在自己的笔记本上：关掉网页再打开还在，但换一台电脑或手机就是全新的空白记录，不会上传到任何地方（技术上叫 localStorage）。」
+  - README 原文「网站没有构建步骤：浏览器直接加载 … 里的 ES 模块。」 -> 「网站没有额外的打包或编译步骤：浏览器直接打开页面、样式和脚本文件就能运行。」 (file paths may follow in a second sentence for developers)
+  - README 原文「两套标准并排显示，随时可以切换；换了之后，所有数字跟着变。」 -> 「中国和美国两套标准可以并排看，也可以随时切换。切换之后，每一张卡片上的目标数字和『还差多少』都会跟着变。」
+  - README e2e 说明 -> 「运行 npm run e2e 时，程序会自动打开两个临时的本地预览页面，并自动截几张图存下来，方便检查页面在不同情况下的样子。」 then keep the developer detail (sub-path check, BASE_URL) in a following sentence.
+  - README: first mention of 包装标签 milks uses the unified sentence; first mention of DRI/RNI/AI/UL gets 「简单说就是……」 plain words.
+  - documentation/README.md 阅读顺序 -> 「完全不写代码的人可以直接从 EXPLAINED.md 开始。想了解数字是怎么算出来的、或想改代码和数据的人：先看整体结构（ARCHITECTURE.md），再看具体算法（KEY_IMPLEMENTATION.md），遇到不认识的词随时回术语表（GLOSSARY.md）查。」
+  - Commit `docs: make README and docs index friendlier for non-coders`.
+- **D8b GLOSSARY.md.**
+  - DRI 行 -> 「官方给出的一组『每天大概该吃多少』的参考数字。页面上每张卡片里的『每日目标』，就是从这张表里查出来的那个数字。」 (keep the file references after it)
+  - RAE 行中文栏 -> 「视黄醇活性当量（维生素 A 的一种计量方式）」, 在本项目里 starts with 「简单理解：这是把不同来源的维生素 A 换算成同一种单位后的数字。」; add similar 「简单理解：」 lines to NE (烟酸当量：把食物里的烟酸和身体能用色氨酸转成的烟酸加在一起), DFE (膳食叶酸当量：把天然叶酸和添加的叶酸折算成同一单位), alpha-TE.
+  - 空值 行 -> 「foods.json 里写 null 表示这个食物这个营养素没有数据。算总量时按 0 处理，同时这个食物也不会出现在该营养素的食物列表里——没有数据的食物不参与比较。注意『没有数据』和『含量为零』（写着 0）是两回事。」
+  - 常见度 行 uses the unified wording; localStorage 行 starts with 「就像你自己的笔记本，只留在这台设备上，不会上传」; ES 模块 行 starts with plain words (「把脚本拆成几个小文件，浏览器按需要一个个读进来」).
+  - Commit `docs: add plain-language lines to the glossary`.
+- **D8c EXPLAINED.md.**
+  - 「是谁决定目标」 -> 「所以同一桶水，对不同的人画的线不一样。页面默认按『女性、30 岁、用中国标准』来画线，你改性别、年龄或标准，线的位置就会跟着变。」 then the group id detail.
+  - First mention of 「没有数据」: add 「这里的『没有数据』和『含量为零』是两回事，后面会看到区别。」
+  - Replace the 「浮点误差会被抹平」 paragraph with 「计算机算小数时偶尔会留下极小的尾巴，程序会把这些几乎相等的情况当成刚好相等，避免页面上出现奇怪的超长小数。」 (one short paragraph; no long decimal example)
+  - 原文「原始数据是 USDA 的 SR Legacy 数据集，几个很大的 CSV 表格，下载后放在 data-raw/。」 -> 「原始数据是美国农业部整理的一张很大的营养成分总表，里面有七千多种食物。这张总表太大、太杂，所以不会直接放进网站，而是提前从里面挑出几百种常用食物，整理成网站能直接读的小文件（技术名：USDA SR Legacy 数据集）。」
+  - Same sentence for per-10 g as KEY: 「营养数值永远按每 100 克存，只是排序比较时，调料和干货这类一次只吃一点的食物按每 10 克来比。」
+  - Unified 可食部 / 包装标签 / 常见度 wording; ending -> 「想看每个词的意思：随时打开术语表（GLOSSARY.md）。遇到不认识的词直接查就行，不用从头再读一遍。」
+  - Commit `docs: smooth the beginner explainer`.
+- **D8d ARCHITECTURE.md (developer doc; add, do not remove).**
+  - Add before the 「一句话概括」 paragraph (keep it): 「白话版：所有营养数字都是提前在电脑上算好、存成文件的。网站放上 GitHub 后就能访问。你打开网页时，浏览器只是读这些文件、算一下今天吃了多少、画成页面。你选的食物只存在你自己的浏览器里，不会上传，也不需要注册账号。」
+  - Data-build 图解 -> 「所有数字都来自原始表格。脚本只负责整理和换算，不会自己编数字。如果某一行有问题，脚本会直接报错停下来，坏数据不会被写进网站文件。」 (keep the bullets)
+  - Before the app.js startup sentence add 「页面启动时，先把三个数据文件读进来，再把你之前选过的食物从浏览器里读回来，然后把这些信息交给负责画卡片和列表的部分。」
+  - In 怎么发布 add first 「这个网站就像一本已经印好的书：文件放在那里就能被打开阅读，不需要有人在后台现做。」
+  - Unified 包装标签 / 可食部 / 常见度 wording at first mention; ending reminds 「不认识的词直接查术语表即可」.
+  - Commit `docs: add plain-language lead-ins to the architecture`.
+- **D8e KEY_IMPLEMENTATION.md (developer doc; add, do not remove).**
+  - Before the intakeTotals/status explanation add 「程序把你选的每份食物，按『每 100 克含多少 × 你吃的克数 ÷ 100』算出贡献，再把所有贡献加在一起，最后和今天的目标比较，看是还差、刚好、超出，还是超过了上限。」
+  - Before the bone-in formula add 「因为你称的是带骨头的整块，但营养只在肉里，所以要先把骨头的重量扣掉（先把骨头扣掉，只算肉的重量），再算营养。」
+  - After the calc.js "pure function" sentence add 「换句话说：这里的计算不依赖页面显示，也不依赖其他文件，所以测试时可以直接拿来单独检查它算得对不对。」 (keep the original sentence)
+  - Before richnessOf() add 「列表排序时比的不是『每 100 克含多少』，而是『按这个食物平时会吃的那一小份来比』。调料和干货一次只吃一点点，所以按每 10 克来比较；普通食物按每 100 克。营养数值本身始终是按每 100 克存的，只是比较时换算了一下。」
+  - Floating point line: 「计算机算小数时偶尔会留下极小的尾巴；差值小于 epsilon 就当成刚好达标。」 keep the code reference.
+  - Commit `docs: add plain-language lead-ins to key implementation`.
+- **D8f consistency pass.** grep all 6 docs for 可食部、包装标签、常见度/分层/档位、localStorage、没有数据/null and make first mentions follow the unified wording; every doc ending mentions GLOSSARY.md; run `npm run docs:check`, `npm run docs:diagrams` (no diff), `npm test`. Commit `docs: unify wording across documents`.
