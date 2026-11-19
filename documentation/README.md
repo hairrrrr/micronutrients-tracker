@@ -31,3 +31,5 @@
 图都用 `documentation/diagrams/build.mjs` 生成，改了图要运行 `npm run docs:diagrams`。
 每张图自带图例：黄色是输入和输出，蓝色是本项目代码，绿色是外部来源，
 红色是被拒绝或出错的分支，紫色圆柱是存储的数据。显示图的文档里会再写一次这个图例。
+
+遇到不认识的词，随时回术语表（[`GLOSSARY.md`](GLOSSARY.md)）查。

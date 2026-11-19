@@ -19,9 +19,10 @@
 |---|---|---|---|
 | 目标值 | target | 每日目标 | `docs/data/dri.json` 每格里的 `target`，由 `docs/js/core/dri.js` 的 `targetsFor()` 取出。 |
 | 上限 | UL, Tolerable Upper Intake Level | 可耐受最高摄入量 | 同一格里的 `ul`；只有 `ulAppliesToFood` 为真时，超过才在卡片上提醒。 |
-| 可食部 | edible portion | 去掉骨头等不可食部分后的重量 | `docs/js/core/measures.js` 的 `edibleGrams()` 用「带骨克数 ×（1 − 废弃率）」算出来。 |
-| 常见度 | commonness tier | 日常常见程度 1–5 档 | `docs/data/foods.json` 每个食物的 `commonness`，列表排序先看它。 |
+| 可食部 | edible portion | 可食部分（先把骨头扣掉，只算肉的重量） | 去掉骨头等不可食部分后的重量。`docs/js/core/measures.js` 的 `edibleGrams()` 用「带骨克数 ×（1 − 废弃率）」算出来。 |
+| 常见度 | commonness tier | 常见度（1–5 档，档位越高越常见） | 日常常见程度；`docs/data/foods.json` 每个食物的 `commonness`，列表排序先看它。 |
 | 比较份量 | amount basis | 比较用的份量 | `docs/data/foods.json` 的 `amountBasisG`，只有 10 和 100 两种；58 个食物按 10 g 比较，其余按 100 g。 |
+| 包装标签食物 | package label food | 包装标签食物 | `source.type` 为 `package_label` 的食物。这是用户自己家的三种牛奶，钙直接用包装上的数字，其他营养素参考同类食品（USDA）估算。 |
 
 ## 一、一次点击怎么变成卡片上的数字
 
@@ -187,7 +188,7 @@ export function edibleGrams(food, grams) {
 
 ## 三、食物列表怎么排：`docs/js/core/order.js`
 
-![排序：已选组、置顶组、常见度分层、同一层里的含量](diagrams/ordering.svg)
+![排序：已选组、置顶组、常见度档位、同一档里的含量](diagrams/ordering.svg)
 
 **图解：列表先放你确认过的食物，再放包装标签牛奶，剩下的先看常见度、同一档里再比含量。**
 
@@ -208,7 +209,7 @@ export function edibleGrams(food, grams) {
   没有常见度的食物当 0 档，排在所有有档的食物后面。
 - 含量不是每 100 g 的值，而是「比较份量」里的值：`richnessOf()` 算的是
   `per100g[n] × amountBasisG / 100`。调料、香料、食用油和干货的 `amountBasisG` 是 10，
-  所以按每 10 g 比；其余食物是 100。层数仍然先决定顺序，按 10 g 比较的食物不会因此跳到更高一档的前面。
+  所以按每 10 g 比；其余食物是 100。常见度档位仍然先决定顺序，按 10 g 比较的食物不会因此跳到更高一档的前面。
 
 `docs/js/core/order.js` 的 `partitionFoods()` 里给已选组挑食物的一段：
 

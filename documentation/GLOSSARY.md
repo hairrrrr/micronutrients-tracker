@@ -35,10 +35,10 @@
 | 每 10 g | per 10 g | 每 10 克 | 调味料、香辛料、食用油和干货每次吃得很少，改用 10 g 作为比较份量：`foods.json` 的 `amountBasisG` 为 10，名单来自 `data-src/small_portion_foods.csv`，共 58 个食物，卡片写「每 10 g」。其余食物的 `amountBasisG` 是 100。 |
 | 废弃率 | refuse percentage | 不可食部分比例 | USDA 记录的骨头等不能吃的部分占多少。15 个带骨食物写在 `data-src/bone_in_foods.csv`，构建后是 `foods.json` 的 `refusePct`。 |
 | 带骨重量 | with-bone weight | 带骨重量 | 带骨食物按整块（含骨）称重，家庭计量和手动克数都是这个重量。 |
-| 可食部 | edible portion | 可食部分 | 真正吃下去的部分，也是营养数值的基准。`docs/js/core/measures.js` 的 `edibleGrams()` 按「带骨克数 × (1 − refusePct / 100)」换算，卡片显示「可食部约 70 g」。 |
+| 可食部 | edible portion | 可食部分（先把骨头扣掉，只算肉的重量） | 真正吃下去的部分，也是营养数值的基准。`docs/js/core/measures.js` 的 `edibleGrams()` 按「带骨克数 × (1 − refusePct / 100)」换算，卡片显示「可食部约 70 g」。 |
 | 估算依据 | basis | 估算依据 | `data-src/measures.csv` 的 `basis` 列：`usda_portion:<编号>` 表示来自 USDA 的份量记录，`estimate:` 开头表示人工估算。 |
 | 空值 | null | 无数据 | `foods.json` 里写 `null` 表示这个食物这个营养素没有数据。算总量时按 0 处理，同时这个食物也不会出现在该营养素的食物列表里——没有数据的食物不参与比较。注意「没有数据」和「含量为零」（写着 0）是两回事。列表过滤见 `docs/js/core/order.js`。 |
-| 包装标签食物 | package label food | 包装标签食物 | `source.type` 为 `package_label` 的食物，本站有 3 个用户自有牛奶：钙取包装标签值，其余营养素按同类 USDA 食物（`source.baseFdcId`）估算；卡片带「包装标签」徽章。 |
+| 包装标签食物 | package label food | 包装标签食物 | `source.type` 为 `package_label` 的食物。这是用户自己家的三种牛奶，钙直接用包装上的数字，其他营养素参考同类食品（USDA）估算（`source.baseFdcId`）；卡片带「包装标签」徽章。 |
 | 常见度 | commonness tier | 常见度（1–5 档，档位越高越常见） | AI 模型估算、人工复核的日常常见程度，写在 `data-src/commonness.csv`，构建时只把整数放进 `foods.json` 的 `commonness`。5 档是最常见（例如西瓜、五花肉、鸡蛋），4 档是很常见，1 档是罕见、进口或小众。普通食物列表先按它从高到低排（已选和置顶的除外）；5 档卡片标「★常见」，4 档标「常见」（`docs/js/ui/foods.js` 的 `COMMON_BADGES`）。 |
 | 置顶食物 | pinTop | 置顶营养素列表 | `foods.json` 的 `pinTop` 数组。3 个自有牛奶写的是 `["calcium"]`，未选中时排在钙列表最前面；选中后就进入已选组（`docs/js/core/order.js` 的 `partitionFoods()`）。 |
 | 营养素 id | nutrient id | 营养素编号 | `data-src/nutrients.csv` 第一列的英文短名，例如 `vitA`、`calcium`；共 22 个，代码和数据都用它对齐。 |
@@ -60,3 +60,5 @@
 | 校验器 | data validator | 数据校验脚本 | `tools/validate_data.py`，检查列名、数值、排序名单、带骨比例等规则，任何一项不合格就以 exit 1 结束；命令 `npm run validate`。 |
 | 开发服务器 | local dev server | 本地预览服务器 | `npm run serve` 用 Python 自带的 `python3 -m http.server 8000 -d docs` 在 `http://localhost:8000/` 提供 `docs/`，看完就关掉。 |
 | 图表 | diagram | 图 | `documentation/diagrams/` 里 5 张图，源文件 `<名字>.dot`，渲染成 `<名字>.svg`，由 `npm run docs:diagrams` 生成；不要手改生成的文件。 |
+
+以后遇到不认识的词，回到这份术语表（`GLOSSARY.md`）查；想按顺序读，从[文档目录](README.md)开始。
