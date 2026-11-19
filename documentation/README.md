@@ -5,10 +5,9 @@
 
 ## 从这里开始
 
-第一次接触这个项目、也不写代码：先看 `EXPLAINED.md`，再看术语表，遇到不认识的词就查。
-
-想改代码或数据：按下面的顺序读，`ARCHITECTURE.md` 讲整体结构，
-`KEY_IMPLEMENTATION.md` 讲关键算法，最后回到 `GLOSSARY.md` 对词。
+完全不写代码的人可以直接从 `EXPLAINED.md` 开始。想了解数字是怎么算出来的、或想改代码和数据的人：
+先看整体结构（`ARCHITECTURE.md`），再看具体算法（`KEY_IMPLEMENTATION.md`），
+遇到不认识的词随时回术语表（`GLOSSARY.md`）查。
 
 ## 目录
 

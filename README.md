@@ -12,9 +12,9 @@
 ## 这个网站能做什么
 
 - **先选自己的情况**：性别、年龄（18–100 岁）和采用哪套标准（中国 2023 / 美国）。
-  两套标准并排显示，随时可以切换；换了之后，所有数字跟着变。
+  中国和美国两套标准可以并排看，也可以随时切换。切换之后，每一张卡片上的目标数字和「还差多少」都会跟着变。
 - **22 张目标卡片**：每张卡片是一种营养素，写着每日目标、还差多少（或超出多少），
-  下面一条细进度条。达到目标时卡片变绿；超过上限（UL）时出现红色提醒。
+  下面一条细进度条。达到目标时卡片变绿；超过上限（UL，简单说就是每天最多吃到这个数）时出现红色提醒。
 - **22 个营养素标签页**：点一张卡片就切到对应的食物列表，看看哪些食物这种营养素多。
 - **食物卡片**：中文名、英文名、每 100 克（少数按每 10 克）的含量。
   点一下卡片会原地展开成编辑框，选好份量后按「确认」才算选中；选中的食物会排到列表最前面。
@@ -22,9 +22,10 @@
   列出这种食物含有的每一种营养素、每 100 克的量、占每日目标的百分比，以及你选的那份量里的量。
 - **家庭计量**：一碗、一杯、一把、一掌心……都是近似重量，也可以直接输入克数。
 - **带骨食物**：猪排骨、鸡翅等按带骨重量称，营养素只算可食部（带骨重量 ×（1 − 废弃率））。
-- **包装标签食物**：用户自己添加的三种品牌牛奶，钙用包装上的标示值，其余营养素参考 USDA 同类食品估算，
+- **包装标签食物**：这是用户自己家的三种牛奶，钙直接用包装上的数字，其他营养素参考同类食品（USDA）估算，
   默认排在钙列表最前面。
-- **不需要账号，也不上传**：所有选择只存在这台设备的浏览器里（localStorage）。
+- **不需要账号，也不上传**：你的选择只存在这台设备的浏览器里，就像记在自己的笔记本上：关掉网页再打开还在，
+  但换一台电脑或手机就是全新的空白记录，不会上传到任何地方（技术上叫 localStorage）。
 - **手机优先**：360–390 像素宽也不会横向滚动；桌面端自动变多列。
 
 ## 数据来源与许可
@@ -32,8 +33,8 @@
 | 数据 | 用在哪里 | 来源与许可 |
 |---|---|---|
 | USDA FoodData Central **SR Legacy（2018-04 版）** | 588 种食物的全部营养素数值 | 美国农业部，公有领域（CC0）；下载页 <https://fdc.nal.usda.gov/download-datasets> |
-| 中国营养学会《中国居民膳食营养素参考摄入量（2023 版）》 | 中国标准的 RNI / AI 和 UL | 中国营养学会，<https://www.cnsoc.org/drpostand/> |
-| NASEM 膳食参考摄入量（经 NIH ODS 汇总） | 美国标准的 RDA / AI 和 UL | <https://ods.od.nih.gov/HealthInformation/nutrientrecommendations.aspx> |
+| 中国营养学会《中国居民膳食营养素参考摄入量（2023 版）》 | 中国标准的 RNI（简单说就是「每天建议吃到这么多」）、AI（「大概吃够就行」）和 UL（「每天最多吃到这个数」） | 中国营养学会，<https://www.cnsoc.org/drpostand/> |
+| NASEM 膳食参考摄入量（经 NIH ODS 汇总） | 美国标准的 RDA（也是「每天建议吃到这么多」）、AI 和 UL | <https://ods.od.nih.gov/HealthInformation/nutrientrecommendations.aspx> |
 | 家庭计量、常见度、带骨废弃率、包装标签 | `data-src/` 里逐条可查的输入 | 家庭计量来自 USDA 份量表或标注过的估算；常见度是 AI 模型的估计并经人工复核；带骨废弃率取自 USDA SR28；包装标签由用户提供 |
 
 一共 **591 种食物**（588 种来自 SR Legacy，3 种来自包装标签），**33 个分类**，
@@ -50,7 +51,8 @@ npm run serve   # 在 http://localhost:8000/ 打开网站
 ```
 
 这个命令只是用 Python 起一个静态文件服务器，把 `docs/` 目录当成网站根目录。
-网站没有构建步骤：浏览器直接加载 `docs/index.html`、`docs/css/style.css` 和 `docs/js/` 里的 ES 模块。
+网站没有额外的打包或编译步骤：浏览器直接打开页面、样式和脚本文件就能运行。
+（想找文件的话：页面是 `docs/index.html`，样式是 `docs/css/style.css`，脚本是按模块拆开放进 `docs/js/` 的 ES 模块。）
 
 ## 测试
 
@@ -62,8 +64,10 @@ npm run validate  # 检查 data-src/ 与 docs/data/ 的数据是否自洽
 
 - `npm test` 直接导入 `docs/js/core/` 里的纯函数和 `docs/js/ui/` 里的 HTML 生成函数，
   不启动浏览器。
-- `npm run e2e` 会自己起两个临时静态服务器（`docs/` 和仓库根目录，用来测子路径部署），
-  并往 `shots/` 写截图。它用系统 Chrome，所以不需要另外下载浏览器。
+- 运行 `npm run e2e` 时，程序会自动打开两个临时的本地预览页面，并自动截几张图存下来，
+  方便检查页面在不同情况下的样子。它自己起两个临时静态服务器：一个把 `docs/` 当网站根目录，
+  另一个把仓库根目录当网站根目录，用来测放在子路径下部署的情况；截图写进 `shots/`。
+  它用系统 Chrome，所以不需要另外下载浏览器。
   设置 `BASE_URL` 可以让它直接测试线上站点。
 - `npm run validate` 运行 `tools/validate_data.py`：检查营养素元数据、食物行、计量、
   常见度、带骨食物、包装标签食物、生成出来的 JSON，以及 `docs/` 里没有不该出现的文字。
@@ -108,7 +112,7 @@ npm run validate     # 生成之后再检查一遍
 - [`documentation/ARCHITECTURE.md`](documentation/ARCHITECTURE.md) — 架构：整体结构和三张图，每个文件夹和数据文件的字段。
 - [`documentation/KEY_IMPLEMENTATION.md`](documentation/KEY_IMPLEMENTATION.md) — 关键实现：目标查找、摄入合计、家庭计量与带骨换算、排序、详情排名、数据构建规则。
 - [`documentation/EXPLAINED.md`](documentation/EXPLAINED.md) — 入门讲解：写给没写过代码的人，用真实数字走一遍从点击食物到卡片出数的过程。
-- [`documentation/GLOSSARY.md`](documentation/GLOSSARY.md) — 术语表：DRI、RNI、AI、UL、RAE、NE、常见度、包装标签等词的含义。
+- [`documentation/GLOSSARY.md`](documentation/GLOSSARY.md) — 术语表：DRI（简单说就是「每天大概该吃多少」的官方参考数字）、RNI、AI、UL、RAE、NE、常见度、包装标签等词的含义。
 - [`documentation/diagrams/`](documentation/diagrams/) — 图表的 `.dot` 源文件和渲染出来的 `.svg`，用 `npm run docs:diagrams` 重新生成。
 - 改完文档可以运行 `npm run docs:check`，检查所有相对链接和写到的文件路径是否还存在。
 
