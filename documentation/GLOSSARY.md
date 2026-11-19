@@ -48,7 +48,7 @@
 
 | 术语 | 英文全称 | 中文 | 在本项目里 |
 |---|---|---|---|
-| ES 模块 | ECMAScript module | ES 模块 | 把脚本拆成几个小文件，浏览器按需要一个个读进来（技术名：ES 模块）。站点不用打包器：`docs/index.html` 用 `<script type="module">` 加载 `docs/js/app.js`，模块之间用 `import` / `export`。 |
+| ES 模块 | ECMAScript module | ES 模块 | 把脚本拆成几个小文件，页面打开时浏览器把它们一起读进来（技术名：ES 模块）。站点不用打包器：`docs/index.html` 用 `<script type="module">` 加载 `docs/js/app.js`，模块之间用 `import` / `export`。 |
 | 纯函数模块 | pure module | 纯函数模块 | `docs/js/core/*.js` 不碰页面、不发请求，只按传入的数据算结果，所以 `node --test` 能直接导入测试。 |
 | 静态站点 | static site | 静态网站 | 没有服务器端程序，只有 HTML、CSS、JavaScript 和 JSON 文件；任何静态文件服务器都能托管。 |
 | GitHub Pages | GitHub Pages | GitHub 页面托管 | 发布方式：直接拿仓库的 `docs/` 目录当网站根目录，所以新文档放在顶层的 `documentation/`，不进 `docs/`。 |
